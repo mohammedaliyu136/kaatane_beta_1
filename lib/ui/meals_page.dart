@@ -9,7 +9,7 @@ import '../utils/rest_api.dart';
 import 'cart_page.dart';
 import 'widgets/add_to_cart_btn.dart';
 import 'widgets/meal_list_item.dart';
-import 'package:firebase_admob/firebase_admob.dart';
+//import 'package:firebase_admob/firebase_admob.dart';
 
 
 const String testDevice = '8385408453538732DCC4398BB3BF7936';
@@ -17,7 +17,7 @@ const String testDevice = '8385408453538732DCC4398BB3BF7936';
 class MealPage extends StatelessWidget {
   MealPage(this.restaurant);
   final Restaurant restaurant;
-
+  /**
   static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
     testDevices: ["8385408453538732DCC4398BB3BF7936"],
     nonPersonalizedAds: true,
@@ -37,18 +37,21 @@ class MealPage extends StatelessWidget {
           print("BannerAd $event");
         });
   }
-
+  **/
 
 
   @override
   Widget build(BuildContext context) {
+    /**
     FirebaseAdMob.instance.initialize(appId: "ca-app-pub-2940956011124308~1055978210");
     //Change appId With Admob Id
     _bannerAd = createBannerAd()
       ..load()
       ..show(anchorOffset: 55.0,anchorType: AnchorType.bottom,);
 
+
     print(_bannerAd);
+        **/
     final title = restaurant.name;
     Future<List<Meal>> meal = fetchMeals(restaurant.id);
     var bloc = Provider.of<CartBloc>(context);
@@ -81,7 +84,7 @@ class MealPage extends StatelessWidget {
                   width: 30.0,
                   child: new GestureDetector(
                     onTap: () {
-                      _bannerAd.dispose();
+                      //_bannerAd.dispose();
                       Navigator.push(
                         context,
                         MaterialPageRoute(

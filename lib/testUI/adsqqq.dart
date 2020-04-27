@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_admob/firebase_admob.dart';
+//import 'package:firebase_admob/firebase_admob.dart';
 
-
+/**
 class MyAppADS extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
@@ -78,3 +78,4 @@ class _MyAppState extends State<MyAppADS> {
     );
   }
 }
+    **/
