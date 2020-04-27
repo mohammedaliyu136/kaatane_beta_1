@@ -50,7 +50,7 @@
 
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
       <array>
-        <string>ng.com.intija.firebaseTestPersonal</string>
+        <string>ng.com.intija.kaatane</string>
       </array>
 
     <key>GADApplicationIdentifier</key>
