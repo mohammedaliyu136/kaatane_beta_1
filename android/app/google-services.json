@@ -1,0 +1,233 @@
+{
+  "project_info": {
+    "project_number": "282999348569",
+    "firebase_url": "https://kaatane-5c28c.firebaseio.com",
+    "project_id": "kaatane-5c28c",
+    "storage_bucket": "kaatane-5c28c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:282999348569:android:0ad01b08881973a8",
+        "android_client_info": {
+          "package_name": "com.ajisaq.smartswitch.restaurantappv90"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "282999348569-ah1bm5f9vkauc33oaufmqgll6n410to6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIZj_WWMdZCUIVjv4Vm1ODv7saqCQalB0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "282999348569-ah1bm5f9vkauc33oaufmqgll6n410to6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "282999348569-pmv0ob5srnerrpumvhoj0ge8c0fahvdm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ng.com.intija.kaatane",
+                "app_store_id": "1507673384"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:282999348569:android:85734fc7fbea27378f4048",
+        "android_client_info": {
+          "package_name": "com.mohammed.intija02"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "282999348569-ah1bm5f9vkauc33oaufmqgll6n410to6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIZj_WWMdZCUIVjv4Vm1ODv7saqCQalB0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "282999348569-ah1bm5f9vkauc33oaufmqgll6n410to6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "282999348569-pmv0ob5srnerrpumvhoj0ge8c0fahvdm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ng.com.intija.kaatane",
+                "app_store_id": "1507673384"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:282999348569:android:df78e71ade0f5b9d8f4048",
+        "android_client_info": {
+          "package_name": "com.mohammedaliyu.flutter_app_firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "282999348569-ah1bm5f9vkauc33oaufmqgll6n410to6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIZj_WWMdZCUIVjv4Vm1ODv7saqCQalB0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "282999348569-ah1bm5f9vkauc33oaufmqgll6n410to6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "282999348569-pmv0ob5srnerrpumvhoj0ge8c0fahvdm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ng.com.intija.kaatane",
+                "app_store_id": "1507673384"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:282999348569:android:0b864fc791850a668f4048",
+        "android_client_info": {
+          "package_name": "com.mohammedaliyu.kaatane_cart_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "282999348569-ah1bm5f9vkauc33oaufmqgll6n410to6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIZj_WWMdZCUIVjv4Vm1ODv7saqCQalB0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "282999348569-ah1bm5f9vkauc33oaufmqgll6n410to6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "282999348569-pmv0ob5srnerrpumvhoj0ge8c0fahvdm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ng.com.intija.kaatane",
+                "app_store_id": "1507673384"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:282999348569:android:2b51d339aeea1c5b8f4048",
+        "android_client_info": {
+          "package_name": "ng.com.intija.kaatane"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "282999348569-ah1bm5f9vkauc33oaufmqgll6n410to6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIZj_WWMdZCUIVjv4Vm1ODv7saqCQalB0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "282999348569-ah1bm5f9vkauc33oaufmqgll6n410to6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "282999348569-pmv0ob5srnerrpumvhoj0ge8c0fahvdm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ng.com.intija.kaatane",
+                "app_store_id": "1507673384"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:282999348569:android:6ede12f1a8785aea8f4048",
+        "android_client_info": {
+          "package_name": "ng.com.intija.kaatane_intija_final"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "282999348569-ah1bm5f9vkauc33oaufmqgll6n410to6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIZj_WWMdZCUIVjv4Vm1ODv7saqCQalB0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "282999348569-ah1bm5f9vkauc33oaufmqgll6n410to6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "282999348569-pmv0ob5srnerrpumvhoj0ge8c0fahvdm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ng.com.intija.kaatane",
+                "app_store_id": "1507673384"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

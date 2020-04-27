@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
-import 'package:kaatane/bloc/cart_bloc.dart';
 import 'package:provider/provider.dart';
+
+import '../../bloc/cart_bloc.dart';
 
 class Quantity_Cart_btn extends StatelessWidget {
   Quantity_Cart_btn(this.meal);

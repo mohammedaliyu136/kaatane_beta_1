@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:kaatane/model/restaurant.dart';
-import 'package:kaatane/ui/widgets/contact.dart';
-import 'package:kaatane/utils/rest_api.dart';
 
+import '../model/restaurant.dart';
+import '../utils/rest_api.dart';
 import 'meals_page.dart';
+import 'widgets/contact.dart';
 import 'widgets/restaurant_list_item.dart';
 
 
@@ -15,7 +15,6 @@ class RestaurantPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Restaurants"),
-        centerTitle: true,
       ),
       body: Center(
         child: Container(
@@ -81,7 +80,7 @@ class RestaurantPage extends StatelessWidget {
                     ),
                   );
                 } else if (snapshot.hasError) {
-                  return Text("${snapshot.error}");
+                  return Text("Failed to load, please check your internet connect");//Text("${snapshot.error}");
                 }
 
                 // By default, show a loading spinner.

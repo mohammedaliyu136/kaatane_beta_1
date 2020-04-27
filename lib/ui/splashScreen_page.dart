@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'dart:async';
 
 import 'restaurant_page.dart';
@@ -12,7 +13,8 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  int _counter = 3;
+  bool isOpen = true;
+  int _counter = 300;
   @override
   void initState() {
     super.initState();
@@ -40,14 +42,14 @@ class _SplashScreenState extends State<SplashScreen> {
         navigateToHomeScreen();
       }
     });
-    Timer.periodic(Duration(seconds: 1), (Timer timer) {
-      setState(() {
-        _counter--;
-        if (_counter == 0) {
-          timer.cancel();
-        }
-      });
-    });
+    //Timer.periodic(Duration(seconds: 1), (Timer timer) {
+      //setState(() {
+        //_counter--;
+        //if (_counter == 0) {
+        //  timer.cancel();
+        //}
+      ///});
+    //});
   }
 
   @override
@@ -58,17 +60,8 @@ class _SplashScreenState extends State<SplashScreen> {
             image: DecorationImage(
                 image: AssetImage("assets/images/kaatane_splash_bg.png"),
                 fit: BoxFit.cover)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(70.0),
-                child: Image.asset("assets/images/kaatane_white.png"),
-              ),
-            ),
-          ],
+        child: Center(
+          child: FlareActor("assets/flare/logo_loading.flr", alignment:Alignment.center, fit:BoxFit.contain, animation: "Untitled",),
         ),
       ),
     );
@@ -79,6 +72,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void navigateToHomeScreen() {
+    isOpen = !isOpen;
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (_) => RestaurantPage()));
   }

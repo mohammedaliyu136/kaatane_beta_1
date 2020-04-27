@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:kaatane/ui/splashScreen_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
 import 'bloc/cart_bloc.dart';
+import 'testUI/adsqqq.dart';
+import 'testUI/collapsingToolbar.dart';
+import 'testUI/flare.dart';
+import 'ui/splashScreen_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -10,6 +14,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    Firestore.instance.collection('books').document()
+        .setData({ 'title': 'title', 'author': 'kabir' });
     return ChangeNotifierProvider<CartBloc>(
       builder: (context) => CartBloc(),
       child: MaterialApp(
@@ -27,7 +33,7 @@ class MyApp extends StatelessWidget {
             //primarySwatch: Colors.red,
             primaryColor: Color.fromRGBO(128, 0, 128, 1),
           ),
-          home: SplashScreen()//MyHomePage(title: 'Flutter Demo Home Page'),
+          home: SplashScreen()//SilverAppBarExampleNested()//SilverAppBarExample()//SplashScreen()//MyHomePage(title: 'Flutter Demo Home Page'),
       ),
     );
   }

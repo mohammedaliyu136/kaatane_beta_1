@@ -8,10 +8,10 @@ import 'package:flutter/foundation.dart';
 //import 'package:js/js.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
-import 'package:kaatane/bloc/cart_bloc.dart';
-import 'package:kaatane/utils/paystack.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import '../bloc/cart_bloc.dart';
+import '../utils/paystack.dart';
 import 'Order_Submitted_page.dart';
 
 //@JS("payWithPaystackWeb")

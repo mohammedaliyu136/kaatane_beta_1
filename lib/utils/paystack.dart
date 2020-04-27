@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
-import 'package:kaatane/bloc/cart_bloc.dart';
 import 'dart:io';
 
-import 'package:kaatane/ui/Order_Submitted_page.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+
+import '../bloc/cart_bloc.dart';
 
 Future<CheckoutResponse> pay(context) async {
   var bloc = Provider.of<CartBloc>(context);

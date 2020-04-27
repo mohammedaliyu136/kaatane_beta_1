@@ -1,8 +1,8 @@
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
-import 'package:kaatane/bloc/cart_bloc.dart';
-import 'package:kaatane/model/meal.dart';
 import 'package:provider/provider.dart';
 
+import '../bloc/cart_bloc.dart';
 import 'restaurant_page.dart';
 
 class Order_Submitted extends StatelessWidget {
@@ -12,49 +12,61 @@ class Order_Submitted extends StatelessWidget {
     bloc.clearAll();
     return Scaffold(
         resizeToAvoidBottomPadding: false,
-        body: Container(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Icon(
-                  Icons.check_circle,
-                  color: Colors.green,
-                  size: 100,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child:
-                  Text("Order Placed!", style: TextStyle(fontSize: 28.0)),
-                )
-              ],
-            ),
-          ),
-        ),
-        bottomNavigationBar: Container(
-          height: 80,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: RaisedButton(
-              color: Color.fromRGBO(128, 0, 128, 1),
-              textColor: Colors.white,
-              shape: new RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(28.0),
-                  side: BorderSide(color: Color.fromRGBO(128, 0, 128, 1) )),
-              onPressed: () {
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => RestaurantPage()), (route)=>false
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Text(
-                  "BACK TO HOME",
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            Expanded(
+              child: Container(
+                child: Center(
+                  child: FlareActor("assets/flare/tick.flr", alignment:Alignment.center, fit:BoxFit.contain, animation: "Untitled",),
                 ),
               ),
             ),
-          ),
-        ));
+            Container(
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: RaisedButton(
+                        textColor: Colors.white,
+                        onPressed: () {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context) => RestaurantPage()), (route)=>false
+                          );
+                        },
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(80.0)),
+                        padding: const EdgeInsets.all(0.0),
+                        child: Ink(
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                                begin: Alignment.topRight,
+                                end: Alignment.bottomLeft,
+                                colors: [Colors.black, Color.fromRGBO(128, 0, 128, 1)]),
+                            borderRadius: BorderRadius.all(Radius.circular(80.0)),
+                          ),
+                          child: Container(
+                            //constraints: const BoxConstraints(minWidth: 88.0, minHeight: 36.0), // min sizes for Material buttons
+                            alignment: Alignment.center,
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Text(
+                                "BACK TO HOME",
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+        );
   }
 }

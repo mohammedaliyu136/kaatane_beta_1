@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kaatane/bloc/cart_bloc.dart';
 import 'package:provider/provider.dart';
 
+import '../bloc/cart_bloc.dart';
 import 'payment_method_page.dart';
 
 class Delivery_info extends StatefulWidget {
@@ -20,7 +20,6 @@ class Delivery_infoState extends State<Delivery_info> {
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: Text("Delivery Information"),
-        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.only(
@@ -68,6 +67,7 @@ class Delivery_infoState extends State<Delivery_info> {
                 padding: const EdgeInsets.only(top: 32.0),
                 child: Row(
                   children: <Widget>[
+                    /**
                     Expanded(
                       child: RaisedButton(
                         textColor: Colors.white,
@@ -93,7 +93,42 @@ class Delivery_infoState extends State<Delivery_info> {
                           child: Text("Proceed"),
                         ),
                       ),
-                    ),
+                    ),**/
+                    Expanded(
+                      child: RaisedButton(
+                        textColor: Colors.white,
+                        onPressed: () {
+                          if(_formKey.currentState.validate()){
+                            _formKey.currentState.save();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Order_payment_method()),
+                            );
+                          }
+                        },
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(80.0)),
+                        padding: const EdgeInsets.all(0.0),
+                        child: Ink(
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                                begin: Alignment.topRight,
+                                end: Alignment.bottomLeft,
+                                colors: [Colors.black, Color.fromRGBO(128, 0, 128, 1)]),
+                            borderRadius: BorderRadius.all(Radius.circular(80.0)),
+                          ),
+                          child: Container(
+                            //constraints: const BoxConstraints(minWidth: 88.0, minHeight: 36.0), // min sizes for Material buttons
+                            alignment: Alignment.center,
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Text(
+                                "CHECHOUT",
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
                   ],
                 ),
               )

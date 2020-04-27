@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:kaatane/model/restaurant.dart';
+
+import '../../model/restaurant.dart';
 
 class Contact extends StatelessWidget {
   Contact(this.restaurant);
