@@ -47,6 +47,7 @@ class MealPage extends StatelessWidget {
     _bannerAd = createBannerAd()
       ..load()
       ..show(anchorOffset: 55.0,anchorType: AnchorType.bottom,);
+
     print(_bannerAd);
     final title = restaurant.name;
     Future<List<Meal>> meal = fetchMeals(restaurant.id);
@@ -80,6 +81,7 @@ class MealPage extends StatelessWidget {
                   width: 30.0,
                   child: new GestureDetector(
                     onTap: () {
+                      _bannerAd.dispose();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -165,76 +167,78 @@ class MealPage extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                Expanded(
-                  child: TabBarView(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: FutureBuilder<List<Meal>>(
-                            future: meal,
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                return ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: snapshot.data.length,
-                                    itemBuilder: (BuildContext context, index) {
-                                      return Card(
-                                        child: Row(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(vertical: 8,),
-                                              child: Container(
-                                                height: 110,
-                                                width: 110,
-                                                decoration: BoxDecoration(
-                                                  image: DecorationImage(
-                                                    image: NetworkImage(snapshot.data[index].img_url),
-                                                    fit: BoxFit.cover,
+                Container(
+                  child: Expanded(
+                    child: TabBarView(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FutureBuilder<List<Meal>>(
+                              future: meal,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: snapshot.data.length,
+                                      itemBuilder: (BuildContext context, index) {
+                                        return Card(
+                                          child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Padding(
+                                                padding: const EdgeInsets.symmetric(vertical: 8,),
+                                                child: Container(
+                                                  height: 110,
+                                                  width: 110,
+                                                  decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                      image: NetworkImage(snapshot.data[index].img_url),
+                                                      fit: BoxFit.cover,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.all(16.0),
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Text(snapshot.data[index].name,
-                                                      style: TextStyle(
-                                                        fontSize: 18.0,
-                                                        fontWeight: FontWeight.bold,
-                                                      )),
-                                                  SizedBox(
-                                                    height: 4.0,
-                                                  ),
-                                                  Text(
-                                                      "Price: ₦${snapshot.data[index].price.toString()}"),
-                                                  SizedBox(
-                                                    height: 4.0,
-                                                  ),
-                                                  Add_To_Cart_btn(snapshot.data[index])
-                                                ],
+                                              Padding(
+                                                padding: const EdgeInsets.all(16.0),
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: <Widget>[
+                                                    Text(snapshot.data[index].name,
+                                                        style: TextStyle(
+                                                          fontSize: 18.0,
+                                                          fontWeight: FontWeight.bold,
+                                                        )),
+                                                    SizedBox(
+                                                      height: 4.0,
+                                                    ),
+                                                    Text(
+                                                        "Price: ₦${snapshot.data[index].price.toString()}"),
+                                                    SizedBox(
+                                                      height: 4.0,
+                                                    ),
+                                                    Add_To_Cart_btn(snapshot.data[index])
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      );}
-                                );
-                              } else if (snapshot.hasError) {
-                                return Center(child: Text("Failed to load, please check your internet connect"));//Text("${snapshot.error}");
-                              }
+                                            ],
+                                          ),
+                                        );}
+                                  );
+                                } else if (snapshot.hasError) {
+                                  return Center(child: Text("Failed to load, please check your internet connect"));//Text("${snapshot.error}");
+                                }
 
-                              // By default, show a loading spinner.
-                              return Center(child: CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Color.fromRGBO(128, 0, 128, 1)),));
-                            },
+                                // By default, show a loading spinner.
+                                return Center(child: CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Color.fromRGBO(128, 0, 128, 1)),));
+                              },
+                            ),
                           ),
                         ),
-                      ),
-                      Center(child: Text("Snacks"),),
-                      Center(child: Text("Drinks"),),
-                    ],
+                        Center(child: Text("Snacks"),),
+                        Center(child: Text("Drinks"),),
+                      ],
+                    ),
                   ),
                 ),
                 Container(
