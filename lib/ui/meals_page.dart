@@ -162,144 +162,150 @@ class MealPage extends StatelessWidget {
                 ),
               ];
             },
-            body: Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Container(
-                    child: Expanded(
-                      child: TabBarView(
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: FutureBuilder<List<Meal>>(
-                                future: meal,
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return ListView.builder(
-                                        shrinkWrap: true,
-                                        itemCount: snapshot.data.length,
-                                        itemBuilder: (BuildContext context, index) {
-                                          return Card(
-                                            child: Row(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                Padding(
-                                                  padding: const EdgeInsets.symmetric(vertical: 8,),
-                                                  child: Container(
-                                                    height: 110,
-                                                    width: 110,
-                                                    decoration: BoxDecoration(
-                                                      image: DecorationImage(
-                                                        image: NetworkImage(snapshot.data[index].img_url),
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets.all(16.0),
-                                                  child: Column(
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Container(
+                  child: Flex(
+                    children: <Widget>[
+                      Expanded(
+                        child: TabBarView(
+                          children: [
+                            Flex(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: FutureBuilder<List<Meal>>(
+                                      future: meal,
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          return ListView.builder(
+                                              shrinkWrap: true,
+                                              itemCount: snapshot.data.length,
+                                              itemBuilder: (BuildContext context, index) {
+                                                return Card(
+                                                  child: Row(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: <Widget>[
-                                                      Text(snapshot.data[index].name,
-                                                          style: TextStyle(
-                                                            fontSize: 18.0,
-                                                            fontWeight: FontWeight.bold,
-                                                          )),
-                                                      SizedBox(
-                                                        height: 4.0,
+                                                      Padding(
+                                                        padding: const EdgeInsets.symmetric(vertical: 8,),
+                                                        child: Container(
+                                                          height: 110,
+                                                          width: 110,
+                                                          decoration: BoxDecoration(
+                                                            image: DecorationImage(
+                                                              image: NetworkImage(snapshot.data[index].img_url),
+                                                              fit: BoxFit.cover,
+                                                            ),
+                                                          ),
+                                                        ),
                                                       ),
-                                                      Text(
-                                                          "Price: ₦${snapshot.data[index].price.toString()}"),
-                                                      SizedBox(
-                                                        height: 4.0,
+                                                      Padding(
+                                                        padding: const EdgeInsets.all(16.0),
+                                                        child: Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: <Widget>[
+                                                            Text(snapshot.data[index].name,
+                                                                style: TextStyle(
+                                                                  fontSize: 18.0,
+                                                                  fontWeight: FontWeight.bold,
+                                                                )),
+                                                            SizedBox(
+                                                              height: 4.0,
+                                                            ),
+                                                            Text(
+                                                                "Price: ₦${snapshot.data[index].price.toString()}"),
+                                                            SizedBox(
+                                                              height: 4.0,
+                                                            ),
+                                                            Add_To_Cart_btn(snapshot.data[index])
+                                                          ],
+                                                        ),
                                                       ),
-                                                      Add_To_Cart_btn(snapshot.data[index])
                                                     ],
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          );}
-                                    );
-                                  } else if (snapshot.hasError) {
-                                    return Center(child: Text("Failed to load, please check your internet connect"));//Text("${snapshot.error}");
-                                  }
+                                                );}
+                                          );
+                                        } else if (snapshot.hasError) {
+                                          return Center(child: Text("Failed to load, please check your internet connect"));//Text("${snapshot.error}");
+                                        }
 
-                                  // By default, show a loading spinner.
-                                  return Center(child: CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Color.fromRGBO(128, 0, 128, 1)),));
-                                },
-                              ),
+                                        // By default, show a loading spinner.
+                                        return Center(child: CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Color.fromRGBO(128, 0, 128, 1)),));
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          Center(child: Text("Snacks"),),
-                          Center(child: Text("Drinks"),),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                            begin: Alignment.topRight,
-                            end: Alignment.bottomLeft,
-                            colors: [Colors.black, Color.fromRGBO(128, 0, 128, 1)]),
-                      //borderRadius: BorderRadius.all(Radius.circular(80.0)),
-                    ),
-                    //color: Color.fromRGBO(128, 0, 128, 1),
-                    height: 50, child: Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(top:8.0, bottom:8.0, left: 16, right: 8.0),
-                        child: Text("$totalCount items", style: TextStyle(color: Colors.white),),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical:16.0, horizontal: 8.0),
-                        child: SizedBox(width: 2, child:Container(color: Colors.white,),),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top:8.0, bottom:8.0, left: 8.0, right: 8.0),
-                        child: Text("₦${bloc.total}", style: TextStyle(color: Colors.white),),
-                      ),
-                      Spacer(),
-                      SizedBox(width: 2, child:Container(color: Colors.white,),),
-                      GestureDetector(
-                        onTap: (){
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CartPage(),
-                            ),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(Icons.shopping_cart, color: Colors.white,),
+                            Center(child: Text("Snacks"),),
+                            Center(child: Text("Drinks"),),
+                          ],
                         ),
                       ),
-                      GestureDetector(
-                        onTap: (){
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CartPage(),
-                            ),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text("VIEW CART", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),),
-                        ),
-                      ),
-                      SizedBox(width: 10,)
                     ],
-                  ),)
-                ],
-              ),
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                          begin: Alignment.topRight,
+                          end: Alignment.bottomLeft,
+                          colors: [Colors.black, Color.fromRGBO(128, 0, 128, 1)]),
+                    //borderRadius: BorderRadius.all(Radius.circular(80.0)),
+                  ),
+                  //color: Color.fromRGBO(128, 0, 128, 1),
+                  height: 50, child: Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(top:8.0, bottom:8.0, left: 16, right: 8.0),
+                      child: Text("$totalCount items", style: TextStyle(color: Colors.white),),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical:16.0, horizontal: 8.0),
+                      child: SizedBox(width: 2, child:Container(color: Colors.white,),),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top:8.0, bottom:8.0, left: 8.0, right: 8.0),
+                      child: Text("₦${bloc.total}", style: TextStyle(color: Colors.white),),
+                    ),
+                    Spacer(),
+                    SizedBox(width: 2, child:Container(color: Colors.white,),),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CartPage(),
+                          ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(Icons.shopping_cart, color: Colors.white,),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CartPage(),
+                          ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text("VIEW CART", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),),
+                      ),
+                    ),
+                    SizedBox(width: 10,)
+                  ],
+                ),)
+              ],
             ),
           ),
         ),
