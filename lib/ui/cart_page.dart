@@ -24,67 +24,65 @@ class CartPage extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(top: 8.0),
-                child: Expanded(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: cart.length,
-                    itemBuilder: (context, index) {
-                      //Meal meal = cart.keys.toList()[index];
-                      Meal meal = cart[index];
-                      print(cart.values.toList()[index].name);
-                      //int count = cart[giftIndex];
-                      return ListTile(
-                        title: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: Stack(
-                                    children: <Widget>[
-                                      Text(
-                                        cart.values.toList()[index].name,
-                                        style: TextStyle(
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: cart.length,
+                  itemBuilder: (context, index) {
+                    //Meal meal = cart.keys.toList()[index];
+                    Meal meal = cart[index];
+                    print(cart.values.toList()[index].name);
+                    //int count = cart[giftIndex];
+                    return ListTile(
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: Stack(
+                                  children: <Widget>[
+                                    Text(
+                                      cart.values.toList()[index].name,
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                      Positioned(
-                                          right: 8,
-                                          child: GestureDetector(
-                                            child: Icon(
-                                              Icons.clear,
-                                              color: Color.fromRGBO(128, 0, 128, 1),
-                                            ),
-                                            onTap: () {
-                                              print("kkkkkkk");
-                                              bloc.clear(cart.keys.toList()[index]);
-                                            },
-                                          ))
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              height: 8.0,
-                            ),
-                            Text("N${cart.values.toList()[index].price}"),
-                            SizedBox(
-                              height: 8.0,
-                            ),
-                            Quantity_Cart_btn(cart.values.toList()[index]),
-                            SizedBox(
-                              height: 8.0,
-                            ),
-                            Divider(
-                              thickness: 1,
-                            )
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+                                    ),
+                                    Positioned(
+                                        right: 8,
+                                        child: GestureDetector(
+                                          child: Icon(
+                                            Icons.clear,
+                                            color: Color.fromRGBO(128, 0, 128, 1),
+                                          ),
+                                          onTap: () {
+                                            print("kkkkkkk");
+                                            bloc.clear(cart.keys.toList()[index]);
+                                          },
+                                        ))
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: 8.0,
+                          ),
+                          Text("N${cart.values.toList()[index].price}"),
+                          SizedBox(
+                            height: 8.0,
+                          ),
+                          Quantity_Cart_btn(cart.values.toList()[index]),
+                          SizedBox(
+                            height: 8.0,
+                          ),
+                          Divider(
+                            thickness: 1,
+                          )
+                        ],
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
