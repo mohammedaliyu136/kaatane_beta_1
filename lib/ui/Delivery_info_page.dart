@@ -32,6 +32,7 @@ class Delivery_infoState extends State<Delivery_info> {
           child: Column(
             children: <Widget>[
               TextFormField(
+                keyboardType: TextInputType.text,
                 decoration: InputDecoration(labelText: 'Enter your fullname', focusColor: Color.fromRGBO(128, 0, 128, 1)),
                 validator: (value) {
                   if (value.isEmpty) {
@@ -43,11 +44,13 @@ class Delivery_infoState extends State<Delivery_info> {
                 onSaved: (input)=>bloc.fullName=input,
               ),
               TextFormField(
+                keyboardType: TextInputType.emailAddress,
                 decoration:
                 InputDecoration(labelText: 'Enter your email (optional)', focusColor: Color.fromRGBO(128, 0, 128, 1)),
                 onSaved: (input)=>bloc.email=input,
               ),
               TextFormField(
+                keyboardType: TextInputType.phone,
                 decoration: InputDecoration(labelText: 'Enter your phonenumber', focusColor: Color.fromRGBO(128, 0, 128, 1)),
                 validator: (value) {
                   if (value.isEmpty) {
@@ -58,6 +61,7 @@ class Delivery_infoState extends State<Delivery_info> {
                 onSaved: (input)=>bloc.phone=input,
               ),
               TextFormField(
+                keyboardType: TextInputType.text,
                 decoration:
                 InputDecoration(labelText: 'Enter your note to resataurant', focusColor: Color.fromRGBO(128, 0, 128, 1),),
                 maxLines: null,

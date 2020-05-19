@@ -1,5 +1,5 @@
 class Restaurant {
-  final int id;
+  final String id;
   final String name;
   final String img_url;
   final String phone_number;

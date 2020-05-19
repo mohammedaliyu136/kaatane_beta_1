@@ -1,20 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:kaatane/bloc/cart_bloc.dart';
+import 'package:provider/provider.dart';
+import '../../admin/SnackBars.dart';
 
 import '../Delivery_info_page.dart';
 
 
 class Buttom_Cart extends StatelessWidget {
+  Buttom_Cart(this._scaffoldKey);
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
+    var bloc = Provider.of<CartBloc>(context);
     return RaisedButton(
       textColor: Colors.white,
       onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Delivery_info()),
-        );
+        if(bloc.cart.length>0){
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Delivery_info()),
+          );
+        }else{
+          cartISEmpty(_scaffoldKey);
+        }
       },
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(80.0)),
       padding: const EdgeInsets.all(0.0),

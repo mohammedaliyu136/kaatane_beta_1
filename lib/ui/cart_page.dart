@@ -7,11 +7,13 @@ import 'widgets/buttom_cart.dart';
 import 'widgets/cart_quantity_btn.dart';
 
 class CartPage extends StatelessWidget {
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     var bloc = Provider.of<CartBloc>(context);
     var cart = bloc.cart;
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text("Cart"),
       ),
@@ -102,7 +104,7 @@ class CartPage extends StatelessWidget {
               ListTile(leading: Text("Grand Total"), trailing: Text("₦${bloc.total}"),),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Buttom_Cart(),
+                child: Buttom_Cart(_scaffoldKey),
               ),
               SizedBox(height: 8.0,),
             ],),)

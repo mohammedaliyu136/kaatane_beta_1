@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
@@ -6,11 +7,14 @@ import '../../bloc/cart_bloc.dart';
 import '../../model/meal.dart';
 
 class Add_To_Cart_btn2 extends StatelessWidget {
-  Add_To_Cart_btn2(this.meal);
-  final Meal meal;
+  Add_To_Cart_btn2(this.mealDocument);
+  //final Meal meal;
+  final DocumentSnapshot mealDocument;
+
   @override
   Widget build(BuildContext context) {
     var bloc = Provider.of<CartBloc>(context);
+    Meal meal = Meal(id: mealDocument.documentID, name: mealDocument['title'], img_url: mealDocument['img_url'], price: mealDocument['price']);
     return RaisedButton(
       textColor: Colors.white,
       //color: Color.fromRGBO(128, 0, 128, 1),
@@ -39,15 +43,18 @@ class Add_To_Cart_btn2 extends StatelessWidget {
 }
 
 class Add_To_Cart_btn extends StatelessWidget {
-  Add_To_Cart_btn(this.meal);
-  final Meal meal;
+  Add_To_Cart_btn(this.mealDocument, this.bloc);
+  final DocumentSnapshot mealDocument;
+  var bloc;
   @override
   Widget build(BuildContext context) {
-    var bloc = Provider.of<CartBloc>(context);
+    var blocc = Provider.of<CartBloc>(context);
+    //Meal meal = Meal(id: mealDocument.documentID, name: mealDocument['title'], img_url: mealDocument['img_url'], price: mealDocument['price']);
+
     return RaisedButton(
       textColor: Colors.white,
       onPressed: () {
-        bloc.addToCart(meal);
+        blocc.addToCart(Meal(id: mealDocument.documentID, name: mealDocument['title'], img_url: mealDocument['img_url'], price: int.parse(mealDocument['normal_price'])));
       },
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(80.0)),
       padding: const EdgeInsets.all(0.0),

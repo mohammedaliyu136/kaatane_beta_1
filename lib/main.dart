@@ -32,6 +32,11 @@ class MyApp extends StatelessWidget {
             // is not restarted.
             //primarySwatch: Colors.red,
             primaryColor: Color.fromRGBO(128, 0, 128, 1),
+              primarySwatch: Colors.purple,
+              buttonTheme: ButtonThemeData(
+                buttonColor: Colors.purple,     //  <-- dark color
+                textTheme: ButtonTextTheme.primary, //  <-- this auto selects the right color
+              )
           ),
           home: SplashScreen()//SilverAppBarExampleNested()//SilverAppBarExample()//SplashScreen()//MyHomePage(title: 'Flutter Demo Home Page'),
       ),

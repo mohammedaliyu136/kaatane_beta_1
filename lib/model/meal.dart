@@ -1,8 +1,8 @@
 class Meal {
-  final int id;
+  final String id;
   final String name;
   final String img_url;
-  final double price;
+  final int price;
   int quantity = 1;
 
   Meal({this.id, this.name, this.img_url, this.price});
