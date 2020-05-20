@@ -300,6 +300,7 @@ class _AddMealState extends State<AddMeal> {
                             Navigator.pop(context);
                           }
                       );
+                      return null;
                     }
                     showAlertDialogValidation(context, error_msg, _scaffoldKey);
                     //Navigator.push(  if request.time < timestamp.date(2020, 5, 24)

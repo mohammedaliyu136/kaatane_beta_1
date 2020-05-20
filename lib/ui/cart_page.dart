@@ -8,6 +8,7 @@ import 'widgets/cart_quantity_btn.dart';
 
 class CartPage extends StatelessWidget {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  int delivery_fee = 0;
   @override
   Widget build(BuildContext context) {
     var bloc = Provider.of<CartBloc>(context);
@@ -96,7 +97,32 @@ class CartPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: SizedBox(height: 1, child: Container(color: Colors.grey[350],),),
               ),
-              ListTile(leading: Text("No Delivery")),
+              bloc.restaurantDocument['delivery']?ListTile(
+                leading: Text("How to get ur order:"),
+                trailing: DropdownButton<bool>(
+                  items: [
+                    DropdownMenuItem<bool>(
+                      child: Text('pick up'),
+                      value: false,
+                    ),
+                    DropdownMenuItem<bool>(
+                      child: Text('Delivery'),
+                      value: true,
+                    ),
+                  ],
+                  onChanged: (bool deliver) {
+                    if(deliver){
+                      bloc.delivery_fee = bloc.restaurantDocument['delivery_fee'];
+                      bloc.not();
+                    }else{
+                      bloc.delivery_fee = '0';
+                      bloc.not();
+                    }
+                  },
+                  hint: Text('Choose'),
+                  //value: _value,
+                ),
+              ):ListTile(leading: Text("No Delivery")),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: SizedBox(height: 1, child: Container(color: Colors.grey[350],),),

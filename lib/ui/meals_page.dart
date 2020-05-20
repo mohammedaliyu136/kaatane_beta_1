@@ -175,8 +175,7 @@ class _MealPageState extends State<MealPage> {
                               ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
                             },
                             blendMode: BlendMode.softLight,
-                            child: Image.network(
-                              'https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60',
+                            child: Image.network(bloc.restaurantDocument['image'],
                               fit: BoxFit.cover,
                             ),
                           ),

@@ -3,6 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kaatane/bloc/cart_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
+import 'package:timeago/timeago.dart' as timeago;
+
 
 import 'order_detail_page.dart';
 import 'SnackBars.dart';
@@ -37,6 +40,15 @@ new_order2(context, DocumentSnapshot document, _scaffoldKey){
 }
 
 ongoing_order(context,  DocumentSnapshot document, _scaffoldKey){
+  var uuid = Uuid();
+  print("&&&&&&&&&&&&&&&&&&&&&");
+  print("&&&&&&&&&&&&&&&&&&&&&");
+  print("&&&&&&&&&&&&&&&&&&&&&");
+  print("&&&&&&&&&&&&&&&&&&&&&");
+  print("443c40b0-9abc-11ea-c2c6-9d414111eb86");
+  print(uuid.v1());
+  print(uuid.v1());
+  print(uuid.v1().split('-')[0]);
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
@@ -68,13 +80,13 @@ order_header(DocumentSnapshot document){
     child: ListTile(
       leading: Icon(Icons.directions_bike, size: 40,),
       title: Text(document['name']),
-      subtitle: Text('time_stamp'),
+      subtitle: Text(timeago.format(document['time_stamp'].toDate().add(new Duration(hours: 1)))),//
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
-          Text("Order id: 348058"),//document['order_id']
-          Text("Total: \$"+document['total'].toString()),
+          Text("Order id: "+document['order_id'].split('-')[0],),//document['order_id']
+          Text("Total: ₦"+document['total'].toString()),
         ],
       ),
     ),
@@ -110,7 +122,7 @@ order_list(DocumentSnapshot document){
                 child: Text(document['meals'][index]['qty'])
             ),
             Expanded(
-                child: Text("\$"+document['meals'][index]['price'], textAlign: TextAlign.end,)
+                child: Text("₦"+document['meals'][index]['price'], textAlign: TextAlign.end,)
             ),
           ],),
         ],
@@ -123,7 +135,7 @@ order_list(DocumentSnapshot document){
             child: Text(document['meals'][index]['qty'])
         ),
         Expanded(
-            child: Text("\$"+document['meals'][index]['price'], textAlign: TextAlign.end,)
+            child: Text("₦"+document['meals'][index]['price'], textAlign: TextAlign.end,)
         ),
       ],),
     ),),),
@@ -216,7 +228,7 @@ buttons_past(context, DocumentSnapshot document){
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal:8.0),
     child: Row(children: <Widget>[
-      Text(document['delivered']?"Order Status: Order Delivered":"Order Status: Order Cancelled", style: TextStyle(fontWeight: FontWeight.bold, color: document['delivered']?Colors.green:Colors.red),),
+      Text(document['delivered']?"Order Status: Order Delivered":"Order Status: Order Canceled", style: TextStyle(fontWeight: FontWeight.bold, color: document['delivered']?Colors.green:Colors.red),),
       Spacer(),
       //RaisedButton(onPressed: (){
         //Navigator.push(
@@ -231,14 +243,13 @@ buttons_past(context, DocumentSnapshot document){
 showAlertDialog(BuildContext context, DocumentSnapshot document,bool new_order, String value, _scaffoldKey) {
 
   final  messageController = TextEditingController();
-  var acceptOrderMessage = document['delivery']?'Order delivery instruction':'Order Pick up instruction';
+  var acceptOrderMessage = document['delivery']?'Order delivery instruction':'Order pick up/ delivery instruction';
   var acceptHintMessage = document['status']==1?'When order will be ready':acceptOrderMessage;
 
   // set up the buttons
   Widget cancelButton = FlatButton(
     child: Text("Cancel"),
     onPressed:  () {
-      orderAccepted(_scaffoldKey);
       Navigator.of(context).pop();
     },
   );
@@ -251,7 +262,7 @@ showAlertDialog(BuildContext context, DocumentSnapshot document,bool new_order, 
       }else{
         status = 3;
       }
-      var message = value=='true'?'Order accepted by reestaurant':'Order canceled by reestaurant, No reason given.';
+      var message = value=='true'?'Order accepted by restaurant':'Order canceled by restaurant, No reason given.';
       var doc = document.documentID;
       var restaurant = Provider.of<CartBloc>(context).restaurant;
       Firestore.instance.document('order_$restaurant/$doc')
@@ -262,9 +273,9 @@ showAlertDialog(BuildContext context, DocumentSnapshot document,bool new_order, 
         'status_text': messageController.text.isEmpty?message:messageController.text,
       });
       if(new_order){
-        orderAccepted(_scaffoldKey);
+        value=="true"?orderAccepted(_scaffoldKey):orderCanceled(_scaffoldKey);
       }else{
-        orderFinished(_scaffoldKey);
+        value=="true"?orderFinished(_scaffoldKey):orderCanceled(_scaffoldKey);
       }
       Navigator.of(context).pop();
     },
@@ -302,7 +313,6 @@ showAlertDialogValidation(BuildContext context, String message, _scaffoldKey) {
   Widget cancelButton = FlatButton(
     child: Text("Cancel"),
     onPressed:  () {
-      orderAccepted(_scaffoldKey);
       Navigator.of(context).pop();
     },
   );
@@ -310,6 +320,7 @@ showAlertDialogValidation(BuildContext context, String message, _scaffoldKey) {
     child: Text("Continue"),
     onPressed:  () {
       Navigator.of(context).pop();
+      orderAccepted(_scaffoldKey);
     },
   );
 

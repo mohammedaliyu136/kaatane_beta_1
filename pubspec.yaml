@@ -36,7 +36,8 @@ dependencies:
   custom_switch: ^0.0.1
   flutter_slidable: ^0.5.4
   firebase_auth: ^0.16.0
-  uuid: ^2.0.2
+  uuid: ^2.0.4
+  timeago: ^2.0.26
   image_cropper: ^1.2.1
   image_picker: 0.6.0+17
   firebase_storage: 3.0.4

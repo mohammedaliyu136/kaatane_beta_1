@@ -4,15 +4,15 @@ snackBarBase(_scaffoldKey, message){
   return _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(message),));
 }
 mealAdded(_scaffoldKey){
- String message = "Menu successfully added";
+ String message = "Meal successfully added";
  snackBarBase(_scaffoldKey, message);
 }
 mealEdited(_scaffoldKey){
-  String message = "Menu successfully edited";
+  String message = "Meal successfully edited";
   snackBarBase(_scaffoldKey, message);
 }
 mealDeleted(_scaffoldKey){
-  String message = "Menu successfully deleted";
+  String message = "Meal successfully deleted";
   snackBarBase(_scaffoldKey, message);
 }
 categoryAdded(_scaffoldKey){
@@ -36,7 +36,7 @@ orderFinished(_scaffoldKey){
   snackBarBase(_scaffoldKey, message);
 }
 cartISEmpty(_scaffoldKey){
-  String message = "Cart is empty. You have add things to the cart";
+  String message = "Please add item to cart before checkout";
   snackBarBase(_scaffoldKey, message);
 }
 categoryISAssigned(_scaffoldKey, num, meals){
@@ -45,5 +45,10 @@ categoryISAssigned(_scaffoldKey, num, meals){
 }
 categoryDeleted(_scaffoldKey){
   String message = "Category deleted successfully";
+  snackBarBase(_scaffoldKey, message);
+}
+
+profileImageUpdated(_scaffoldKey){
+  String message = "Profile image updated successfully";
   snackBarBase(_scaffoldKey, message);
 }

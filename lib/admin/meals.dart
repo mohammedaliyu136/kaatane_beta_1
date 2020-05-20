@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kaatane/bloc/cart_bloc.dart';
@@ -31,9 +32,12 @@ class Meals extends StatelessWidget {
       child: Text("Continue"),
       onPressed:  () {
         var doc_id=document.documentID;
+        var img_url = document['img_url'];
         Firestore.instance.document('meal/$doc_id').delete();
         mealDeleted(_scaffoldKey);
         Navigator.of(context).pop();
+        FirebaseStorage.instance.getReferenceFromUrl(document['img_url']).then((value) => value.delete().then((value){
+        }));
       },
     );
 
@@ -155,7 +159,7 @@ class Meals extends StatelessWidget {
               Expanded(child: RaisedButton(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: Text("Add Menu"),
+                  child: Text("Add Meal"),
                 ),
                 onPressed: (){
                   Navigator.push(

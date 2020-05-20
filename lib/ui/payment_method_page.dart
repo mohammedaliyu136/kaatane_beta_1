@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:uuid/uuid.dart';
 import '../bloc/cart_bloc.dart';
 import '../utils/paystack.dart';
 import 'Order_Submitted_page.dart';
@@ -129,7 +130,9 @@ class Order_payment_methodState extends State<Order_payment_method> {
               child: GestureDetector(
                 onTap: () async {
                   //var url = "https://kaatane.herokuapp.com/api/order/";
-                  bloc.postOrder("Pay on Delivery", context, paystackPublicKey);
+                  var uuid = Uuid();
+
+                  bloc.postOrder("Pay on Delivery", context, uuid.v1());
                   //Navigator.push(
                     //context,
                     //MaterialPageRoute(builder: (context) => Order_Submitted()),

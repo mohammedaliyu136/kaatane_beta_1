@@ -32,11 +32,12 @@ class CartBloc with ChangeNotifier {
 
   String restaurant = '';
   DocumentSnapshot restaurantDocument;
+  String delivery_fee = '0';
 
   Map<String, Meal> _cart = {};
 
   int _total = 0;
-  int get total => _total;
+  int get total => _total+int.parse(delivery_fee);
 
   String _fullName="";
   String _email="";
@@ -196,17 +197,10 @@ class CartBloc with ChangeNotifier {
             restaurant=value.documents[0].documentID;
             restaurantDocument = value.documents[0];
             _fcm.subscribeToTopic(restaurantDocument.documentID);
-            if(_userFirebase.displayName!=null){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Orders()),//EditProfile
-              );
-            }else{
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => EditProfile()),
-              );
-            }
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Orders()),//EditProfile
+            );
           });
 
 

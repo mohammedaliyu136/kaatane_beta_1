@@ -32,7 +32,9 @@ drawer(context, page, bloc){
           child: Column(children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(top: 50.0, bottom: 20),
-              child: Icon(Icons.person_pin, size:200),
+              child: bloc.restaurantDocument['image']=='https://google.com'?
+              Center(child: Icon(Icons.person_pin, size: 200,)):
+              Center(child: Image.network(bloc.restaurantDocument['image'], height: 200, width: 200,)),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0,),
