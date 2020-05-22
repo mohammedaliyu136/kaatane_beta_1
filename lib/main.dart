@@ -14,12 +14,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    Firestore.instance.collection('books').document()
-        .setData({ 'title': 'title', 'author': 'kabir' });
     return ChangeNotifierProvider<CartBloc>(
       builder: (context) => CartBloc(),
       child: MaterialApp(
-          title: 'Flutter Demo',
+          title: 'Kaatane',
           theme: ThemeData(
             // This is the theme of your application.
             //

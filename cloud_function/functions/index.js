@@ -33,7 +33,7 @@ exports.createRestaurant_1 = functions.firestore
         let payload = {
             notification: {
                 title: 'You have a new order',
-                body: "Total: $"+total,
+                body: "Total: ₦"+total,
                 sound: 'default',
                 badge: '1'
             }
@@ -89,7 +89,7 @@ exports.createRestaurant_2 = functions.firestore
         let payload = {
             notification: {
                 title: 'You have a new order',
-                body: "Total: $"+total,
+                body: "Total: ₦"+total,
                 sound: 'default',
                 badge: '1'
             }
@@ -145,7 +145,7 @@ exports.createRestaurant_3 = functions.firestore
         let payload = {
             notification: {
                 title: 'You have a new order',
-                body: "Total: $"+total,
+                body: "Total: ₦"+total,
                 sound: 'default',
                 badge: '1'
             }
@@ -201,7 +201,7 @@ exports.createRestaurant_4 = functions.firestore
         let payload = {
             notification: {
                 title: 'You have a new order',
-                body: "Total: $"+total,
+                body: "Total: ₦"+total,
                 sound: 'default',
                 badge: '1'
             }
@@ -256,7 +256,7 @@ exports.createRestaurant_5 = functions.firestore
         let payload = {
             notification: {
                 title: 'You have a new order',
-                body: "Total: $"+total,
+                body: "Total: ₦"+total,
                 sound: 'default',
                 badge: '1'
             }
@@ -311,7 +311,7 @@ exports.createRestaurant_6 = functions.firestore
         let payload = {
             notification: {
                 title: 'You have a new order',
-                body: "Total: $"+total,
+                body: "Total: ₦"+total,
                 sound: 'default',
                 badge: '1'
             }
@@ -366,7 +366,7 @@ exports.createRestaurant_7 = functions.firestore
         let payload = {
             notification: {
                 title: 'You have a new order',
-                body: "Total: $"+total,
+                body: "Total: ₦"+total,
                 sound: 'default',
                 badge: '1'
             }

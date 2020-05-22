@@ -1,5 +1,5 @@
 name: kaatane
-description: A new Flutter application.
+description: Kaatane application.
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -40,6 +40,7 @@ dependencies:
   timeago: ^2.0.26
   image_cropper: ^1.2.1
   image_picker: 0.6.0+17
+  image_native_resizer: ^0.1.1
   firebase_storage: 3.0.4
   firebase_messaging: ^5.0.2
   #firebase_admob: ^0.9.0+1

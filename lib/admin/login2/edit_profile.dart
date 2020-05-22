@@ -53,13 +53,21 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Future<void> _cropImage() async {
+      int persent = 100;
+      await imageFile.length()
+          .then((value) {
+        if(value/1000000>0.5){
+          return persent = 50;
+        }
+      });
     File cropped = await ImageCropper.cropImage(
         sourcePath: imageFile.path,
-        aspectRatioPresets: [CropAspectRatioPreset.square,],
+        compressQuality: persent,
+        aspectRatioPresets: [CropAspectRatioPreset.ratio3x2,],
         // ratioX: 1.0,
         // ratioY: 1.0,
-        // maxWidth: 512,
-        // maxHeight: 512,
+        maxWidth: 512,
+        maxHeight: 512,
         //toolbarColor: Colors.purple,
         //toolbarWidgetColor: Colors.white,
         //toolbarTitle: 'Crop It'
@@ -70,7 +78,10 @@ class _EditProfileState extends State<EditProfile> {
         )
     );
 
-    imageFile = cropped ?? imageFile;
+
+    setState(() {
+      imageFile = cropped ?? imageFile;
+    });
   }
 
   showAlertDialog(BuildContext context, DocumentSnapshot document) {
@@ -230,7 +241,7 @@ class _EditProfileState extends State<EditProfile> {
                   Text("Will you deliver?"),
                   SizedBox(width: 10,),
                   CustomSwitch(
-                    activeColor: Colors.green,
+                    activeColor: Color.fromRGBO(128, 0, 128, 1),
                     value: deliveryController,
                     onChanged: (value) {
                       deliveryController=value;
@@ -265,14 +276,11 @@ class _EditProfileState extends State<EditProfile> {
             child: Row(
               children: <Widget>[
                 Expanded(child: RaisedButton(
-                  color: Colors.green,
+                  color: Color.fromRGBO(128, 0, 128, 1),
                   onPressed: () async {
                     //_signInWithEmailAndPassword();
                     var doc_id = restaurantDocument.documentID;
-                    print("+++++++++++++++++++++");
-                    print("+++++++++++++++++++++");
-                    print("+++++++++++++++++++++");
-                    print("+++++++++++++++++++++");
+
                     //FirebaseStorage.instance.getReferenceFromUrl(document['img_url']).then((value) => value.delete().then((value){
                     //}));
                     Provider.of<CartBloc>(context).isLoading = true;
@@ -297,15 +305,22 @@ class _EditProfileState extends State<EditProfile> {
                         MaterialPageRoute(builder: (context) => Orders()),
                       );
                     }else{
+                      String img = bloc.restaurantDocument['image'];
                       Provider.of<CartBloc>(context).uploadImage(imageFile ).then(
                               (url){
+                                print("@@@@@@@@@@@@@@@@");
+                                print("@@@@@@@@@@@@@@@@");
+                                print("@@@@@@@@@@@@@@@@");
+                                print("@@@@@@@@@@@@@@@@");
+                                print("@@@@@@@@@@@@@@@@"+deliveryFeeController.text);
+                                print(url);
                             Firestore.instance.document('Restaurant/$doc_id')
                                 .updateData({
                               'name': nameController.text,
                               'phone_number': phonenumberController.text,
                               'location': locationController.text,
                               'delivery': deliveryController,
-                              'delivery_fee': deliveryFeeController,
+                              'delivery_fee': deliveryFeeController.text.trim()==''?'0':deliveryFeeController.text,
                               'image':url
                             });
                             Firestore.instance.collection('Restaurant').where('user_id', isEqualTo: mUser.uid)
@@ -313,6 +328,8 @@ class _EditProfileState extends State<EditProfile> {
                               bloc.restaurantDocument = value.documents[0];
                               bloc.not();
                             });
+                            FirebaseStorage.instance.getReferenceFromUrl(img).then((value) => value.delete().then((value){
+                            }));
                             Provider.of<CartBloc>(context).isLoading = false;
                             Provider.of<CartBloc>(context).showSnackBar=true;
                             Navigator.push(
@@ -335,7 +352,7 @@ class _EditProfileState extends State<EditProfile> {
             child: Row(
               children: <Widget>[
                 Expanded(child: RaisedButton(
-                  color: Colors.green,
+                  color: Color.fromRGBO(128, 0, 128, 1),
                   onPressed: () async {
                     //_signInWithEmailAndPassword();
                     sendPasswordResetEmail(emailController).then(
@@ -377,6 +394,7 @@ class _EditProfileState extends State<EditProfile> {
               ],
             ),
           ),
+          SizedBox(height: 20),
         ],),
       ):Center(
         child: Column(

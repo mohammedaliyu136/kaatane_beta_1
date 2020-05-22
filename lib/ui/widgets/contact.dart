@@ -12,13 +12,14 @@ class Contact extends StatelessWidget {
     Restaurant restaurant = Restaurant(id: restaurantDocument.documentID, name: restaurantDocument['name'], img_url: restaurantDocument['img_url'], phone_number: restaurantDocument['phone_number'], location: restaurantDocument['location']);
     return Row(
       children: <Widget>[
-        Icon(Icons.phone, size: 18.0),
+        Icon(Icons.phone, size: 20.0),
         SizedBox(width: 3.0),
         Text(restaurant.phone_number,  style: TextStyle(
           color: Colors.black,
         )),
-        SizedBox(width: 8.0),
-        restaurantDocument['delivery']?Text("will deliver"):Text("No delivery")
+        //SizedBox(width: 8.0),
+        Spacer(),
+        restaurantDocument['delivery']?Text("Delivery available"):Text("No delivery")
       ],
     );
   }

@@ -92,17 +92,18 @@ class CartPage extends StatelessWidget {
             Container(color: Colors.white, child: Column(children: <Widget>[
               SizedBox(height: 8.0,),
               ListTile(leading: Text("Your Orders", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),)),
-              ListTile(leading: Text("Bill Total"), trailing: Text("₦${bloc.total}"),),
+              ListTile(leading: Text("Bill Total"), trailing: Text("₦${bloc.total-int.parse(bloc.delivery_fee)}"),),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: SizedBox(height: 1, child: Container(color: Colors.grey[350],),),
               ),
+
               bloc.restaurantDocument['delivery']?ListTile(
                 leading: Text("How to get ur order:"),
-                trailing: DropdownButton<bool>(
+                title: DropdownButton<bool>(
                   items: [
                     DropdownMenuItem<bool>(
-                      child: Text('pick up'),
+                      child: Text('Pickup'),
                       value: false,
                     ),
                     DropdownMenuItem<bool>(
@@ -113,15 +114,19 @@ class CartPage extends StatelessWidget {
                   onChanged: (bool deliver) {
                     if(deliver){
                       bloc.delivery_fee = bloc.restaurantDocument['delivery_fee'];
+                      bloc.del_or_pick = true;
                       bloc.not();
                     }else{
                       bloc.delivery_fee = '0';
+                      bloc.del_or_pick = false;
                       bloc.not();
                     }
                   },
+                  value: bloc.del_or_pick,
                   hint: Text('Choose'),
                   //value: _value,
-                ),
+                ),//Text("How to get ur order: "),
+                trailing: bloc.del_or_pick?Text("₦"+bloc.delivery_fee):Text(""),
               ):ListTile(leading: Text("No Delivery")),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),

@@ -9,6 +9,7 @@ class Order_Submitted extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var bloc = Provider.of<CartBloc>(context);
+    bloc.not();
     bloc.clearAll();
     return Scaffold(
         resizeToAvoidBottomPadding: false,

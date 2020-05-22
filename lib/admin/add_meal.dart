@@ -47,13 +47,21 @@ class _AddMealState extends State<AddMeal> {
   }
 
   Future<void> _cropImage() async {
+    int persent = 100;
+    await imageFile.length()
+        .then((value) {
+      if(value/1000000>0.5){
+        return persent = 50;
+      }
+    });
     File cropped = await ImageCropper.cropImage(
       sourcePath: imageFile.path,
+        compressQuality: persent,
         aspectRatioPresets: [CropAspectRatioPreset.square,],
       // ratioX: 1.0,
       // ratioY: 1.0,
-      // maxWidth: 512,
-      // maxHeight: 512,
+      maxWidth: 512,
+      maxHeight: 512,
       //toolbarColor: Colors.purple,
       //toolbarWidgetColor: Colors.white,
       //toolbarTitle: 'Crop It'
@@ -65,6 +73,48 @@ class _AddMealState extends State<AddMeal> {
     );
 
     imageFile = cropped ?? imageFile;
+  }
+
+  setImageDialog(BuildContext context) {
+
+    //imageFile.path;
+    print(")))))))))))))))))))");
+    print(")))))))))))))))))))");
+    print(")))))))))))))))))))");
+    //imageFile!=null?print(imageFile.path.toString()):print("is null");
+
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Camera"),
+      onPressed:  () {
+        _pickImage(ImageSource.camera);
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Galary"),
+      onPressed:  () {
+        _pickImage(ImageSource.gallery);
+        Navigator.of(context).pop();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Set image for meal"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   @override
@@ -85,7 +135,7 @@ class _AddMealState extends State<AddMeal> {
     );
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(title: Text("Add New Menu"), centerTitle: true,),
+      appBar: AppBar(title: Text("Add New Meal"), centerTitle: true,),
       body: !isLoading?Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -94,13 +144,18 @@ class _AddMealState extends State<AddMeal> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Container(
-                    height: 250,
-                    width: 250,
-                    decoration: new BoxDecoration(
-                      image: new DecorationImage(
-                        image: imageFile!=null?new FileImage(imageFile):new AssetImage("assets/images/placeholder.png"),
-                        fit: BoxFit.cover,
+                  GestureDetector(
+                    onTap: (){
+                      setImageDialog(context);
+                    },
+                    child: Container(
+                      height: 250,
+                      width: 250,
+                      decoration: new BoxDecoration(
+                        image: new DecorationImage(
+                          image: imageFile!=null?new FileImage(imageFile):new AssetImage("assets/images/placeholder.png"),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
@@ -111,20 +166,12 @@ class _AddMealState extends State<AddMeal> {
                 children: <Widget>[
                   Center(child: GestureDetector(
                     onTap: (){
-                      _pickImage(ImageSource.gallery);
+                      //_pickImage(ImageSource.gallery);
+                      setImageDialog(context);
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
-                      child: Text("Pick Image", style: TextStyle(decoration: TextDecoration.underline,),),
-                    ),
-                  )),
-                  Center(child: GestureDetector(
-                    onTap: (){
-                      _pickImage(ImageSource.camera);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Text("Take Image", style: TextStyle(decoration: TextDecoration.underline,),),
+                      child: Text("Add meal image", style: TextStyle(decoration: TextDecoration.underline,),),
                     ),
                   )),
                 ],
@@ -207,7 +254,7 @@ class _AddMealState extends State<AddMeal> {
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: "Enter Discounted price (optional)",
+                        hintText: "Enter Discounted price",
                         hintStyle: TextStyle(color: Colors.grey[400])
                     ),
                   ),
@@ -227,7 +274,7 @@ class _AddMealState extends State<AddMeal> {
                     controller: briefDescriptionController,
                     decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: "Write a brief description... (optional)",
+                        hintText: "Write a brief description...",
                         hintStyle: TextStyle(color: Colors.grey[400])
                     ),
                   ),

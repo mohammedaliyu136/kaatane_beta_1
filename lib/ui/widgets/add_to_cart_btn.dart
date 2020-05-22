@@ -54,7 +54,11 @@ class Add_To_Cart_btn extends StatelessWidget {
     return RaisedButton(
       textColor: Colors.white,
       onPressed: () {
-        blocc.addToCart(Meal(id: mealDocument.documentID, name: mealDocument['title'], img_url: mealDocument['img_url'], price: int.parse(mealDocument['normal_price'])));
+        if(mealDocument['discount']){
+          blocc.addToCart(Meal(id: mealDocument.documentID, name: mealDocument['title'], img_url: mealDocument['img_url'], price: int.parse(mealDocument['discount_price'])));
+        }else{
+          blocc.addToCart(Meal(id: mealDocument.documentID, name: mealDocument['title'], img_url: mealDocument['img_url'], price: int.parse(mealDocument['normal_price'])));
+        }
       },
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(80.0)),
       padding: const EdgeInsets.all(0.0),

@@ -63,7 +63,7 @@ class Delivery_infoState extends State<Delivery_info> {
               TextFormField(
                 keyboardType: TextInputType.text,
                 decoration:
-                InputDecoration(labelText: 'Enter your note to resataurant', focusColor: Color.fromRGBO(128, 0, 128, 1),),
+                InputDecoration(labelText: 'Enter your note to restaurant', focusColor: Color.fromRGBO(128, 0, 128, 1),),
                 maxLines: null,
                 onSaved: (input)=>bloc.note=input,
               ),

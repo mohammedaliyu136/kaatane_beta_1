@@ -28,7 +28,6 @@ class _MealPageState extends State<MealPage> {
   final DocumentSnapshot restaurantDocument;
   List<DocumentSnapshot> ctegory_list;
   List<Widget> tabBarList;
-  BuildContext mContext;
   /**
   static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
     testDevices: ["8385408453538732DCC4398BB3BF7936"],
@@ -109,8 +108,6 @@ class _MealPageState extends State<MealPage> {
     bloc.restaurant = restaurantDocument.documentID;
     bloc.restaurantDocument = restaurantDocument;
 
-    mContext = context;
-
     int totalCount = 0;
     if (bloc.cart.length > 0) {
       //totalCount = bloc.cart.values.reduce((a, b) => a + b);
@@ -128,6 +125,65 @@ class _MealPageState extends State<MealPage> {
           primaryColor: Color.fromRGBO(128, 0, 128, 1),
         ),
         home: Scaffold(
+          appBar: AppBar(
+              title: Text(restaurantDocument['name']),
+              leading: IconButton(
+                  icon: BackButtonIcon(),
+                  onPressed: () {
+                    showAlertDialog(context);
+                    //Navigator.pop(context);
+                  }),
+            elevation: 0,
+            actions: <Widget>[
+              new Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: new Container(
+                    height: 150.0,
+                    width: 30.0,
+                    child: new GestureDetector(
+                      onTap: () {
+                        //_bannerAd.dispose();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CartPage(),
+                          ),
+                        );
+                      },
+                      child: new Stack(
+                        children: <Widget>[
+                          new IconButton(
+                            icon: new Icon(
+                              Icons.shopping_cart,
+                              color: Colors.white,
+                            ),
+                            onPressed: null,
+                          ),
+                          new Positioned(
+                              child: new Stack(
+                                children: <Widget>[
+                                  new Icon(Icons.brightness_1,
+                                      size: 20.0, color: Colors.white),
+                                  new Positioned(
+                                      top: totalCount>9 ? 6.0 : 3.0,
+                                      right: totalCount>9 ? 10.0 : 6.0,
+                                      child: new Center(
+                                        child: new Text(
+                                          '$totalCount',//(totalCount+8).toString()+'',
+                                          style: new TextStyle(
+                                              color:  Color.fromRGBO(128, 0, 128, 1),
+                                              fontSize: totalCount>9 ? 10.0 : 12.0,//12.0,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      )),
+                                ],
+                              )),
+                        ],
+                      ),
+                    )),
+              )
+            ],
+              ),
           body: Column(
             children: <Widget>[
               Expanded(
@@ -137,88 +193,33 @@ class _MealPageState extends State<MealPage> {
                     headerSliverBuilder: (context, value) {
                       return [
                         SliverAppBar(
-                          floating: false,
+                          bottom: TabBar(
+                            isScrollable: true,
+                            indicatorColor: Color.fromRGBO(128, 0, 128, 1),
+                            tabs: tabBarList,
+                          ),
+                          expandedHeight: 220.0,
+                          floating: true,
                           pinned: true,
-                          centerTitle: true,
-                          leading: IconButton(
-                              icon: BackButtonIcon(),
-                              onPressed: () {
-                                showAlertDialog(mContext);
-                                //Navigator.pop(context);
-                              }),
-                          title: Text(restaurantDocument['name'],
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16.0,
-                              )),
-                          actions: <Widget>[
-                            new Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: new Container(
-                                  height: 150.0,
-                                  width: 30.0,
-                                  child: new GestureDetector(
-                                    onTap: () {
-                                      //_bannerAd.dispose();
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => CartPage(),
-                                        ),
-                                      );
-                                    },
-                                    child: new Stack(
-                                      children: <Widget>[
-                                        new IconButton(
-                                          icon: new Icon(
-                                            Icons.shopping_cart,
-                                            color: Colors.white,
-                                          ),
-                                          onPressed: null,
-                                        ),
-                                        new Positioned(
-                                            child: new Stack(
-                                              children: <Widget>[
-                                                new Icon(Icons.brightness_1,
-                                                    size: 20.0, color: Colors.white),
-                                                new Positioned(
-                                                    top: totalCount>9 ? 6.0 : 3.0,
-                                                    right: totalCount>9 ? 10.0 : 6.0,
-                                                    child: new Center(
-                                                      child: new Text(
-                                                        '$totalCount',//(totalCount+8).toString()+'',
-                                                        style: new TextStyle(
-                                                            color:  Color.fromRGBO(128, 0, 128, 1),
-                                                            fontSize: totalCount>9 ? 10.0 : 12.0,//12.0,
-                                                            fontWeight: FontWeight.w500),
-                                                      ),
-                                                    )),
-                                              ],
-                                            )),
-                                      ],
-                                    ),
-                                  )),
-                            )
-                          ],
-                          expandedHeight: 230.0,
-                          //elevation: 50,
+                          snap: true,
+                          elevation: 50,
                           flexibleSpace: FlexibleSpaceBar(
                             centerTitle: true,
-                            background: Image.network(bloc.restaurantDocument['image'], fit: BoxFit.cover,),
-                          ),
-                        ),
-                        SliverPersistentHeader(
-                          delegate: _SliverAppBarDelegate(
-                            TabBar(
-                              isScrollable: true,
-                              labelColor: Color.fromRGBO(128, 0, 128, 1),
-                              indicatorColor: Color.fromRGBO(128, 0, 128, 1),
-                              unselectedLabelColor: Colors.grey,
-                              tabs: tabBarList,
+                            background: ShaderMask(
+                              shaderCallback: (rect) {
+                                return LinearGradient(
+                                  begin: Alignment.bottomCenter,
+                                  end: Alignment.topCenter,
+                                  colors: [Colors.black, Colors.white],
+                                ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
+                              },
+                              blendMode: BlendMode.softLight,
+                              child: Image.network(bloc.restaurantDocument['image'],
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
-                          pinned: true,
-                        )
+                        ),
                       ];
                     },
                     body: Column(
@@ -315,7 +316,7 @@ class _MealPageState extends State<MealPage> {
                                   return snapshot.data.documents.length!=0?
                                   TabBarView(
                                     children: list0//taViewList
-                                  ):Center(child: new Text("There is no menu to show"));
+                                  ):new Text("There is no menu to show");
 
                               }
                             },
@@ -388,33 +389,5 @@ class _MealPageState extends State<MealPage> {
         ),
       ),
     );
-  }
-}
-
-class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-  _SliverAppBarDelegate(this._tabBar);
-
-  final TabBar _tabBar;
-
-  @override
-  double get minExtent => _tabBar.preferredSize.height;
-  @override
-  double get maxExtent => _tabBar.preferredSize.height;
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Align(
-      alignment: Alignment.center,
-      child: new Container(
-        color: Colors.white,
-        child: _tabBar,
-      ),
-    );
-  }
-
-  @override
-  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
-    return false;
   }
 }

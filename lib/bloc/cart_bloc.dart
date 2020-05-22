@@ -33,11 +33,12 @@ class CartBloc with ChangeNotifier {
   String restaurant = '';
   DocumentSnapshot restaurantDocument;
   String delivery_fee = '0';
+  bool del_or_pick=false;
 
   Map<String, Meal> _cart = {};
 
   int _total = 0;
-  int get total => _total+int.parse(delivery_fee);
+  int get total => delivery_fee.trim()!=''?_total+int.parse(delivery_fee):_total;
 
   String _fullName="";
   String _email="";
@@ -69,6 +70,8 @@ class CartBloc with ChangeNotifier {
   void clearAll() {
     _cart={};
     _total=0;
+    delivery_fee = '0';
+    del_or_pick=false;
     notifyListeners();
   }
 
@@ -149,7 +152,13 @@ class CartBloc with ChangeNotifier {
         }).then((value){
       _fcm.subscribeToTopic(reference);
       isLoading=false;
-      notifyListeners();
+      restaurant = '';
+      delivery_fee = '0';
+
+      _cart = {};
+
+      _total = 0;
+
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(

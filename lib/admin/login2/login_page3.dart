@@ -51,13 +51,17 @@ class _LoginPage2State extends State<LoginPage3> {
                       Row(
                         children: <Widget>[
                           Expanded(child: Container(color: Color.fromRGBO(242, 242, 242, 1), height: 65, child: Center(
-                              child: Text("Admin Login",style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color.fromRGBO(128, 0, 128, 1)),)
+                              child: Text("Login",style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color.fromRGBO(128, 0, 128, 1)),)
                           ),)),
                         ],
                       ),
-                      Row(children: <Widget>[
-                        isTerminated?Text(Provider.of<CartBloc>(context).message,style:TextStyle(color: Colors.red)):Container()
-                      ],),
+                      SizedBox(height: 10,),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 18),
+                        child: Row(children: <Widget>[
+                          isTerminated?Expanded(child: Text(Provider.of<CartBloc>(context).message,style:TextStyle(color: Colors.red,), )):Container()
+                        ],),
+                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 18),
                         child: Row(
