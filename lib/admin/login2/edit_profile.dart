@@ -117,7 +117,7 @@ class _EditProfileState extends State<EditProfile> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Change restaurant profile"),
+      title: Text("Change restaurant image"),
       actions: [
         cancelButton,
         continueButton,
@@ -366,7 +366,7 @@ class _EditProfileState extends State<EditProfile> {
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(18.0),
-                    child: Text("Send a reset link to my Email", style: TextStyle(color: Colors.white, fontSize: 16),),
+                    child: Text("Send password reset link", style: TextStyle(color: Colors.white, fontSize: 16),),
                   ),)),
               ],
             ),

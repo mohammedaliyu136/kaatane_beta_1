@@ -342,6 +342,7 @@ class _AddMealState extends State<AddMeal> {
                               'normal_price': normalPriceController.text,
                               'discount_price': discountPriceController.text,
                               'discount': false,
+                              'listed': true,
                               'brief_description': briefDescriptionController.text,
                               'restaurant_id': restaurant,
                             });

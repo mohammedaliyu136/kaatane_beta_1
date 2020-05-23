@@ -212,7 +212,7 @@ class _MealPageState extends State<MealPage> {
 
   bool get isShrink {
     return _scrollController.hasClients &&
-        _scrollController.offset > (200 - kToolbarHeight);
+        _scrollController.offset > (250 - kToolbarHeight);
   }
 
   @override
@@ -230,7 +230,9 @@ class _MealPageState extends State<MealPage> {
       }
     });
 
-    Firestore.instance.collection('meal').where('restaurant_id', isEqualTo: restaurantDocument.documentID).getDocuments()
+    Firestore.instance.collection('meal')
+        .where('restaurant_id', isEqualTo: restaurantDocument.documentID)
+        .where('listed', isEqualTo: true).getDocuments()
         .then((meals){
       setState(() {
         print("***************");
@@ -311,7 +313,7 @@ class _MealPageState extends State<MealPage> {
                     headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
                       return <Widget>[
                         SliverAppBar(
-                          expandedHeight: 200.0,
+                          expandedHeight: 300.0,
                           floating: false,
                           pinned: true,
                           leading: IconButton(
@@ -381,6 +383,7 @@ class _MealPageState extends State<MealPage> {
                           ],
                           flexibleSpace: FlexibleSpaceBar(
                               centerTitle: true,
+                              titlePadding: !isShrink?EdgeInsets.all(0):null,
                               title: GestureDetector(
                                 onTap: (){
                                   if(bloc.isLoggedIn){
@@ -391,10 +394,24 @@ class _MealPageState extends State<MealPage> {
                                     showColorDialog(mContext);
                                   }
                                 },
-                                child: Text(restaurantDocument['name'],
+                                child: isShrink?Text(restaurantDocument['name'],
                                     style: TextStyle(
                                       color: isShrink ? Colors.white : currentColor,
-                                    )),
+                                    )):Container(
+                                  color: Color.fromRGBO(128, 0, 128, 99),//Colors.white60,//Colors.black38,
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: Text(restaurantDocument['name'],
+                                                  style: TextStyle(
+                                                    color: Colors.white,////Colors.white,//Color.fromRGBO(128, 0, 128, 1),
+                                                  )),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                               ),
                               background: Image.network(restaurantDocument['image'],
                                 fit: BoxFit.cover,
@@ -409,7 +426,7 @@ class _MealPageState extends State<MealPage> {
                               indicatorColor: Color.fromRGBO(128, 0, 128, 1),
                               unselectedLabelColor: Colors.grey,
                               tabs: tabBarList,
-                            ),
+                            ),isShrink
                           ),
                           pinned: true,
                         )
@@ -421,7 +438,6 @@ class _MealPageState extends State<MealPage> {
                       //mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         Expanded(
-
                           child: TabBarView(
                             children: ctegory_list.map((DocumentSnapshot cat_document){
                               if(meal_list!=null){
@@ -465,8 +481,8 @@ class _MealPageState extends State<MealPage> {
                                                   ),
                                                   Row(
                                                     children: <Widget>[
-                                                      Text("Price:"),
-                                                      Text(" ₦"+meal_list[index]['normal_price'].toString(), style: meal_list[index]['discount']?TextStyle(decoration: TextDecoration.lineThrough, ):TextStyle()),
+                                                      Text("Price: ₦"),
+                                                      Text(meal_list[index]['normal_price'].toString(), style: meal_list[index]['discount']?TextStyle(decoration: TextDecoration.lineThrough, ):TextStyle()),
                                                       meal_list[index]['discount']?Text(" ₦"+meal_list[index]['discount_price'].toString(), style: TextStyle(color: Colors.green)):Container(),
                                                     ],
                                                   ),
@@ -571,9 +587,10 @@ class _MealPageState extends State<MealPage> {
 }
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-  _SliverAppBarDelegate(this._tabBar);
+  _SliverAppBarDelegate(this._tabBar, this.isShrink);
 
   final TabBar _tabBar;
+  bool isShrink;
 
   @override
   double get minExtent => _tabBar.preferredSize.height;
@@ -586,7 +603,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
     return Align(
       alignment: Alignment.center,
       child: new Container(
-        color: Colors.white,
+        color: Colors.grey[50],//isShrink?Colors.white:Colors.transparent,
         child: _tabBar,
       ),
     );

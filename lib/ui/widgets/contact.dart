@@ -19,7 +19,7 @@ class Contact extends StatelessWidget {
         )),
         //SizedBox(width: 8.0),
         Spacer(),
-        restaurantDocument['delivery']?Text("Delivery available"):Text("No delivery")
+        restaurantDocument['delivery']?Text("Delivery Available"):Text("No delivery")
       ],
     );
   }

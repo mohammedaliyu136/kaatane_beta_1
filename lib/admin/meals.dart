@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:custom_switch/custom_switch.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -90,45 +91,64 @@ class Meals extends StatelessWidget {
                       ),
                     );
                     default:
-                      return new ListView(
-                        children: snapshot.data.documents.map((DocumentSnapshot document) {
-                          return Column(
-                            children: <Widget>[
-                              new Slidable(
-                                actionPane: SlidableDrawerActionPane(),
-                                actionExtentRatio: 0.25,
-                                child: ListTile(title: Text(document['title']), trailing: Icon(Icons.border_outer),),
-                                secondaryActions: <Widget>[
-                                  IconSlideAction(
-                                    caption: 'Edit',
-                                    color: Colors.blue,
-                                    icon: Icons.edit,
-                                    onTap: (){
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => EditMeal(document)),
-                                      ).then((value){
-                                        if(Provider.of<CartBloc>(context).showSnackBar){
-                                          Provider.of<CartBloc>(context).showSnackBar=false;
-                                          mealEdited(_scaffoldKey);
-                                        }
-                                      });
-                                    },
-                                  ),
-                                  IconSlideAction(
-                                    caption: 'Delete',
-                                    color: Colors.red,
-                                    icon: Icons.delete,
-                                    onTap: (){
-                                      showAlertDialog(context, document);
-                                    },
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 1, child: Container(color: Colors.grey[350],),)
-                            ],
-                          );
-                        }).toList(),
+                      return GestureDetector(
+                        onTap: (){
+                          mealEditDeleteHint(_scaffoldKey);
+                        },
+                        child: new ListView(
+                          children: snapshot.data.documents.map((DocumentSnapshot document) {
+                            return Column(
+                              children: <Widget>[
+                                new Slidable(
+                                  actionPane: SlidableDrawerActionPane(),
+                                  actionExtentRatio: 0.25,
+                                  child: ListTile(
+                                    title: Text(document['title']),
+                                    trailing: CustomSwitch(
+                                      activeColor: Color.fromRGBO(128, 0, 128, 1),
+                                      value: document['listed'],
+                                      onChanged: (value) {
+                                        var doc_id = document.documentID;
+                                        Firestore.instance.document('meal/$doc_id')
+                                            .updateData({
+                                          'listed': document['listed']?false:true,
+                                        }).then((value){
+                                          delisted(_scaffoldKey);
+                                        });
+                                      },
+                                    ),),
+                                  secondaryActions: <Widget>[
+                                    IconSlideAction(
+                                      caption: 'Edit',
+                                      color: Colors.blue,
+                                      icon: Icons.edit,
+                                      onTap: (){
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => EditMeal(document)),
+                                        ).then((value){
+                                          if(Provider.of<CartBloc>(context).showSnackBar){
+                                            Provider.of<CartBloc>(context).showSnackBar=false;
+                                            mealEdited(_scaffoldKey);
+                                          }
+                                        });
+                                      },
+                                    ),
+                                    IconSlideAction(
+                                      caption: 'Delete',
+                                      color: Colors.red,
+                                      icon: Icons.delete,
+                                      onTap: (){
+                                        showAlertDialog(context, document);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 1, child: Container(color: Colors.grey[350],),)
+                              ],
+                            );
+                          }).toList(),
+                        ),
                       );
                   }
                 },

@@ -52,3 +52,11 @@ profileImageUpdated(_scaffoldKey){
   String message = "Profile image updated successfully";
   snackBarBase(_scaffoldKey, message);
 }
+mealEditDeleteHint(_scaffoldKey){
+  String message = "Swipe right to left to edit or delete a meal.";
+  snackBarBase(_scaffoldKey, message);
+}
+delisted(_scaffoldKey){
+  String message = "Meal listing has been updated successfully.";
+  snackBarBase(_scaffoldKey, message);
+}

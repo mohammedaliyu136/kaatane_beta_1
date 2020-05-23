@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
@@ -11,9 +14,13 @@ import 'ui/splashScreen_page.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  final FirebaseMessaging _fcm = FirebaseMessaging();
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    if (Platform.isIOS) {
+      _fcm.requestNotificationPermissions(IosNotificationSettings());
+    }
     return ChangeNotifierProvider<CartBloc>(
       builder: (context) => CartBloc(),
       child: MaterialApp(

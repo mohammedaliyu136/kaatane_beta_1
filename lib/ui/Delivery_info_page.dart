@@ -33,7 +33,7 @@ class Delivery_infoState extends State<Delivery_info> {
             children: <Widget>[
               TextFormField(
                 keyboardType: TextInputType.text,
-                decoration: InputDecoration(labelText: 'Enter your fullname', focusColor: Color.fromRGBO(128, 0, 128, 1)),
+                decoration: InputDecoration(labelText: 'Full Name', focusColor: Color.fromRGBO(128, 0, 128, 1)),
                 validator: (value) {
                   if (value.isEmpty) {
                     return 'Please enter your name';
@@ -46,12 +46,12 @@ class Delivery_infoState extends State<Delivery_info> {
               TextFormField(
                 keyboardType: TextInputType.emailAddress,
                 decoration:
-                InputDecoration(labelText: 'Enter your email (optional)', focusColor: Color.fromRGBO(128, 0, 128, 1)),
+                InputDecoration(labelText: 'Email Address', focusColor: Color.fromRGBO(128, 0, 128, 1)),
                 onSaved: (input)=>bloc.email=input,
               ),
               TextFormField(
                 keyboardType: TextInputType.phone,
-                decoration: InputDecoration(labelText: 'Enter your phonenumber', focusColor: Color.fromRGBO(128, 0, 128, 1)),
+                decoration: InputDecoration(labelText: 'Phone Number', focusColor: Color.fromRGBO(128, 0, 128, 1)),
                 validator: (value) {
                   if (value.isEmpty) {
                     return 'Please enter your phonenumber';
@@ -63,7 +63,7 @@ class Delivery_infoState extends State<Delivery_info> {
               TextFormField(
                 keyboardType: TextInputType.text,
                 decoration:
-                InputDecoration(labelText: 'Enter your note to restaurant', focusColor: Color.fromRGBO(128, 0, 128, 1),),
+                InputDecoration(labelText: 'Additional note to restaurant', focusColor: Color.fromRGBO(128, 0, 128, 1),),
                 maxLines: null,
                 onSaved: (input)=>bloc.note=input,
               ),
