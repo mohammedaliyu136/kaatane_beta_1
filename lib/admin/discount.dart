@@ -43,7 +43,7 @@ class _DiscountState extends State<Discount> {
                     children: <Widget>[
                       new ListTile(title: Text(document['title']),
                           trailing: CustomSwitch(
-                            activeColor: Colors.green,
+                            activeColor: Color.fromRGBO(128, 0, 128, 1),
                             value: document['discount'],
                             onChanged: (value) {
                               var doc_id = document.documentID;

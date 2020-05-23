@@ -28,15 +28,9 @@ class _MealPageState extends State<MealPage> {
   _MealPageState(this.restaurantDocument, this.ctegory_list, this.tabBarList);
   final DocumentSnapshot restaurantDocument;
   List<DocumentSnapshot> ctegory_list;
-  List<DocumentSnapshot> meal_list;
   List<Widget> tabBarList;
   BuildContext mContext;
   Color currentColor;
-
-  bool isLoading = true;
-
-  Color titleColor;
-  var bloc;
 
   ScrollController _scrollController;
 
@@ -99,71 +93,19 @@ class _MealPageState extends State<MealPage> {
     );
   }
 
-  showAlertColorDialog(BuildContext context) {
-
-    // set up the buttons
-    Widget cancelButton = FlatButton(
-      child: Text("No"),
-      onPressed:  () {
-        setState(() {
-          currentColor = titleColor;
-        });
-        Navigator.of(context).pop();
-      },
-    );
-    Widget continueButton = FlatButton(
-      child: Text("Yes"),
-      onPressed:  () {
-        String doc_id = restaurantDocument.documentID;
-        Firestore.instance.document('Restaurant/$doc_id')
-            .updateData({ 'color': currentColor.value});
-        Firestore.instance.collection('Restaurant')
-            .where('user_id', isEqualTo: restaurantDocument['user_id'])
-            .getDocuments()
-            .then((value){
-          bloc.restaurantDocument =value.documents[0];
-        });
-        Navigator.of(context).pop();
-        Navigator.of(context).pop();
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Are you sure you'd like to change color?"),
-      //content: Text("Your current order will be lost"),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-
   showColorDialog(BuildContext context) {
 
     //imageFile!=null?print(imageFile.path.toString()):print("is null");
 
     // set up the buttons
     Widget cancelButton = FlatButton(
-      child: Text("Reset"),
+      child: Text("Camera"),
       onPressed:  () {
-        setState(() {
-          print(Colors.white.value==currentColor.value);
-          currentColor = Colors.white;
-        });
         Navigator.of(context).pop();
       },
     );
     Widget continueButton = FlatButton(
-      child: Text("Done"),
+      child: Text("Galary"),
       onPressed:  () {
         Navigator.of(context).pop();
         //FirebaseStorage.instance.getReferenceFromUrl(document['img_url']).then((value) => value.delete().then((value){
@@ -178,17 +120,10 @@ class _MealPageState extends State<MealPage> {
         pickerColor: Color.fromRGBO(128, 0, 128, 1),
         onColorChanged: (change){
           setState(() {
-
-            print(change);
-            print(change.value);
-            print(change.value.toString());
-            print(Color(change.value));
-            print(Color(int.parse(change.value.toString())));
             currentColor = change;
           });},
       ),
       actions: [
-        cancelButton,
         continueButton,
       ],
     );
@@ -219,28 +154,6 @@ class _MealPageState extends State<MealPage> {
   void initState() {
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
-
-    setState(() {
-      if(restaurantDocument['color']!=null){
-        titleColor = Color(restaurantDocument['color']);
-        currentColor = Color(restaurantDocument['color']);
-      }else{
-        titleColor = Colors.white;
-        currentColor = Colors.white;
-      }
-    });
-
-    Firestore.instance.collection('meal').where('restaurant_id', isEqualTo: restaurantDocument.documentID).getDocuments()
-        .then((meals){
-      setState(() {
-        print("***************");
-        print("***************");
-        isLoading = false;
-        print(meals.documents.length);
-        meal_list=meals.documents;
-
-      });
-    });
     super.initState();
   }
 
@@ -269,7 +182,7 @@ class _MealPageState extends State<MealPage> {
     final title = restaurant.name;
     Future<List<Meal>> meal = fetchMeals(restaurant.id);
     **/
-    bloc = Provider.of<CartBloc>(context);
+    var bloc = Provider.of<CartBloc>(context);
     bloc.restaurant = restaurantDocument.documentID;
     bloc.restaurantDocument = restaurantDocument;
 
@@ -281,18 +194,9 @@ class _MealPageState extends State<MealPage> {
       totalCount = bloc.cart.length;
     }
     List<Widget> taViewList = [];
-
     return new WillPopScope(
       onWillPop: (){
-        if(bloc.isLoggedIn){
-          if(titleColor.value!=currentColor.value){
-            showAlertColorDialog(mContext);
-          }else{
-            Navigator.of(mContext).pop();
-          }
-        }else{
-          showAlertDialog(mContext);
-        }
+        showAlertDialog(context);
       },
       child: MaterialApp(
         title: restaurantDocument['name'],
@@ -307,29 +211,35 @@ class _MealPageState extends State<MealPage> {
                 child: DefaultTabController(
                   length: tabBarList.length,
                   child: NestedScrollView(
-                    controller: _scrollController,
-                    headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-                      return <Widget>[
+                    headerSliverBuilder: (context, value) {
+                      return [
                         SliverAppBar(
-                          expandedHeight: 200.0,
                           floating: false,
                           pinned: true,
+                          centerTitle: true,
                           leading: IconButton(
                               icon: BackButtonIcon(),
-                              color: isShrink ? Colors.white : currentColor,
+                              color: currentColor,
                               onPressed: () {
-                                //showAlertDialog(mContext);
-                                if(bloc.isLoggedIn){
-                                  if(titleColor.value!=currentColor.value){
-                                    showAlertColorDialog(mContext);
-                                  }else{
-                                    Navigator.of(mContext).pop();
-                                  }
-                                }else{
-                                  showAlertDialog(mContext);
-                                }
+                                showAlertDialog(mContext);
                                 //Navigator.pop(context);
                               }),
+                          title: GestureDetector(
+                            onTap: (){
+                              if(bloc.isLoggedIn){
+                                print("0000000000000000000");
+                                print("0000000000000000000");
+                                print("0000000000000000000");
+                                print("change title");
+                                showColorDialog(mContext);
+                              }
+                            },
+                            child: Text(restaurantDocument['name'],
+                                style: TextStyle(
+                                  color: isShrink ? Colors.white : currentColor,
+                                  fontSize: 16.0,
+                                )),
+                          ),
                           actions: <Widget>[
                             new Padding(
                               padding: const EdgeInsets.all(10.0),
@@ -351,7 +261,7 @@ class _MealPageState extends State<MealPage> {
                                         new IconButton(
                                           icon: new Icon(
                                             Icons.shopping_cart,
-                                            color: currentColor != null?(isShrink ?  Colors.white : currentColor):Colors.white,
+                                            color: currentColor,
                                           ),
                                           onPressed: null,
                                         ),
@@ -379,27 +289,12 @@ class _MealPageState extends State<MealPage> {
                                   )),
                             )
                           ],
+                          expandedHeight: 200.0,
+                          //elevation: 50,
                           flexibleSpace: FlexibleSpaceBar(
-                              centerTitle: true,
-                              title: GestureDetector(
-                                onTap: (){
-                                  if(bloc.isLoggedIn){
-                                    print("0000000000000000000");
-                                    print("0000000000000000000");
-                                    print("0000000000000000000");
-                                    print("change title");
-                                    showColorDialog(mContext);
-                                  }
-                                },
-                                child: Text(restaurantDocument['name'],
-                                    style: TextStyle(
-                                      color: isShrink ? Colors.white : currentColor,
-                                    )),
-                              ),
-                              background: Image.network(restaurantDocument['image'],
-                                fit: BoxFit.cover,
-                              )),
-
+                            centerTitle: true,
+                            background: Image.network(bloc.restaurantDocument['image'], fit: BoxFit.cover,),
+                          ),
                         ),
                         SliverPersistentHeader(
                           delegate: _SliverAppBarDelegate(
@@ -415,93 +310,108 @@ class _MealPageState extends State<MealPage> {
                         )
                       ];
                     },
-                    body: !isLoading?Column(
+                    body: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      //mainAxisSize: MainAxisSize.max,
-                      //mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         Expanded(
-
-                          child: TabBarView(
-                            children: ctegory_list.map((DocumentSnapshot cat_document){
-                              if(meal_list!=null){
-                                print("0000000");
-                                print("0000000");
-                                print(cat_document.documentID);
-                                return ListView.builder(
-                                    padding: EdgeInsets.zero,
-                                  itemCount: meal_list.length,
-                                  itemBuilder: (context, index){
-                                    if(cat_document.documentID==meal_list[index]['category_id']){//meal_list[index]
-                                      return Card(
-                                        child: Row(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(vertical: 8,),
-                                              child: Container(
-                                                height: 110,
-                                                width: 110,
-                                                decoration: BoxDecoration(
-                                                  image: DecorationImage(
-                                                    image: NetworkImage(meal_list[index]['img_url']),
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.all(16.0),
-                                              child: Column(
+                          child: StreamBuilder<QuerySnapshot>(
+                            stream: Firestore.instance.collection('meal').where('restaurant_id', isEqualTo:restaurantDocument.documentID).snapshots(),
+                            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                              print("***************");
+                              if (snapshot.hasError)
+                                return new Text('Error: ${snapshot.error}');
+                              switch (snapshot.connectionState) {
+                                case ConnectionState.waiting: return new Text('Loading...');
+                                default:
+                                  List<Widget> list0 = [];
+                                  for(var i=0; i<ctegory_list.length; i++){
+                                    String cat_id = ctegory_list[i].documentID;
+                                    List<Widget> list = [];
+                                    //print(snapshot.data.documents[i]['title']);
+                                    for(var i=0; i<snapshot.data.documents.length; i++){
+                                      if(snapshot.data.documents[i]['category_id']==cat_id){
+                                        var document =snapshot.data.documents[i];
+                                        //list.add(Text(snapshot.data.documents[i]['title']));
+                                        list.add(
+                                            new Card(
+                                              child: Row(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: <Widget>[
-                                                  Text(meal_list[index]['title'],
-                                                      style: TextStyle(
-                                                        fontSize: 18.0,
-                                                        fontWeight: FontWeight.bold,
-                                                      )),
-                                                  SizedBox(
-                                                    height: 4.0,
+                                                  Padding(
+                                                    padding: const EdgeInsets.symmetric(vertical: 8,),
+                                                    child: Container(
+                                                      height: 110,
+                                                      width: 110,
+                                                      decoration: BoxDecoration(
+                                                        image: DecorationImage(
+                                                          image: NetworkImage(document['img_url']),
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                    ),
                                                   ),
-                                                  Row(
-                                                    children: <Widget>[
-                                                      Text("Price:"),
-                                                      Text(" ₦"+meal_list[index]['normal_price'].toString(), style: meal_list[index]['discount']?TextStyle(decoration: TextDecoration.lineThrough, ):TextStyle()),
-                                                      meal_list[index]['discount']?Text(" ₦"+meal_list[index]['discount_price'].toString(), style: TextStyle(color: Colors.green)):Container(),
-                                                    ],
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(16.0),
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: <Widget>[
+                                                        Text(document['title'],
+                                                            style: TextStyle(
+                                                              fontSize: 18.0,
+                                                              fontWeight: FontWeight.bold,
+                                                            )),
+                                                        SizedBox(
+                                                          height: 4.0,
+                                                        ),
+                                                        Row(
+                                                          children: <Widget>[
+                                                            Text("Price:"),
+                                                            Text(" ₦"+document['normal_price'].toString(), style: document['discount']?TextStyle(decoration: TextDecoration.lineThrough, ):TextStyle()),
+                                                            document['discount']?Text(" ₦"+document['discount_price'].toString(), style: TextStyle(color: Colors.green)):Container(),
+                                                          ],
+                                                        ),
+                                                        SizedBox(
+                                                          height: 4.0,
+                                                        ),
+                                                        Add_To_Cart_btn(document, bloc)
+                                                      ],
+                                                    ),
                                                   ),
-                                                  SizedBox(
-                                                    height: 4.0,
-                                                  ),
-                                                  Add_To_Cart_btn(meal_list[index], bloc)
                                                 ],
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
+                                            )
+                                        );
+                                      }
+                                    }
+                                    if(list.length==0){
+                                      list0.add(Center(child: Text("No menu to show")));
                                     }else{
-                                      return Container();
+                                      list0.add(
+                                          ListView(
+                                              shrinkWrap: true,
+                                              children: list
+                                          )
+                                      );
                                     }
 
                                   }
-                                );
+                                  print("=================");
+                                  print("=================");
+                                  print("=================");
+                                  print(list0.length);
+                                  return snapshot.data.documents.length!=0?
+                                  TabBarView(
+                                    children: list0//taViewList
+                                  ):Center(child: new Text("There is no menu to show"));
+
                               }
-                              //Container();
-                            }).toList(),
+                            },
                           ),
                         ),
 
                       ],
-                    ):Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Color.fromRGBO(128, 0, 128, 1)),),
-                          SizedBox(height: 20,),
-                          Text(Provider.of<CartBloc>(context).message, style: TextStyle(fontSize: 20,),),
-                        ],
-                      ),
                     ),
                   ),
                 ),

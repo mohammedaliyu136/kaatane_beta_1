@@ -68,7 +68,10 @@ class _AddMealState extends State<AddMeal> {
         androidUiSettings: AndroidUiSettings(
         lockAspectRatio: true),
         iosUiSettings: IOSUiSettings(
-    minimumAspectRatio: 1.0,
+         //minimumAspectRatio: 1.0,
+          aspectRatioLockEnabled: true,
+          rectHeight: 200,
+          rectWidth: 300
     )
     );
 

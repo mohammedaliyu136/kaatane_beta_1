@@ -17,7 +17,7 @@ class Buttom_Cart extends StatelessWidget {
     return RaisedButton(
       textColor: Colors.white,
       onPressed: () {
-        if(bloc.cart.length>0){
+        if(bloc.cart.length>0 && !bloc.isLoggedIn){
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => Delivery_info()),

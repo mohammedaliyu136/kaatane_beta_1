@@ -25,6 +25,7 @@ class CartBloc with ChangeNotifier {
   FirebaseUser _userFirebase;
   FirebaseMessaging _fcm = FirebaseMessaging();
   bool isLoading = false;
+  bool isLoggedIn = false;
   bool isTerminated = false;
   bool showSnackBar = false;
   String message = "";
@@ -202,6 +203,7 @@ class CartBloc with ChangeNotifier {
           //setUsernamePassword(email, password);
           _userFirebase=currentUser.user;
           isLoading=false;
+          isLoggedIn=true;
           Firestore.instance.collection('Restaurant').where('user_id', isEqualTo: _userFirebase.uid).getDocuments().then((value){
             restaurant=value.documents[0].documentID;
             restaurantDocument = value.documents[0];
