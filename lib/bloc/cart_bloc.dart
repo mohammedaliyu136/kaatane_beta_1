@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -24,6 +25,7 @@ class CartBloc with ChangeNotifier {
 
   FirebaseUser _userFirebase;
   FirebaseMessaging _fcm = FirebaseMessaging();
+  StreamSubscription iosSubscription;
   bool isLoading = false;
   bool isLoggedIn = false;
   bool isTerminated = false;
@@ -110,6 +112,13 @@ class CartBloc with ChangeNotifier {
       context,
       MaterialPageRoute(builder: (context) => LoadingPage(method)),
     );
+    if (Platform.isIOS) {
+      iosSubscription = _fcm.onIosSettingsRegistered.listen((data) {
+        // save the token  OR subscribe to a topic here
+      });
+
+      _fcm.requestNotificationPermissions(IosNotificationSettings());
+    }
 
     /**
     var url = "https://kaatane.herokuapp.com/api/place/order/";
