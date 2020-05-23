@@ -59,6 +59,8 @@ class RestaurantPage extends StatelessWidget {
 
                                     });
                                     isLoading=false;
+                                    bloc.clearAll();
+                                    bloc.not();
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(builder: (context) => MealPage(document, ctegory_list, tabBarList)),

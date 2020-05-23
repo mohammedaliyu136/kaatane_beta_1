@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -15,10 +16,15 @@ void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   final FirebaseMessaging _fcm = FirebaseMessaging();
+  StreamSubscription iosSubscription;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     if (Platform.isIOS) {
+      iosSubscription = _fcm.onIosSettingsRegistered.listen((data) {
+        // save the token  OR subscribe to a topic here
+      });
+
       _fcm.requestNotificationPermissions(IosNotificationSettings());
     }
     return ChangeNotifierProvider<CartBloc>(
