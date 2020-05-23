@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'dart:async';
 
+import '../PushNotificationsManager.dart';
 import 'restaurant_page.dart';
 import 'desktop_page.dart';
 
@@ -17,6 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
   int _counter = 300;
   @override
   void initState() {
+    new FirebaseNotifications().setUpFirebase();
     super.initState();
     initData().then((_) {
       if (kIsWeb) {

@@ -1,27 +1,59 @@
+import 'dart:io';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class PushNotificationsManager {
+class FirebaseNotifications {
+  FirebaseMessaging _firebaseMessaging;
+  final databaseReference = Firestore.instance;
 
-  PushNotificationsManager._();
+  void setUpFirebase() {
+    _firebaseMessaging = FirebaseMessaging();
+    firebaseCloudMessaging_Listeners();
 
-  factory PushNotificationsManager() => _instance;
+  }
 
-  static final PushNotificationsManager _instance = PushNotificationsManager._();
+  void firebaseCloudMessaging_Listeners() {
+    if (Platform.isIOS) iOS_Permission();
 
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-  bool _initialized = false;
+    _firebaseMessaging.getToken().then((token) {
+      print(token);
+      createRecord(token);
+    });
 
-  Future<void> init() async {
-    if (!_initialized) {
-      // For iOS request permission first.
-      _firebaseMessaging.requestNotificationPermissions();
-      _firebaseMessaging.configure();
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print('on message $message');
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print('on resume $message');
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print('on launch $message');
+      },
+    );
+  }
 
-      // For testing purposes print the Firebase Messaging token
-      String token = await _firebaseMessaging.getToken();
-      print("FirebaseMessaging token: $token");
+  void iOS_Permission() {
+    _firebaseMessaging.requestNotificationPermissions(
+        IosNotificationSettings(sound: true, badge: true, alert: true));
+    _firebaseMessaging.onIosSettingsRegistered
+        .listen((IosNotificationSettings settings) {
+      print("Settings registered: $settings");
+    });
+  }
 
-      _initialized = true;
-    }
+  void createRecord(token) async {
+    await databaseReference.collection("books")
+        .document("1")
+        .setData({
+      'token': token
+    });
+
+    DocumentReference ref = await databaseReference.collection("books")
+        .add({
+      'token': token
+    });
+    print(ref.documentID);
   }
 }
