@@ -47,15 +47,18 @@ class CartBloc with ChangeNotifier {
   String _email="";
   String _phone="";
   String _note="";
+  String _address="";
   String get fullName => _fullName;
   String get email => _email;
   String get phone => _phone;
   String get note => _note;
+  String get address => _address;
 
   set fullName (String name)=> _fullName=name;
   set email (String email)=> _email=email;
   set phone (String phone)=> _phone=phone;
   set note (String note)=> _note=note;
+  set address (String address)=> _address=address;
 
   Map<String, Meal> get cart => _cart;
 
@@ -154,8 +157,11 @@ class CartBloc with ChangeNotifier {
       'time_stamp':Timestamp.now(),
       'total':total,
       'message':_note,
+      'phone_number':_phone,
+      'email':_email.trim!=""?_email:"",
+      'address':_address,
       'order_id':reference,
-      'delivery':false,
+      'delivery': del_or_pick,
       'delivered':false,
       'restaurant_id': restaurant,
       'restaurant_name': restaurantDocument['name'],

@@ -60,6 +60,19 @@ class Delivery_infoState extends State<Delivery_info> {
                 },
                 onSaved: (input)=>bloc.phone=input,
               ),
+              bloc.del_or_pick?TextFormField(
+                keyboardType: TextInputType.text,
+                decoration:
+                InputDecoration(labelText: 'Delivery Address', focusColor: Color.fromRGBO(128, 0, 128, 1),),
+                maxLines: null,
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please enter Delivery Address';
+                  }
+                  return null;
+                },
+                onSaved: (input)=>bloc.address=input,
+              ):Container(),
               TextFormField(
                 keyboardType: TextInputType.text,
                 decoration:

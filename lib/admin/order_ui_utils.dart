@@ -103,7 +103,7 @@ order_list(DocumentSnapshot document){
           new Row(children: <Widget>[///document['meals']
             Expanded(
                 flex: 3,
-                child: Text("Menu", style: TextStyle(fontWeight: FontWeight.bold),)
+                child: Text("Meals", style: TextStyle(fontWeight: FontWeight.bold),)
             ),
             Expanded(
                 child: Text("Qty", style: TextStyle(fontWeight: FontWeight.bold))
@@ -161,15 +161,15 @@ buttons(context, DocumentSnapshot document, _scaffoldKey){
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal:8.0),
     child: Row(children: <Widget>[
-      //RaisedButton(
-        //onPressed: (){
-          //Navigator.push(
-           // context,
-          //  MaterialPageRoute(builder: (context) => OrderDetailPage(1)),
-         // );
-        //},
-       // child: Text("View Detail"),
-     // ),
+      RaisedButton(
+        onPressed: (){
+          Navigator.push(
+            context,
+          MaterialPageRoute(builder: (context) => OrderDetailPage(1, document)),
+          );
+        },
+       child: Text("View Detail"),
+      ),
       Spacer(),
       SizedBox(width: 5,),
       RaisedButton(
@@ -213,13 +213,12 @@ buttons_ongoing(context, DocumentSnapshot document, _scaffoldKey){
         ),
       ),
       Spacer(),
-      //RaisedButton(onPressed: (){
-        //Navigator.push(
-          //context,
-         // MaterialPageRoute(builder: (context) => OrderDetailPage(2)),
-       // );
-      //},
-       // child: Text("View Detail"),),
+      RaisedButton(onPressed: (){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => OrderDetailPage(2, document)),
+        );
+      }, child: Text("View Detail"),),
     ],),
   );
 }
@@ -230,12 +229,13 @@ buttons_past(context, DocumentSnapshot document){
     child: Row(children: <Widget>[
       Text(document['delivered']?"Order Status: Order Delivered":"Order Status: Order Canceled", style: TextStyle(fontWeight: FontWeight.bold, color: document['delivered']?Colors.green:Colors.red),),
       Spacer(),
-      //RaisedButton(onPressed: (){
-        //Navigator.push(
-        //context,
-        //MaterialPageRoute(builder: (context) => OrderDetailPage(3)),
-      //);},
-        //child: Text("View Detail"),),
+      RaisedButton(onPressed: (){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => OrderDetailPage(3, document)),
+        );
+        },
+        child: Text("View Detail"),),
     ],),
   );
 }
