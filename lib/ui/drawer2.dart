@@ -1,11 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kaatane/admin/login2/login_page3.dart';
+import 'package:kaatane/admin/login2/login_page4.dart';
 import 'package:kaatane/admin/privacy_policy.dart';
 import 'package:kaatane/admin/settings.dart';
 import 'package:kaatane/admin/term_of_use.dart';
+import 'package:kaatane/bloc/cart_bloc.dart';
+import 'package:kaatane/model/my_order_model.dart';
+import 'package:provider/provider.dart';
 
+import 'my_order.dart';
 
+getdata(context)async{
+  List<OrderModel> list = await Provider.of<CartBloc>(context).getMyOrders();
+  return list;
+}
 
 drawer2(context){
   return Drawer(
@@ -22,16 +31,36 @@ drawer2(context){
           child: Column(children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(top: 50.0, bottom: 20),
-              child: Icon(Icons.person_pin, size:200),
+              child: Icon(Icons.person_pin, size:200, color: Colors.white,),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0,),
-              child: Text("Kaatane Client", style: TextStyle(fontSize: 25)),
+              child: Text("Kaatane Client", style: TextStyle(fontSize: 25, color: Colors.white)),
             )
           ],),
         ),
 
-        SizedBox(height: 50),
+        SizedBox(height: 20),
+        SizedBox(height: 3, child: Container(color: Colors.grey[300],),),
+        ListTile(
+          title: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 28.0),
+            child: Row(
+              children: <Widget>[
+                Icon(Icons.reorder, size: 28),
+                SizedBox(width: 20),
+                Text('My Orders', style: TextStyle(fontSize: 18),),
+              ],
+            ),
+          ),
+          onTap: ()async{
+            List<OrderModel> list = await getdata(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MyOrder(list)),//EditProfile
+            );
+          },
+        ),
         SizedBox(height: 3, child: Container(color: Colors.grey[300],),),
         ListTile(
           title: Padding(
@@ -47,7 +76,7 @@ drawer2(context){
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => LoginPage3()),
+              MaterialPageRoute(builder: (context) => LoginPage4()),
             );
           },
         ),

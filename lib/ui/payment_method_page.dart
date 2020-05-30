@@ -48,8 +48,9 @@ class Order_payment_methodState extends State<Order_payment_method> {
     print(bloc.cart.toString());
     return Scaffold(
       resizeToAvoidBottomPadding: false,
+      backgroundColor: Colors.white,
       body: new SafeArea(
-        child: Column(
+        child: ListView(
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -64,15 +65,21 @@ class Order_payment_methodState extends State<Order_payment_method> {
                 ],
               ),
             ),
-            Expanded(
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text("How would you \nlike to pay",
-                      style:
-                      TextStyle(fontSize: 38.0, fontWeight: FontWeight.bold)),
-                ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset("assets/images/pay_online.png"),
+                  Row(
+                    children: <Widget>[
+                      Text("How would you \nlike to pay",
+                          style:
+                          TextStyle(fontSize: 38.0, fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                ],
               ),
             ),
           ],
@@ -112,6 +119,7 @@ class Order_payment_methodState extends State<Order_payment_method> {
                 child: Container(
                   color: Colors.green[300],
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Padding(
                           padding: const EdgeInsets.only(left: 16.0),
@@ -141,6 +149,7 @@ class Order_payment_methodState extends State<Order_payment_method> {
                 child: Container(
                   color: Colors.green[300],
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Padding(
                           padding: const EdgeInsets.only(left: 16.0),
@@ -154,7 +163,8 @@ class Order_payment_methodState extends State<Order_payment_method> {
                   ),
                 ),
               ),
-            )
+            ),
+            SizedBox(height: 20,),
           ],
         ),
       ),

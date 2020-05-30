@@ -9,8 +9,8 @@ class Order_Submitted extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var bloc = Provider.of<CartBloc>(context);
-    bloc.not();
-    bloc.clearAll();
+    //bloc.not();
+    //bloc.clearAll();
     return Scaffold(
         resizeToAvoidBottomPadding: false,
         body: Column(
@@ -34,6 +34,8 @@ class Order_Submitted extends StatelessWidget {
                       child: RaisedButton(
                         textColor: Colors.white,
                         onPressed: () {
+                          Provider.of<CartBloc>(context).clearAll();
+                          Provider.of<CartBloc>(context).notifyListeners();
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(builder: (context) => RestaurantPage()), (route)=>false

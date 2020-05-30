@@ -13,6 +13,7 @@ import 'package:kaatane/admin/login2/edit_profile.dart';
 import 'package:kaatane/admin/login2/login_page3.dart';
 import 'package:kaatane/admin/orders.dart';
 import 'package:kaatane/admin/SnackBars.dart';
+import 'package:kaatane/model/my_order_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/meal.dart';
@@ -26,6 +27,10 @@ class CartBloc with ChangeNotifier {
   FirebaseUser _userFirebase;
   FirebaseMessaging _fcm = FirebaseMessaging();
   StreamSubscription iosSubscription;
+
+  OrderModel currentOrder;
+  OrderHelper _orderHelper = OrderHelper();
+
   bool isLoading = false;
   bool isLoggedIn = false;
   bool isTerminated = false;
@@ -104,6 +109,10 @@ class CartBloc with ChangeNotifier {
   void calculateTotal(index, op) {
       if(op=="add") {
         _total+=_cart[index].price;
+        print("0000000");
+        print("0000000");
+        print("0000000");
+        print(_total);
       }else if(op=="clear"){
         _total-=(_cart[index].price*_cart[index].quantity);
       }else{
@@ -142,9 +151,11 @@ class CartBloc with ChangeNotifier {
     }); **/
 
     var _0cart = [];
+    var meals = "";
 
     _cart.forEach((key, value) {
       _0cart.add({'food_title':value.name, 'price':value.price.toString(), 'qty':value.quantity.toString()});
+      meals+="${value.name}#${value.quantity}*";
     });
 
 
@@ -165,8 +176,20 @@ class CartBloc with ChangeNotifier {
       'delivered':false,
       'restaurant_id': restaurant,
       'restaurant_name': restaurantDocument['name'],
-        }).then((value){
+        }).then((value)async{
       _fcm.subscribeToTopic(reference);
+
+      //save order to local database
+      currentOrder = OrderModel(
+          restaurant_name:restaurantDocument['name'],
+          restaurant_id:restaurantDocument.documentID,
+          order_id:reference,
+          order_time:Timestamp.now().toDate().toString(),
+          order_total:total.toString(),
+          order_meals:meals);
+      _orderHelper.insertOrder(currentOrder);
+      List<OrderModel> list = await _orderHelper.getAllOrder();
+
       isLoading=false;
       restaurant = '';
       delivery_fee = '0';
@@ -174,6 +197,8 @@ class CartBloc with ChangeNotifier {
       _cart = {};
 
       _total = 0;
+
+      notifyListeners();
 
       Navigator.pushAndRemoveUntil(
           context,
@@ -215,7 +240,7 @@ class CartBloc with ChangeNotifier {
           print("000000000000000000000000000000");
           print("000000000000000000000000000000");
           print(currentUser.user.displayName);
-          //setUsernamePassword(email, password);
+          setUsernamePassword(email, password);
           _userFirebase=currentUser.user;
           isLoading=false;
           isLoggedIn=true;
@@ -304,9 +329,14 @@ class CartBloc with ChangeNotifier {
     }
   }
   setUsernamePassword(_email, _password) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('email', _email);
-    await prefs.setString('passord', _password);
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString('username', _email);
+    pref.setString('password', _password);
+  }
+
+  getMyOrders()async{
+    List<OrderModel> list = await _orderHelper.getAllOrder();
+    return list;
   }
 
   not(){

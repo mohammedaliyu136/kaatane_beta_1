@@ -16,6 +16,7 @@ import '../orders.dart';
 import 'account_bloc.dart';
 import '../SnackBars.dart';
 import 'login_page3.dart';
+import 'login_page4.dart';
 
 class EditProfile extends StatefulWidget {
   @override
@@ -386,7 +387,7 @@ class _EditProfileState extends State<EditProfile> {
                     Provider.of<CartBloc>(context).isLoading = false;
                     _fcm.subscribeToTopic(bloc.restaurantDocument.documentID);
                     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                        LoginPage3()), (Route<dynamic> route) => false);
+                        LoginPage4()), (Route<dynamic> route) => false);
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(18.0),

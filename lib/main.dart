@@ -12,7 +12,10 @@ import 'testUI/collapsingToolbar.dart';
 import 'testUI/flare.dart';
 import 'ui/splashScreen_page.dart';
 
-void main() => runApp(MyApp());
+void main(){
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   final FirebaseMessaging _fcm = FirebaseMessaging();

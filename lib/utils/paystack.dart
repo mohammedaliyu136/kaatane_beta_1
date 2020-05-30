@@ -6,6 +6,7 @@ import 'dart:io';
 
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:uuid/uuid.dart';
 
 import '../bloc/cart_bloc.dart';
 
@@ -13,13 +14,15 @@ Future<CheckoutResponse> pay(context) async {
   var bloc = Provider.of<CartBloc>(context);
   var total = bloc.total;
   var _reference = _getReference();
+  var uuid = Uuid().v1();
 
   Charge charge = Charge()
     ..amount = total.toInt()*100 // In base currency
     ..email = 'customer@email.com'
     ..card = _getCardFromUI();
 
-  charge.reference = _reference;
+  //charge.reference = _reference;
+  charge.reference = uuid;
 
   CheckoutResponse response = await PaystackPlugin.checkout(
     context,
@@ -31,7 +34,8 @@ Future<CheckoutResponse> pay(context) async {
   print('Response = $response');
   //return response;
   if(response.message=="Success"){
-    bloc.postOrder("card", context, _reference);
+    //bloc.postOrder("card", context, _reference);
+    bloc.postOrder("card", context, uuid);
   }
 
   //response = {message: Success, card: PaymentCard{_cvc: 884, expiryMonth: 11, expiryYear: 21, _type: VERVE, _last4Digits: 7804 , _number: null}, account: null, reference: ChargedFromAndroid_1579028228949, status: true, method: CheckoutMethod.card, verify: true}

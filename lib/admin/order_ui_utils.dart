@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:kaatane/bloc/cart_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -86,7 +87,7 @@ order_header(DocumentSnapshot document){
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
           Text("Order id: "+document['order_id'].split('-')[0],),//document['order_id']
-          Text("Total: ₦"+document['total'].toString()),
+          Text("Total: ₦${NumberFormat.currency(symbol: "",decimalDigits: 0).format(document['total'])}"),
         ],
       ),
     ),
@@ -122,7 +123,7 @@ order_list(DocumentSnapshot document){
                 child: Text(document['meals'][index]['qty'])
             ),
             Expanded(
-                child: Text("₦"+document['meals'][index]['price'], textAlign: TextAlign.end,)
+                child: Text("₦${NumberFormat.currency(symbol: "", decimalDigits: 0).format(int.parse(document['meals'][index]['price']))}", textAlign: TextAlign.end,)
             ),
           ],),
         ],
@@ -135,7 +136,7 @@ order_list(DocumentSnapshot document){
             child: Text(document['meals'][index]['qty'])
         ),
         Expanded(
-            child: Text("₦"+document['meals'][index]['price'], textAlign: TextAlign.end,)
+            child: Text("₦${NumberFormat.currency(symbol: "", decimalDigits: 0).format(int.parse(document['meals'][index]['price']))}", textAlign: TextAlign.end,)
         ),
       ],),
     ),),),

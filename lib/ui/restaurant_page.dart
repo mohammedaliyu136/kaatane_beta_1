@@ -1,27 +1,48 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kaatane/bloc/cart_bloc.dart';
+import 'package:kaatane/model/my_order_model.dart';
 import 'package:provider/provider.dart';
 
 import '../model/restaurant.dart';
 import '../utils/rest_api.dart';
 import 'drawer2.dart';
 import 'meals_page.dart';
+import 'my_order.dart';
 import 'widgets/contact.dart';
 import 'widgets/restaurant_list_item.dart';
 
 
 class RestaurantPage extends StatelessWidget {
+  List<OrderModel> myOrders;
+  getdata(context)async{
+    List<OrderModel> list = await Provider.of<CartBloc>(context).getMyOrders();
+    return list;
+  }
   //Future<List<Restaurant>> restaurant = fetchRestaurants();
 
   @override
   Widget build(BuildContext context) {
     var bloc = Provider.of<CartBloc>(context);
     bool isLoading =Provider.of<CartBloc>(context).isLoading;
-    //bloc.clearAll();
+
+    //bloc.clearAll();MyOrder
     return Scaffold(
       appBar: AppBar(
         title: Text("Restaurants"),
+        actions: <Widget>[
+          IconButton(
+            icon: Image.asset('assets/images/order_icon.png', height: 22,),//Icon(Icons.reorder),
+            onPressed: ()async{
+              myOrders = await Provider.of<CartBloc>(context).getMyOrders();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MyOrder(myOrders)),//EditProfile
+              );
+            },
+          ),
+        ],
       ),
       drawer: drawer2(context),
       body: !isLoading?Center(

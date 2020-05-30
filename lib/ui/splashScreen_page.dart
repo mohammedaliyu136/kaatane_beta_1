@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flare_flutter/flare_actor.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 
 import '../PushNotificationsManager.dart';
+import 'onboarding.dart';
 import 'restaurant_page.dart';
 import 'desktop_page.dart';
 
@@ -73,13 +75,34 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(Duration(seconds: 4));
   }
 
-  void navigateToHomeScreen() {
+  void navigateToHomeScreen()async{
     isOpen = !isOpen;
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (_) => RestaurantPage()));
+    bool visitedFlag = await getVisitingFlag();
+    setVisitingFlag();
+    if(!visitedFlag){
+      //prefs.setBool('showOnBoarding', false);
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => OnBoardingPage()));
+    }else{
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => RestaurantPage()));
+    }
+    //Navigator.pushReplacement(
+      //  context, MaterialPageRoute(builder: (_) => RestaurantPage()));
   }
   void navigateToErrorScreen() {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (_) => DesktopPage()));
+  }
+
+  setVisitingFlag()async{
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setBool('visited', true);
+  }
+
+  getVisitingFlag()async{
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    bool alreadyVisited = pref.getBool('visited') ?? false;
+    return alreadyVisited;
   }
 }

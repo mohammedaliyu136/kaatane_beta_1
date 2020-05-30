@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../bloc/cart_bloc.dart';
@@ -16,7 +17,7 @@ class CartPage extends StatelessWidget {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text("Cart"),
+        title: Text("Your Order"),
       ),
       body: Container(
         child: Column(
@@ -59,7 +60,6 @@ class CartPage extends StatelessWidget {
                                             color: Color.fromRGBO(128, 0, 128, 1),
                                           ),
                                           onTap: () {
-                                            print("kkkkkkk");
                                             bloc.clear(cart.keys.toList()[index]);
                                           },
                                         ))
@@ -71,7 +71,7 @@ class CartPage extends StatelessWidget {
                           SizedBox(
                             height: 8.0,
                           ),
-                          Text("N${cart.values.toList()[index].price}"),
+                          Text("₦${NumberFormat.currency(symbol: "", decimalDigits: 0).format(cart.values.toList()[index].price)}"),
                           SizedBox(
                             height: 8.0,
                           ),
@@ -91,8 +91,8 @@ class CartPage extends StatelessWidget {
             ),
             Container(color: Colors.white, child: Column(children: <Widget>[
               SizedBox(height: 8.0,),
-              ListTile(leading: Text("Your Orders", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),)),
-              ListTile(leading: Text("Bill Total"), trailing: Text("₦${bloc.total-int.parse(bloc.delivery_fee)}"),),
+              ListTile(leading: Text("Order Summary", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),)),
+              ListTile(leading: Text("Bill Total"), trailing: Text("₦${NumberFormat.currency(symbol: "", decimalDigits: 0).format(bloc.total-int.parse(bloc.delivery_fee))}"),),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: SizedBox(height: 1, child: Container(color: Colors.grey[350],),),
@@ -132,7 +132,7 @@ class CartPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: SizedBox(height: 1, child: Container(color: Colors.grey[350],),),
               ),
-              ListTile(leading: Text("Grand Total"), trailing: Text("₦${bloc.total}"),),
+              ListTile(leading: Text("Grand Total"), trailing: Text("₦${NumberFormat.currency(symbol: "", decimalDigits: 0).format(bloc.total)}"),),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Buttom_Cart(_scaffoldKey),

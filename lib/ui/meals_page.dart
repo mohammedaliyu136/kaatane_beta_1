@@ -8,6 +8,7 @@ import '../bloc/cart_bloc.dart';
 import '../model/meal.dart';
 import '../model/restaurant.dart';
 import '../utils/rest_api.dart';
+import 'package:intl/intl.dart';
 import 'cart_page.dart';
 import 'widgets/add_to_cart_btn.dart';
 import 'widgets/meal_list_item.dart';
@@ -75,6 +76,7 @@ class _MealPageState extends State<MealPage> {
       child: Text("Continue"),
       onPressed:  () {
         Provider.of<CartBloc>(context).clearAll();
+        Provider.of<CartBloc>(context).not();
         Navigator.of(context).pop();
         Navigator.of(context).pop();
       },
@@ -275,12 +277,13 @@ class _MealPageState extends State<MealPage> {
     bloc.restaurant = restaurantDocument.documentID;
     bloc.restaurantDocument = restaurantDocument;
 
+
     mContext = context;
 
     int totalCount = 0;
-    if (bloc.cart.length > 0) {
+    if (Provider.of<CartBloc>(context).cart.length > 0) {
       //totalCount = bloc.cart.values.reduce((a, b) => a + b);
-      totalCount = bloc.cart.length;
+      totalCount = Provider.of<CartBloc>(context).cart.length;
     }
     List<Widget> taViewList = [];
 
@@ -449,6 +452,7 @@ class _MealPageState extends State<MealPage> {
                                   itemCount: meal_list.length,
                                   itemBuilder: (context, index){
                                     if(cat_document.documentID==meal_list[index]['category_id']){//meal_list[index]
+                                      print(NumberFormat.currency(symbol: "", decimalDigits: 0).format(2000));
                                       return Card(
                                         child: Row(
                                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -482,8 +486,8 @@ class _MealPageState extends State<MealPage> {
                                                   Row(
                                                     children: <Widget>[
                                                       Text("Price: ₦"),
-                                                      Text(meal_list[index]['normal_price'].toString(), style: meal_list[index]['discount']?TextStyle(decoration: TextDecoration.lineThrough, ):TextStyle()),
-                                                      meal_list[index]['discount']?Text(" ₦"+meal_list[index]['discount_price'].toString(), style: TextStyle(color: Colors.green)):Container(),
+                                                      Text(NumberFormat.currency(symbol: "", decimalDigits: 0).format(int.parse(meal_list[index]['normal_price'])), style: meal_list[index]['discount']?TextStyle(decoration: TextDecoration.lineThrough, ):TextStyle()),
+                                                      meal_list[index]['discount']?Text(" ₦${NumberFormat.currency(symbol: "", decimalDigits: 0).format(int.parse(meal_list[index]['discount_price']))}", style: TextStyle(color: Colors.green)):Container(),
                                                     ],
                                                   ),
                                                   SizedBox(
@@ -535,7 +539,7 @@ class _MealPageState extends State<MealPage> {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(top:8.0, bottom:8.0, left: 16, right: 8.0),
-                    child: Text("$totalCount items", style: TextStyle(color: Colors.white),),
+                    child: Text("$totalCount ${totalCount>1?"items":"item"}", style: TextStyle(color: Colors.white),),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical:16.0, horizontal: 8.0),
@@ -543,7 +547,7 @@ class _MealPageState extends State<MealPage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top:8.0, bottom:8.0, left: 8.0, right: 8.0),
-                    child: Text("₦${bloc.total}", style: TextStyle(color: Colors.white),),
+                    child: Text("₦${NumberFormat.currency(symbol: "", decimalDigits: 0).format(bloc.total)}", style: TextStyle(color: Colors.white),),
                   ),
                   Spacer(),
                   SizedBox(width: 2, child:Container(color: Colors.white,),),
@@ -556,9 +560,33 @@ class _MealPageState extends State<MealPage> {
                         ),
                       );
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(Icons.shopping_cart, color: Colors.white,),
+                    child: Row(children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(Icons.shopping_cart, color: Colors.white,),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text("VIEW CART", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),),
+                      )
+                    ],),
+                  ),
+                  /*
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CartPage(),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      color: Colors.teal,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(Icons.shopping_cart, color: Colors.white,),
+                      ),
                     ),
                   ),
                   GestureDetector(
@@ -570,11 +598,14 @@ class _MealPageState extends State<MealPage> {
                         ),
                       );
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text("VIEW CART", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),),
+                    child: Container(
+                      color: Colors.teal,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text("VIEW CART", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),),
+                      ),
                     ),
-                  ),
+                  ),*/
                   SizedBox(width: 10,)
                 ],
               ),)
