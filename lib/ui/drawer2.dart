@@ -25,17 +25,18 @@ drawer2(context){
       // Important: Remove any padding from the ListView.
       padding: EdgeInsets.zero,
       children: <Widget>[
+
         GestureDetector(
           onTap: (){
           },
           child: Column(children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(top: 50.0, bottom: 20),
-              child: Icon(Icons.person_pin, size:200, color: Colors.white,),
+              padding: const EdgeInsets.only(top: 30.0, bottom: 20),
+              child: Icon(Icons.person_pin, size:200, color: Colors.transparent,),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0,),
-              child: Text("Kaatane Client", style: TextStyle(fontSize: 25, color: Colors.white)),
+              padding: const EdgeInsets.symmetric(horizontal: 0.0,),
+              child: Text("Kaatane Client", style: TextStyle(fontSize: 25, color: Colors.transparent)),
             )
           ],),
         ),

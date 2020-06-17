@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import 'STRINGVALUE.dart';
+
 
 class EditCategory extends StatefulWidget {
   DocumentSnapshot _Document;
@@ -30,7 +32,7 @@ class _EditCategoryState extends State<EditCategory> {
   Widget build(BuildContext context) {
     nameController.text=_Document['title'];
     return Scaffold(
-      appBar: AppBar(title: Text("Add New Category"), centerTitle: true,),
+      appBar: AppBar(title: Text(UPDATE_CATEGORY_LABEL_TEXT), centerTitle: true,),
       body: ListView(
         children: <Widget>[
           Padding(
@@ -50,9 +52,9 @@ class _EditCategoryState extends State<EditCategory> {
                       maxLength: 20,
                       controller: nameController,
                       decoration: InputDecoration(
-                        errorText: _validate ? 'Value Can\'t Be Empty' : null,
+                        errorText: _validate ? ERROR_LABEL_TEXT : null,
                         border: InputBorder.none,
-                        hintText: "Enter Category Name",
+                        hintText: ENTER_CATEGORY_NAME_LABEL_TEXT,
                         hintStyle: TextStyle(color: Colors.grey[400]),
                       ),
                     ),
@@ -63,7 +65,7 @@ class _EditCategoryState extends State<EditCategory> {
                   Expanded(child: RaisedButton(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20.0),
-                      child: Text("Update", style: TextStyle(fontSize: 19),),
+                      child: Text(UPDATE_LABEL_TEXT, style: TextStyle(fontSize: 19),),
                     ),
                     onPressed: (){
                       if(nameController.text.isEmpty){

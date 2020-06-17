@@ -46,6 +46,8 @@ class CartBloc with ChangeNotifier {
   Map<String, Meal> _cart = {};
 
   int _total = 0;
+  int _count_total = 0;
+  int get count_total => _count_total;
   int get total => delivery_fee.trim()!=''?_total+int.parse(delivery_fee):_total;
 
   String _fullName="";
@@ -68,6 +70,7 @@ class CartBloc with ChangeNotifier {
   Map<String, Meal> get cart => _cart;
 
   void addToCart(Meal meal) {
+    _count_total+=1;
     if (_cart.containsKey(meal.id)) {
       //_cart[index] += 1;
       _cart[meal.id].addQuantity();
@@ -81,6 +84,7 @@ class CartBloc with ChangeNotifier {
   void clearAll() {
     _cart={};
     _total=0;
+    _count_total=0;
     delivery_fee = '0';
     del_or_pick=false;
     notifyListeners();
@@ -95,12 +99,14 @@ class CartBloc with ChangeNotifier {
   }
   void addQuantity(index) {
     _cart[index].addQuantity();
+    _count_total+=1;
     calculateTotal(index, "add");
     notifyListeners();
   }
   void subQuantity(index) {
     if (_cart[index].quantity>1) {
       _cart[index].subQuantity();
+      _count_total-=1;
       calculateTotal(index, "sub");
       notifyListeners();
     }
@@ -109,14 +115,12 @@ class CartBloc with ChangeNotifier {
   void calculateTotal(index, op) {
       if(op=="add") {
         _total+=_cart[index].price;
-        print("0000000");
-        print("0000000");
-        print("0000000");
-        print(_total);
       }else if(op=="clear"){
         _total-=(_cart[index].price*_cart[index].quantity);
+        _count_total-=_cart[index].quantity;
       }else{
         _total-=_cart[index].price;
+        _count_total-=_cart[index].quantity;
       }
   }
   postOrder(method, context, reference) async {

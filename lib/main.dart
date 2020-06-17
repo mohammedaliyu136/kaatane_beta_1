@@ -5,16 +5,24 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 import 'bloc/cart_bloc.dart';
 import 'testUI/adsqqq.dart';
 import 'testUI/collapsingToolbar.dart';
 import 'testUI/flare.dart';
+import 'ui/payment_method_page.dart';
 import 'ui/splashScreen_page.dart';
+import 'ui/button.dart';
 
 void main(){
+  Crashlytics.instance.enableInDevMode = true;
+  FlutterError.onError = Crashlytics.instance.recordFlutterError;
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
+
+  runZoned((){
+    runApp(MyApp());
+  }, onError: Crashlytics.instance.recordError);
 }
 
 class MyApp extends StatelessWidget {

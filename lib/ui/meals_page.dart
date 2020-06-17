@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:kaatane/admin/STRINGVALUE.dart';
 import 'package:provider/provider.dart';
 import 'dart:io';
 
@@ -9,8 +10,10 @@ import '../model/meal.dart';
 import '../model/restaurant.dart';
 import '../utils/rest_api.dart';
 import 'package:intl/intl.dart';
+import 'button.dart';
 import 'cart_page.dart';
 import 'widgets/add_to_cart_btn.dart';
+import 'widgets/contact.dart';
 import 'widgets/meal_list_item.dart';
 //import 'package:firebase_admob/firebase_admob.dart';
 
@@ -35,6 +38,8 @@ class _MealPageState extends State<MealPage> {
   Color currentColor;
 
   bool isLoading = true;
+
+  int cat_len = 0;
 
   Color titleColor;
   var bloc;
@@ -221,8 +226,15 @@ class _MealPageState extends State<MealPage> {
   void initState() {
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
+    int len = 0;
+    print("00000000000");
+    ctegory_list.forEach((element) {
+      len += element['title'].length;
+      print(element['title'].length);
+    });
 
     setState(() {
+      cat_len=len;
       if(restaurantDocument['color']!=null){
         titleColor = Color(restaurantDocument['color']);
         currentColor = Color(restaurantDocument['color']);
@@ -319,7 +331,31 @@ class _MealPageState extends State<MealPage> {
                           expandedHeight: 300.0,
                           floating: false,
                           pinned: true,
-                          leading: IconButton(
+                          leading: !isShrink?Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(80.0)),
+                      ),
+                              child: IconButton(
+                                  icon: BackButtonIcon(),
+                                  color: Colors.black,//isShrink ? Colors.white : currentColor,
+                                  onPressed: () {
+                                    //showAlertDialog(mContext);
+                                    if(bloc.isLoggedIn){
+                                      if(titleColor.value!=currentColor.value){
+                                        showAlertColorDialog(mContext);
+                                      }else{
+                                        Navigator.of(mContext).pop();
+                                      }
+                                    }else{
+                                      showAlertDialog(mContext);
+                                    }
+                                    //Navigator.pop(context);
+                                  }),
+                            ),
+                          ):IconButton(
                               icon: BackButtonIcon(),
                               color: isShrink ? Colors.white : currentColor,
                               onPressed: () {
@@ -336,6 +372,7 @@ class _MealPageState extends State<MealPage> {
                                 //Navigator.pop(context);
                               }),
                           actions: <Widget>[
+                            /**
                             new Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: new Container(
@@ -382,7 +419,7 @@ class _MealPageState extends State<MealPage> {
                                       ],
                                     ),
                                   )),
-                            )
+                            )**/
                           ],
                           flexibleSpace: FlexibleSpaceBar(
                               centerTitle: true,
@@ -390,29 +427,70 @@ class _MealPageState extends State<MealPage> {
                               title: GestureDetector(
                                 onTap: (){
                                   if(bloc.isLoggedIn){
-                                    print("0000000000000000000");
-                                    print("0000000000000000000");
-                                    print("0000000000000000000");
-                                    print("change title");
                                     showColorDialog(mContext);
                                   }
                                 },
                                 child: isShrink?Text(restaurantDocument['name'],
                                     style: TextStyle(
                                       color: isShrink ? Colors.white : currentColor,
-                                    )):Container(
-                                  color: Color.fromRGBO(128, 0, 128, 99),//Colors.white60,//Colors.black38,
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: <Widget>[
-                                          Padding(
-                                                padding: const EdgeInsets.all(8.0),
-                                                child: Text(restaurantDocument['name'],
-                                                  style: TextStyle(
-                                                    color: Colors.white,////Colors.white,//Color.fromRGBO(128, 0, 128, 1),
-                                                  )),
+                                    )):SafeArea(
+                                      child: Container(
+                                  color: Colors.white,//Colors.black38,Color.fromRGBO(128, 0, 128, 99),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Row(
+                                                //mainAxisAlignment: MainAxisAlignment.center,
+                                                children: <Widget>[
+                                                  Expanded(
+                                                    child: Text(restaurantDocument['name'],
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        color: Colors.black,////Colors.white,//Color.fromRGBO(128, 0, 128, 1),
+                                                      )),
+                                                  ),
+                                                ],
+                                              ),
+
+                                              SizedBox(height: 5,),
+                                              Row(
+                                                //mainAxisAlignment: MainAxisAlignment.center,
+                                                children: <Widget>[
+                                                  Icon(Icons.location_on, size: 12.0, color: Color.fromRGBO(128, 0, 128, 1)),
+                                                  SizedBox(width: 3.0),
+                                                  Expanded(
+                                                    child: Text(restaurantDocument['location'],
+                                                        style: TextStyle(
+                                                          fontSize: 10,
+                                                          color: Colors.grey,////Colors.white,//Color.fromRGBO(128, 0, 128, 1),
+                                                        )),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(height: 5.0),
+                                              Row(
+                                                //mainAxisAlignment: MainAxisAlignment.center,
+                                                children: <Widget>[
+                                                  Icon(Icons.phone, size: 12.0, color: Color.fromRGBO(128, 0, 128, 1)),
+                                                  SizedBox(width: 3.0),
+                                                  Text(restaurantDocument['phone_number'],
+                                                      style: TextStyle(
+                                                        fontSize: 11,
+                                                        color: Colors.grey,////Colors.white,//Color.fromRGBO(128, 0, 128, 1),
+                                                      )),
+                                                  Spacer(),
+                                                  Text(restaurantDocument['delivery']?"Delivery Fee: ₦${restaurantDocument['delivery_fee']}":"No Delivery",
+                                                      style: TextStyle(
+                                                        fontSize: 10,
+                                                        color: Colors.grey,////Colors.white,//Color.fromRGBO(128, 0, 128, 1),
+                                                      )),
+                                                ],
+                                              ),
+                                            ],
                                           ),
-                                        ],
+                                        ),
                                       ),
                                     ),
                               ),
@@ -421,10 +499,11 @@ class _MealPageState extends State<MealPage> {
                               )),
 
                         ),
+
                         SliverPersistentHeader(
                           delegate: _SliverAppBarDelegate(
                             TabBar(
-                              isScrollable: true,
+                              isScrollable: cat_len<30?false:true,
                               labelColor: Color.fromRGBO(128, 0, 128, 1),
                               indicatorColor: Color.fromRGBO(128, 0, 128, 1),
                               unselectedLabelColor: Colors.grey,
@@ -444,8 +523,6 @@ class _MealPageState extends State<MealPage> {
                           child: TabBarView(
                             children: ctegory_list.map((DocumentSnapshot cat_document){
                               if(meal_list!=null){
-                                print("0000000");
-                                print("0000000");
                                 print(cat_document.documentID);
                                 return ListView.builder(
                                     padding: EdgeInsets.zero,
@@ -453,51 +530,62 @@ class _MealPageState extends State<MealPage> {
                                   itemBuilder: (context, index){
                                     if(cat_document.documentID==meal_list[index]['category_id']){//meal_list[index]
                                       print(NumberFormat.currency(symbol: "", decimalDigits: 0).format(2000));
-                                      return Card(
-                                        child: Row(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(vertical: 8,),
-                                              child: Container(
-                                                height: 110,
-                                                width: 110,
-                                                decoration: BoxDecoration(
-                                                  image: DecorationImage(
-                                                    image: NetworkImage(meal_list[index]['img_url']),
-                                                    fit: BoxFit.cover,
+                                      return Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Card(
+                                          child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              SizedBox(width: 5,),
+                                              Padding(
+                                                padding: const EdgeInsets.symmetric(vertical: 8,),
+                                                child: Container(
+                                                  height: 110,
+                                                  width: 110,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(10.0),
+                                                    image: DecorationImage(
+                                                      image: NetworkImage(meal_list[index]['img_url']),
+                                                      fit: BoxFit.cover,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.all(16.0),
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Text(meal_list[index]['title'],
-                                                      style: TextStyle(
-                                                        fontSize: 18.0,
-                                                        fontWeight: FontWeight.bold,
-                                                      )),
-                                                  SizedBox(
-                                                    height: 4.0,
-                                                  ),
-                                                  Row(
+                                              Expanded(
+                                                //flex: 7,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(16.0),
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: <Widget>[
-                                                      Text("Price: ₦"),
-                                                      Text(NumberFormat.currency(symbol: "", decimalDigits: 0).format(int.parse(meal_list[index]['normal_price'])), style: meal_list[index]['discount']?TextStyle(decoration: TextDecoration.lineThrough, ):TextStyle()),
-                                                      meal_list[index]['discount']?Text(" ₦${NumberFormat.currency(symbol: "", decimalDigits: 0).format(int.parse(meal_list[index]['discount_price']))}", style: TextStyle(color: Colors.green)):Container(),
+                                                      Text(meal_list[index]['title'],
+                                                          style: TextStyle(
+                                                            fontSize: 18.0,
+                                                            fontWeight: FontWeight.bold,
+                                                          )),
+                                                      SizedBox(
+                                                        height: 5.0,
+                                                      ),
+                                                      Row(
+                                                        children: <Widget>[
+                                                          Text("${PRICE_LABEL_TEXT}: ₦"),
+                                                          Text(NumberFormat.currency(symbol: "", decimalDigits: 0).format(int.parse(meal_list[index]['normal_price'])), style: meal_list[index]['discount']?TextStyle(decoration: TextDecoration.lineThrough, ):TextStyle()),
+                                                          meal_list[index]['discount']?Text(" ₦${NumberFormat.currency(symbol: "", decimalDigits: 0).format(int.parse(meal_list[index]['discount_price']))}", style: TextStyle(color: Colors.green)):Container(),
+                                                        ],
+                                                      ),
+                                                      SizedBox(
+                                                        height: 4.0,
+                                                      ),
+                                                      Row(children: <Widget>[
+                                                        //Add_To_Cart_btn(meal_list[index], bloc),
+                                                        Button(meal_list[index])
+                                                      ],)
                                                     ],
                                                   ),
-                                                  SizedBox(
-                                                    height: 4.0,
-                                                  ),
-                                                  Add_To_Cart_btn(meal_list[index], bloc)
-                                                ],
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       );
                                     }else{
@@ -539,7 +627,7 @@ class _MealPageState extends State<MealPage> {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(top:8.0, bottom:8.0, left: 16, right: 8.0),
-                    child: Text("$totalCount ${totalCount>1?"items":"item"}", style: TextStyle(color: Colors.white),),
+                    child: Text("${Provider.of<CartBloc>(context).count_total} ${Provider.of<CartBloc>(context).count_total>1?ITEMS_LABEL_TEXT:ITEM_LABEL_TEXT}", style: TextStyle(color: Colors.white),),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical:16.0, horizontal: 8.0),
@@ -567,7 +655,7 @@ class _MealPageState extends State<MealPage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text("VIEW CART", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),),
+                        child: Text(VIEW_CART_LABEL_TEXT, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),),
                       )
                     ],),
                   ),

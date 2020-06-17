@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:kaatane/bloc/cart_bloc.dart';
 import 'package:provider/provider.dart';
 
+import 'STRINGVALUE.dart';
 import 'add_category.dart';
 import 'add_meal.dart';
 import 'SnackBars.dart';
@@ -24,13 +25,13 @@ class Meals extends StatelessWidget {
 
     // set up the buttons
     Widget cancelButton = FlatButton(
-      child: Text("Cancel"),
+      child: Text(CANCEL_LABEL_TEXT),
       onPressed:  () {
         Navigator.of(context).pop();
       },
     );
     Widget continueButton = FlatButton(
-      child: Text("Continue"),
+      child: Text(CONTINUE_LABEL_TEXT),
       onPressed:  () {
         var doc_id=document.documentID;
         var img_url = document['img_url'];
@@ -44,8 +45,8 @@ class Meals extends StatelessWidget {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Delete"),
-      content: Text("Are you sure you want to delete $title?"),
+      title: Text(DELETE_LABEL_TEXT),
+      content: Text("${ARE_YOU_SURE_YOU_WANT_TO_DELETE_LABEL_TEXT} $title?"),
       actions: [
         cancelButton,
         continueButton,
@@ -67,7 +68,7 @@ class Meals extends StatelessWidget {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('Menu'),
+        title: Text(MENU_TITLE_LABEL_TEXT),
         centerTitle: true,
       ),
       //drawer: drawer(context, "meal"),
@@ -86,7 +87,7 @@ class Meals extends StatelessWidget {
                         children: <Widget>[
                           CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Color.fromRGBO(128, 0, 128, 1)),),
                           SizedBox(height: 20,),
-                          Text("Loading please wait...", style: TextStyle(fontSize: 20, color: Colors.white),),
+                          Text(LOADING_PLEASE_WAIT_LABEL_TEXT, style: TextStyle(fontSize: 20, color: Colors.white),),
                         ],
                       ),
                     );
@@ -160,7 +161,7 @@ class Meals extends StatelessWidget {
               Expanded(child: RaisedButton(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: Text("Add Category"),
+                  child: Text(ADD_CATEGORY_LABEL_TEXT),
                 ),
                 onPressed: (){
                   //categoryAdded(_scaffoldKey);
@@ -179,7 +180,7 @@ class Meals extends StatelessWidget {
               Expanded(child: RaisedButton(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: Text("Add Meal"),
+                  child: Text(ADD_MEAL_LABEL_TEXT),
                 ),
                 onPressed: (){
                   Navigator.push(

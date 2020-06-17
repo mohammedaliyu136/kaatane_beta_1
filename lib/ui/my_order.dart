@@ -45,7 +45,7 @@ class _MyOrderState extends State<MyOrder> {
       print("333 ${order["status"]}");
       print("333 ${order["status_text"]}");
       Navigator.of(context).pop();
-      showAlertDialogDone(context, meal, order["status_text"], order["status"], _scaffoldKey);
+      showAlertDialogDone(context, meal, order["status_text"], order["status"],order["delivered"], _scaffoldKey);
     });
     // set up the buttons
     Widget cancelButton = FlatButton(
@@ -80,7 +80,7 @@ class _MyOrderState extends State<MyOrder> {
       },
     );
   }
-  showAlertDialogDone(BuildContext context, OrderModel meal, String status_text, int status, _scaffoldKey) {
+  showAlertDialogDone(BuildContext context, OrderModel meal, String status_text, int status,bool delivered, _scaffoldKey) {
 
     // set up the buttons
     Widget cancelButton = FlatButton(
@@ -89,7 +89,7 @@ class _MyOrderState extends State<MyOrder> {
         Navigator.of(context).pop();
       },
     );
-    Widget continueButton = FlatButton(
+    Widget continueButton = RaisedButton(
       child: Text("OK"),
       onPressed:  () {
         Navigator.of(context).pop();
@@ -99,10 +99,43 @@ class _MyOrderState extends State<MyOrder> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: status==1?Text("The restaurant has not done anything about order yet.", style: TextStyle(fontWeight: FontWeight.bold),):Text(status_text, style: TextStyle(fontWeight: FontWeight.bold),),
-      content: ListTile(
-        title: Text('Restaurant: ${meal.restaurant_name}'),
-        subtitle: Text('Time: ${timeago.format(DateTime.parse(meal.order_time))}'),
+      title: Text("Order Status"),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Row(children: [
+            status==1?Text("Your order is pending", style: TextStyle(fontWeight: FontWeight.bold),):
+            status==2?Text("Your order is ongoing", style: TextStyle(fontWeight: FontWeight.bold),):
+            delivered?Text("Your order is delivered", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green),):Text("Your order is canceled", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),),
+            //Text(status_text, style: TextStyle(fontWeight: FontWeight.bold),),
+          ],),
+          ListTile(
+            contentPadding: EdgeInsets.symmetric(vertical: 0),
+            title: Row(
+              children: [
+                Expanded(child: Text('Restaurant: ${meal.restaurant_name}')),
+              ],
+            ),
+            subtitle: Column(
+              children: [
+                SizedBox(height: 3,),
+                Row(
+                  children: [
+                    Expanded(child: Text('Time of Order: ${timeago.format(DateTime.parse(meal.order_time))}')),
+                  ],
+                ),
+                SizedBox(height: 3,),
+                status==1?
+                Container():
+                Row(
+                  children: [
+                    Expanded(child: Text('Message: ${status_text}')),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
       actions: [
         //cancelButton,
@@ -140,77 +173,96 @@ class _MyOrderState extends State<MyOrder> {
           //meals.removeAt(2);
           return Column(
             children: <Widget>[
-              Container(
-                color:  Colors.purple[50],
-                child: new ListTile(
-                  title: Text('${document.restaurant_name}'),
-                  trailing: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: <Widget>[
-                      Text('Order ID: ${document.order_id.split('-')[0]}'),
-                      Text('Total: ₦${NumberFormat.currency(symbol: "", decimalDigits: 0).format(int.parse(document.order_total))}'),
-                    ],
-                  ),
-                  subtitle: Text(timeago.format(DateTime.parse(document.order_time))),
+              Card(
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      color:  Colors.purple[50],
+                      child: new ListTile(
+                        title: Text('${document.restaurant_name}'),
+                        trailing: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: <Widget>[
+                            Text('Order ID: ${document.order_id.split('-')[0]}'),
+                            Text('Total: ₦${NumberFormat.currency(symbol: "", decimalDigits: 0).format(int.parse(document.order_total))}'),
+                          ],
+                        ),
+                        subtitle: Text(timeago.format(DateTime.parse(document.order_time))),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                      child: Column(children: meals.map((e){
+                        if(e.trim()!=""){
+                          return meals.indexOf(e)!=0?Row(children: <Widget>[///document['meals']
+                            Expanded(
+                                flex: 3,
+                                child: Text(e.split("#")[0])
+                            ),
+                            Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left:18.0),
+                                  child: Text("${e.split("#")[1]}"),
+                                )
+                            )
+                          ],):Column(
+                            children: <Widget>[
+                              Row(children: <Widget>[///document['meals']
+                                Expanded(
+                                    flex: 3,
+                                    child: Text("Meals", style: TextStyle(fontWeight: FontWeight.bold),)
+                                ),
+                                Expanded(
+                                    child: Text("Quantity", style: TextStyle(fontWeight: FontWeight.bold),)
+                                )
+                              ],),
+                              SizedBox(height: 5,),
+                              Row(children: <Widget>[///document['meals']
+                                Expanded(
+                                    flex: 3,
+                                    child: Text(e.split("#")[0])
+                                ),
+                                Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left:18.0),
+                                      child: Text("${e.split("#")[1]}"),
+                                    )
+                                )
+                              ],),
+                              SizedBox(height: 4,),
+                            ],
+                          );
+                        }else{
+                          return Container();
+                        }
+                      }).toList(),),
+                    ),
+                    SizedBox(height: 10,),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: RaisedButton(
+                              onPressed: (){
+                                setState(() {
+                                  isLoading=true;
+                                });
+                                showAlertDialog(context, document, _scaffoldKey);
+                                print(document.restaurant_name);
+                              },
+                              child: Text("Check Status"),),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 10,),
+                    SizedBox(height: 1, child: Container(color: Colors.grey[350],),)
+                  ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                child: Column(children: meals.map((e){
-                  if(e.trim()!=""){
-                    return meals.indexOf(e)!=0?Row(children: <Widget>[///document['meals']
-                      Expanded(
-                          flex: 3,
-                          child: Text(e.split("#")[0])
-                      ),
-                      Expanded(
-                          child: Text("${e.split("#")[1]}")
-                      )
-                    ],):Column(
-                      children: <Widget>[
-                        Row(children: <Widget>[///document['meals']
-                          Expanded(
-                              flex: 3,
-                              child: Text("Meals", style: TextStyle(fontWeight: FontWeight.bold),)
-                          ),
-                          Expanded(
-                              child: Text("Quantity", style: TextStyle(fontWeight: FontWeight.bold),)
-                          )
-                        ],),
-                        SizedBox(height: 5,),
-                        Row(children: <Widget>[///document['meals']
-                          Expanded(
-                              flex: 3,
-                              child: Text(e.split("#")[0])
-                          ),
-                          Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left:18.0),
-                                child: Text("${e.split("#")[1]}"),
-                              )
-                          )
-                        ],),
-                        SizedBox(height: 4,),
-                      ],
-                    );
-                  }else{
-                    return Container();
-                  }
-                }).toList(),),
-              ),
               SizedBox(height: 10,),
-              RaisedButton(
-                onPressed: (){
-                  setState(() {
-                    isLoading=true;
-                  });
-                  showAlertDialog(context, document, _scaffoldKey);
-                  print(document.restaurant_name);
-                },
-                child: Text("Check Status"),),
-              SizedBox(height: 10,),
-              SizedBox(height: 1, child: Container(color: Colors.grey[350],),)
             ],
           );
         }).toList(),

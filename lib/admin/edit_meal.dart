@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:kaatane/bloc/cart_bloc.dart';
 import 'package:provider/provider.dart';
 
+import 'STRINGVALUE.dart';
+
 class EditMeal extends StatefulWidget {
   DocumentSnapshot _Document;
   EditMeal(this._Document);
@@ -42,13 +44,14 @@ class _EditMealState extends State<EditMeal> {
 
   @override
   Widget build(BuildContext context) {
-    Firestore.instance.collection('category').orderBy('title').getDocuments().then(
+    String restaurant =Provider.of<CartBloc>(context).restaurant;
+    Firestore.instance.collection('category').where('restaurant_id', isEqualTo: restaurant).getDocuments().then(
             (sn){setState(() {
           ctegory_list = sn.documents;
         });}
     );
     return Scaffold(
-      appBar: AppBar(title: Text("Update Menu"), centerTitle: true,),
+      appBar: AppBar(title: Text(EDIT_MENU_TITLE_LABEL_TEXT), centerTitle: true,),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(children: <Widget>[
@@ -84,7 +87,7 @@ class _EditMealState extends State<EditMeal> {
                   controller: nameController,
                   decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: "Enter Item Name",
+                      hintText: ENTER_ITEM_NAME_HINT_TEXT,
                       hintStyle: TextStyle(color: Colors.grey[400])
                   ),
                 ),
@@ -129,7 +132,7 @@ class _EditMealState extends State<EditMeal> {
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: "Enter normal price",
+                      hintText: ENTER_NORMAL_PRICE_HINT_TEXT,
                       hintStyle: TextStyle(color: Colors.grey[400])
                   ),
                 ),
@@ -149,12 +152,13 @@ class _EditMealState extends State<EditMeal> {
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: "Enter Discounted price (optional)",
+                      hintText: ENTER_DISCOUNT_PRICE_HINT_TEXT,
                       hintStyle: TextStyle(color: Colors.grey[400])
                   ),
                 ),
               ),
             ),
+            /**
             SizedBox(height: 10,),
             Container(
               //color: Colors.grey[200],
@@ -174,7 +178,7 @@ class _EditMealState extends State<EditMeal> {
                   ),
                 ),
               ),
-            ),
+            ),**/
             SizedBox(height: 100,),
           ],)),
 
@@ -183,7 +187,7 @@ class _EditMealState extends State<EditMeal> {
               Expanded(child: RaisedButton(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  child: Text("Update", style: TextStyle(fontSize: 19),),
+                  child: Text(UPDATE_LABEL_TEXT, style: TextStyle(fontSize: 19),),
                 ),
                 onPressed: (){
                   print("#####################################");

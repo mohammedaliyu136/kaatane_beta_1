@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 //import 'package:js/js.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
+import 'package:kaatane/admin/STRINGVALUE.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
@@ -50,7 +51,7 @@ class Order_payment_methodState extends State<Order_payment_method> {
       resizeToAvoidBottomPadding: false,
       backgroundColor: Colors.white,
       body: new SafeArea(
-        child: ListView(
+        child: Column(
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -65,106 +66,110 @@ class Order_payment_methodState extends State<Order_payment_method> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+            Expanded(
+              flex: 5,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Image.asset("assets/images/pay_online.png"),
+                    Row(
+                      children: <Widget>[
+                        Text(HOW_WOULD_YOU_LIKE_TO_PAY_LABEL,
+                            style:
+                            TextStyle(fontSize: 38.0, fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 1,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Image.asset("assets/images/pay_online.png"),
-                  Row(
-                    children: <Widget>[
-                      Text("How would you \nlike to pay",
-                          style:
-                          TextStyle(fontSize: 38.0, fontWeight: FontWeight.bold)),
-                    ],
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () async {
+                        if (kIsWeb) {
+                          // running on the web!
+                          //payWithPaystackWeb(bloc.total, "customer@email.com", bloc.phone, paystackPublicKey);
+                          //const oneSec = const Duration(seconds:1);
+                          //new Timer.periodic(oneSec, (Timer t) {
+                          //print("checking");
+                          //if(get_status() == "done"){
+                          //var response = json.decode(get_response());
+                          //print(response);
+                          //if(response['status']=="success" && response['message']=="Approved"){
+                          // t.cancel();
+                          //var reference = response['reference'];
+                          //bloc.postOrder("card", context, reference);
+                          //}
+                          //}else if(get_status() == "closed"){
+                          //t.cancel();
+                          //}
+                          //});
+
+                        } else {
+                          pay(context);
+                        }
+
+                      },
+                      child: Container(
+                        color: Colors.green[300],
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Padding(
+                                padding: const EdgeInsets.only(left: 16.0),
+                                child: Row(children: <Widget>[
+                                  Text("Pay with ", style: TextStyle(color: Colors.white)),
+                                  Text("Card",
+                                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))
+                                ])),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
+                  Divider(height: 1, thickness: 2),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () async {
+                        //var url = "https://kaatane.herokuapp.com/api/order/";
+                        var uuid = Uuid();
+
+                        bloc.postOrder("Pay on Delivery", context, uuid.v1());
+                        //Navigator.push(
+                        //context,
+                        //MaterialPageRoute(builder: (context) => Order_Submitted()),
+                        //);
+                      },
+                      child: Container(
+                        color: Colors.green[300],
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Padding(
+                                padding: const EdgeInsets.only(left: 16.0),
+                                child:Row(children: <Widget>[
+                                  Text("Pay on ", style: TextStyle(color: Colors.white)),
+                                  Text("Delivery",
+                                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))
+                                ])
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20,),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        height: 120.0,
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: GestureDetector(
-                onTap: () async {
-                  if (kIsWeb) {
-                    // running on the web!
-                    //payWithPaystackWeb(bloc.total, "customer@email.com", bloc.phone, paystackPublicKey);
-                    //const oneSec = const Duration(seconds:1);
-                    //new Timer.periodic(oneSec, (Timer t) {
-                      //print("checking");
-                      //if(get_status() == "done"){
-                        //var response = json.decode(get_response());
-                        //print(response);
-                        //if(response['status']=="success" && response['message']=="Approved"){
-                         // t.cancel();
-                          //var reference = response['reference'];
-                          //bloc.postOrder("card", context, reference);
-                        //}
-                      //}else if(get_status() == "closed"){
-                        //t.cancel();
-                      //}
-                    //});
-
-                  } else {
-                    pay(context);
-                  }
-
-                },
-                child: Container(
-                  color: Colors.green[300],
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: Row(children: <Widget>[
-                            Text("Pay with ", style: TextStyle(color: Colors.white)),
-                            Text("Card",
-                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))
-                          ])),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Divider(height: 1, thickness: 2),
-            Expanded(
-              child: GestureDetector(
-                onTap: () async {
-                  //var url = "https://kaatane.herokuapp.com/api/order/";
-                  var uuid = Uuid();
-
-                  bloc.postOrder("Pay on Delivery", context, uuid.v1());
-                  //Navigator.push(
-                    //context,
-                    //MaterialPageRoute(builder: (context) => Order_Submitted()),
-                  //);
-                },
-                child: Container(
-                  color: Colors.green[300],
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child:Row(children: <Widget>[
-                            Text("Pay on ", style: TextStyle(color: Colors.white)),
-                            Text("Delivery",
-                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))
-                          ])
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 20,),
           ],
         ),
       ),

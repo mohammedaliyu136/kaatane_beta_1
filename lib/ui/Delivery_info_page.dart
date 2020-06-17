@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kaatane/admin/STRINGVALUE.dart';
 import 'package:provider/provider.dart';
 
 import '../bloc/cart_bloc.dart';
@@ -19,7 +20,7 @@ class Delivery_infoState extends State<Delivery_info> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: Text("Delivery Information"),
+        title: Text(DELIVERY_INFORMATION),
       ),
       body: Padding(
         padding: const EdgeInsets.only(
@@ -33,10 +34,10 @@ class Delivery_infoState extends State<Delivery_info> {
             children: <Widget>[
               TextFormField(
                 keyboardType: TextInputType.text,
-                decoration: InputDecoration(labelText: 'Full Name', focusColor: Color.fromRGBO(128, 0, 128, 1)),
+                decoration: InputDecoration(labelText: FULL_NAME_LABEL, focusColor: Color.fromRGBO(128, 0, 128, 1)),
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Please enter your name';
+                    return FULL_NAME_ERROR_MESSAGE_LABEL;
                   }
                   return null;
                 },
@@ -46,15 +47,15 @@ class Delivery_infoState extends State<Delivery_info> {
               TextFormField(
                 keyboardType: TextInputType.emailAddress,
                 decoration:
-                InputDecoration(labelText: 'Email Address', focusColor: Color.fromRGBO(128, 0, 128, 1)),
+                InputDecoration(labelText: EMAIL_ADDRESS_LABEL, focusColor: Color.fromRGBO(128, 0, 128, 1)),
                 onSaved: (input)=>bloc.email=input,
               ),
               TextFormField(
                 keyboardType: TextInputType.phone,
-                decoration: InputDecoration(labelText: 'Phone Number', focusColor: Color.fromRGBO(128, 0, 128, 1)),
+                decoration: InputDecoration(labelText: PHONE_NUMBER_LABEL, focusColor: Color.fromRGBO(128, 0, 128, 1)),
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Please enter your phonenumber';
+                    return PHONE_NUMBER_ERROR_MESSAGE_LABEL;
                   }
                   return null;
                 },
@@ -63,11 +64,11 @@ class Delivery_infoState extends State<Delivery_info> {
               bloc.del_or_pick?TextFormField(
                 keyboardType: TextInputType.text,
                 decoration:
-                InputDecoration(labelText: 'Delivery Address', focusColor: Color.fromRGBO(128, 0, 128, 1),),
+                InputDecoration(labelText: DELIVERY_ADDRESS_LABEL, focusColor: Color.fromRGBO(128, 0, 128, 1),),
                 maxLines: null,
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Please enter Delivery Address';
+                    return DELIVERY_ADDRESS_ERROR_MESSAGE_LABEL;
                   }
                   return null;
                 },
@@ -76,7 +77,7 @@ class Delivery_infoState extends State<Delivery_info> {
               TextFormField(
                 keyboardType: TextInputType.text,
                 decoration:
-                InputDecoration(labelText: 'Additional note to restaurant', focusColor: Color.fromRGBO(128, 0, 128, 1),),
+                InputDecoration(labelText: ADDITIONAL_NOTE_TO_RESTAURANT_LABEL, focusColor: Color.fromRGBO(128, 0, 128, 1),),
                 maxLines: null,
                 onSaved: (input)=>bloc.note=input,
               ),
@@ -139,7 +140,7 @@ class Delivery_infoState extends State<Delivery_info> {
                             child: Padding(
                               padding: const EdgeInsets.all(12.0),
                               child: Text(
-                                "CHECHOUT",
+                                CHECKOUT_LABEL_TEXT,
                               ),
                             ),
                           ),

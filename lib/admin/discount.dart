@@ -3,6 +3,7 @@ import 'package:custom_switch/custom_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:kaatane/bloc/cart_bloc.dart';
 import 'package:provider/provider.dart';
+import 'STRINGVALUE.dart';
 import 'SnackBars.dart';
 
 class Discount extends StatefulWidget {
@@ -19,7 +20,7 @@ class _DiscountState extends State<Discount> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(title: Text("Discounts"), centerTitle: true,),
+      appBar: AppBar(title: Text(DISCOUNT_TITLE_LABEL_TEXT), centerTitle: true,),
       body: StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance.collection('meal').where('restaurant_id', isEqualTo:Provider.of<CartBloc>(context).restaurant).snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -32,7 +33,7 @@ class _DiscountState extends State<Discount> {
                 children: <Widget>[
                   CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Color.fromRGBO(128, 0, 128, 1)),),
                   SizedBox(height: 20,),
-                  Text("Loading, please wait...", style: TextStyle(fontSize: 20, color: Colors.white),),
+                  Text(LOADING_PLEASE_WAIT_LABEL_TEXT, style: TextStyle(fontSize: 20, color: Colors.white),),
                 ],
               ),
             );

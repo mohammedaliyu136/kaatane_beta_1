@@ -9,6 +9,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:kaatane/bloc/cart_bloc.dart';
 import 'package:provider/provider.dart';
 
+import 'STRINGVALUE.dart';
+import 'SnackBars.dart';
 import 'order_ui_utils.dart';
 
 import 'login2/account_bloc.dart';
@@ -138,7 +140,7 @@ class _AddMealState extends State<AddMeal> {
     );
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(title: Text("Add New Meal"), centerTitle: true,),
+      appBar: AppBar(title: Text(ADD_NEW_MENU_TITLE_LABEL_TEXT), centerTitle: true,),
       body: !isLoading?Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -174,7 +176,7 @@ class _AddMealState extends State<AddMeal> {
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
-                      child: Text("Add meal image", style: TextStyle(decoration: TextDecoration.underline,),),
+                      child: Text(ADD_MEAL_IMAGE_LABEL_TEXT, style: TextStyle(decoration: TextDecoration.underline,),),
                     ),
                   )),
                 ],
@@ -193,7 +195,7 @@ class _AddMealState extends State<AddMeal> {
                     controller: nameController,
                     decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: "Enter Item Name",
+                        hintText: ENTER_ITEM_NAME_HINT_TEXT,
                         hintStyle: TextStyle(color: Colors.grey[400])
                     ),
                   ),
@@ -218,7 +220,7 @@ class _AddMealState extends State<AddMeal> {
                             categoryController = value;
                           });
                         },
-                        hint: Text('Choose Item Category'),
+                        hint: Text(CHOOSE_ITEM_CATEGORY_HINT_TEXT),
                         value: categoryController,
                       ):Container()
                 ),
@@ -237,7 +239,7 @@ class _AddMealState extends State<AddMeal> {
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: "Enter normal price",
+                        hintText: ENTER_NORMAL_PRICE_HINT_TEXT,
                         hintStyle: TextStyle(color: Colors.grey[400])
                     ),
                   ),
@@ -257,12 +259,13 @@ class _AddMealState extends State<AddMeal> {
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: "Enter Discounted price",
+                        hintText: ENTER_DISCOUNT_PRICE_HINT_TEXT,
                         hintStyle: TextStyle(color: Colors.grey[400])
                     ),
                   ),
                 ),
               ),
+              /**
               SizedBox(height: 10,),
               Container(
                 //color: Colors.grey[200],
@@ -282,7 +285,7 @@ class _AddMealState extends State<AddMeal> {
                     ),
                   ),
                 ),
-              ),
+              ),**/
               SizedBox(height: 100,),
             ],)),
 
@@ -291,39 +294,35 @@ class _AddMealState extends State<AddMeal> {
                 Expanded(child: RaisedButton(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20.0),
-                    child: Text("Save", style: TextStyle(fontSize: 19),),
+                    child: Text(SAVE_LABEL_TEXT, style: TextStyle(fontSize: 19),),
                   ),
                   onPressed: (){
-                    print("#####################################");
-                    print("#####################################");
-                    print("#####################################");
-                    print("#####################################");
                     String error_msg = "";
                     bool is_error = false;
-                    print(nameController.text);
-                    print(categoryController);
-                    print(normalPriceController.text);
-                    print(discountPriceController.text);
-                    print(briefDescriptionController.text);
                     if(imageFile==null){
                       is_error=true;
-                      error_msg+="Image must be selected\n\n";
+                      error_msg+="${ERROR_IMAGE_LABEL_TEXT}\n\n";
                     }
                     if(nameController.text.isEmpty){
                       is_error=true;
-                      error_msg+="Menu title cannot be empty\n\n";
+                      error_msg+="${ERROR_MENU_TITLE_LABEL_TEXT}\n\n";
                     }
                     if(categoryController==null){
                       is_error=true;
-                      error_msg+="Cateory must be selected\n\n";
+                      error_msg+="${ERROR_CATEGORY_TITLE_LABEL_TEXT}\n\n";
                     }
-                    if(discountPriceController.text.isEmpty){
+                    if(normalPriceController.text.isEmpty){
                       is_error=true;
-                      error_msg+="Discount cannot be emptyd\n\n";
+                      error_msg+="${ERROR_NORMAL_PRICE_LABEL_TEXT}\n\n";
                     }
-                    if(briefDescriptionController.text.isEmpty){
+                    try{
+                      if(int.parse(discountPriceController.text)>int.parse(normalPriceController.text)){
+                        is_error=true;
+                        error_msg+="${ERROR_NORMAL_PRICE_MUST_BE_MORETHAN_DISCOUNT_PRICE_LABEL_TEXT}\n\n";
+                      }
+                    }catch(e){
                       is_error=true;
-                      error_msg+="Discription cannot be empty\n\n";
+                      error_msg+="${ERROR_NORMAL_PRICE_AND_DISCOUNT_PRICE_LABEL_TEXT}\n\n";
                     }
                     if(!is_error){
                       setState(() {
@@ -343,12 +342,13 @@ class _AddMealState extends State<AddMeal> {
                               'discount_price': discountPriceController.text,
                               'discount': false,
                               'listed': true,
-                              'brief_description': briefDescriptionController.text,
+                              'brief_description': "nil",//briefDescriptionController.text,
                               'restaurant_id': restaurant,
                             });
                             Provider.of<CartBloc>(context).isLoading = false;
                             Provider.of<CartBloc>(context).showSnackBar=true;
                             Navigator.pop(context);
+                            mealAdded(_scaffoldKey);
                           }
                       );
                       return null;

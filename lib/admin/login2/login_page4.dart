@@ -6,6 +6,7 @@ import 'package:kaatane/ui/restaurant_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../STRINGVALUE.dart';
 import 'account_bloc.dart';
 import 'detail.dart';
 
@@ -49,10 +50,12 @@ class _LoginPage2State extends State<LoginPage4> {
     bool isTerminated =Provider.of<CartBloc>(context).isTerminated;
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
+      appBar: !Provider.of<CartBloc>(context).isLoading?AppBar(
         leading: BackButton(onPressed: ()=>Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
           RestaurantPage()), (Route<dynamic> route) => false),
         color: Color.fromRGBO(128, 0, 128, 1),),
+        backgroundColor: Colors.white,
+        elevation: 0,):AppBar(
         backgroundColor: Colors.white,
         elevation: 0,),
       body: !isLoading?Container(
@@ -71,13 +74,13 @@ class _LoginPage2State extends State<LoginPage4> {
                   child: Column(children: <Widget>[
                     Row(
                       children: <Widget>[
-                        Text('Welcome Back!', style: TextStyle(fontSize: 25),),
+                        Text(WELCOME_LABEL_TEXT, style: TextStyle(fontSize: 25),),
                       ],
                     ),
                     SizedBox(height: 10,),
                     Row(
                       children: <Widget>[
-                        Text('Sign in to Continue', style: TextStyle(),),
+                        Text(SIGN_IN_LABEL_TEXT, style: TextStyle(),),
                       ],
                     ),
                     SizedBox(height: 30,),
@@ -99,7 +102,7 @@ class _LoginPage2State extends State<LoginPage4> {
                               controller: _emailController,
                               decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: "Email",
+                                  hintText: EMAIL_HINT_TEXT,
                                   hintStyle: TextStyle(color: Colors.grey[400])
                               ),
                               validator: (String value) {
@@ -130,7 +133,7 @@ class _LoginPage2State extends State<LoginPage4> {
                               obscureText: true,
                               decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: "Password",
+                                  hintText: PASSWORD_HINT_TEXT,
                                   hintStyle: TextStyle(color: Colors.grey[400])
                               ),
                               validator: (String value) {
@@ -172,7 +175,7 @@ class _LoginPage2State extends State<LoginPage4> {
                                       }
                                 });
                               },
-                              child: Text('forgot password?')
+                              child: Text(FORGET_PASSWORD_LABEL_TEXT)
                           )
 
                         ],),
@@ -195,7 +198,7 @@ class _LoginPage2State extends State<LoginPage4> {
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(18.0),
-                          child: Text("Login", style: TextStyle(color: Colors.white, fontSize: 16),),
+                          child: Text(LOGIN_LABEL_TEXT, style: TextStyle(color: Colors.white, fontSize: 16),),
                         ),)),
                     ],
                   ),
@@ -217,9 +220,9 @@ class _LoginPage2State extends State<LoginPage4> {
                 color: Colors.white70,
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
-                  child: !err?Text("please wait...",
+                  child: !err?Text(PLEASE_WAIT_LABEL_TEXT,
                     style: TextStyle(fontSize: 20,
-                        color: Color.fromRGBO(128, 0, 128, 1)),):Text("please wait...",
+                        color: Color.fromRGBO(128, 0, 128, 1)),):Text(PLEASE_WAIT_LABEL_TEXT,
                     style: TextStyle(fontSize: 20,
                         color: Color.fromRGBO(128, 0, 128, 1)),),
                 )),

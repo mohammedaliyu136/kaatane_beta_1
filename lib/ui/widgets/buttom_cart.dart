@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:kaatane/admin/STRINGVALUE.dart';
 import 'package:kaatane/bloc/cart_bloc.dart';
 import 'package:provider/provider.dart';
 import '../../admin/SnackBars.dart';
@@ -23,7 +24,11 @@ class Buttom_Cart extends StatelessWidget {
             MaterialPageRoute(builder: (context) => Delivery_info()),
           );
         }else{
-          cartISEmpty(_scaffoldKey);
+          if(bloc.isLoggedIn){
+            cartISLoggedin(_scaffoldKey);
+          }else{
+            cartISEmpty(_scaffoldKey);
+          }
         }
       },
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(80.0)),
@@ -42,7 +47,7 @@ class Buttom_Cart extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(12.0),
             child: Text(
-              "CHECHOUT",
+              CHECKOUT_LABEL_TEXT,
             ),
           ),
         ),

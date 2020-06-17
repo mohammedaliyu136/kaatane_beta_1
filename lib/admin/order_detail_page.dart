@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import 'package:timeago/timeago.dart' as timeago;
 
+import 'STRINGVALUE.dart';
 import 'order_ui_utils.dart';
 
 class OrderDetailPage extends StatelessWidget {
@@ -30,8 +31,8 @@ class OrderDetailPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
-                  Text("Order id: "+document['order_id'].split('-')[0],),
-                  Text("Total: "+document['total'].toString()),
+                  Text("${ORDER_ID_LABEL_TEXT}: "+document['order_id'].split('-')[0],),
+                  Text("${TOTAL_LABEL_TEXT}: "+document['total'].toString()),
                 ],
               ),
             ),
@@ -67,7 +68,7 @@ class OrderDetailPage extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Row(
             children: <Widget>[
-              Text("Message", style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.start,),
+              Text(MESSAGE_LABEL_TEXT, style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.start,),
             ],
           ),
         ),
@@ -99,7 +100,7 @@ class OrderDetailPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                Text("Subtotal  :  ₦"+document['total'].toString(), style: TextStyle(fontSize: 18),)
+                Text("${SUBTOTAL_LABEL_TEXT}  :  ₦"+document['total'].toString(), style: TextStyle(fontSize: 18),)
               ],),
               bloc.restaurantDocument['delivery']?
               SizedBox(height: 10,):Container(),
@@ -107,13 +108,13 @@ class OrderDetailPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  Text("Delivery Fee  :  ₦"+bloc.restaurantDocument['delivery_fee'], style: TextStyle(fontSize: 18),)
+                  Text("${DELIVERY_FEE_LABEL_TEXT}  :  ₦"+bloc.restaurantDocument['delivery_fee'], style: TextStyle(fontSize: 18),)
               ],):Container(),
                 SizedBox(height: 10,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    Text("Total  :  ₦"+document['total'].toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),)
+                    Text("${TOTAL_LABEL_TEXT}  :  ₦"+document['total'].toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),)
                 ],),
 
             ],),

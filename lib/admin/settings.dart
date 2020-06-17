@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'delivery_area.dart';
 import 'drawer.dart';
 import 'login2/login_page3.dart';
+import 'login2/login_page4.dart';
 import 'privacy_policy.dart';
 import 'term_of_use.dart';
 
@@ -20,6 +21,7 @@ class Settings extends StatelessWidget {
       appBar: AppBar(title: Text("Settings"), centerTitle: true,),
       //drawer: drawer(context, "settings"),
       body: ListView(children: <Widget>[
+        /**
         ListTile(title: Padding(
           padding: const EdgeInsets.symmetric(vertical: 20.0),
           child: Text("Set Delivery Area", style: TextStyle(fontSize: 18)),
@@ -30,7 +32,7 @@ class Settings extends StatelessWidget {
               MaterialPageRoute(builder: (context) => DeliveryArea()),
             );
           },
-        ),
+        ),**/
         SizedBox(height: 1, child: Container(color: Colors.grey[300],),),
         ListTile(title: Padding(
           padding: const EdgeInsets.symmetric(vertical: 20.0),
@@ -64,7 +66,7 @@ class Settings extends StatelessWidget {
             Provider.of<CartBloc>(context).isLoading = false;
             _fcm.subscribeToTopic(bloc.restaurantDocument.documentID);
             Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                LoginPage3()), (Route<dynamic> route) => false);
+                LoginPage4()), (Route<dynamic> route) => false);
           },
           title: Padding(
           padding: const EdgeInsets.symmetric(vertical: 20.0),

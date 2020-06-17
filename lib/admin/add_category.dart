@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:kaatane/bloc/cart_bloc.dart';
 import 'package:provider/provider.dart';
+import 'STRINGVALUE.dart';
 import 'SnackBars.dart';
 
 import 'login2/account_bloc.dart';
@@ -30,7 +31,7 @@ class _AddCategoryState extends State<AddCategory> {
     bool isLoading =Provider.of<CartBloc>(context).isLoading;
     String restaurant =Provider.of<CartBloc>(context).restaurant;
     return Scaffold(
-      appBar: AppBar(title: Text("Add New Category"), centerTitle: true,),
+      appBar: AppBar(title: Text(ADD_NEW_CATEGORY_LABEL_TEXT), centerTitle: true,),
       body: !isLoading?ListView(
         children: <Widget>[
           Padding(
@@ -56,9 +57,9 @@ class _AddCategoryState extends State<AddCategory> {
                       maxLength: 20,
                       controller: nameController,
                       decoration: InputDecoration(
-                        errorText: _validate ? 'Value Can\'t Be Empty' : null,
+                        errorText: _validate ? ERROR_LABEL_TEXT : null,
                           border: InputBorder.none,
-                          hintText: "Enter Category Name",
+                          hintText: ENTER_CATEGORY_NAME_LABEL_TEXT,
                           hintStyle: TextStyle(color: Colors.grey[400]),
                       ),
                     ),
@@ -69,7 +70,7 @@ class _AddCategoryState extends State<AddCategory> {
                   Expanded(child: RaisedButton(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20.0),
-                      child: Text("Save", style: TextStyle(fontSize: 19),),
+                      child: Text(SAVE_LABEL_TEXT, style: TextStyle(fontSize: 19),),
                     ),
                     onPressed: (){
                       if(nameController.text.isEmpty){

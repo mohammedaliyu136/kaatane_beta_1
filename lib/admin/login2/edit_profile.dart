@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kaatane/admin/STRINGVALUE.dart';
 import 'package:kaatane/bloc/cart_bloc.dart';
 import 'package:provider/provider.dart';
 
@@ -89,21 +90,18 @@ class _EditProfileState extends State<EditProfile> {
 
     var title = document['title'];
     //imageFile.path;
-    print(")))))))))))))))))))");
-    print(")))))))))))))))))))");
-    print(")))))))))))))))))))");
     //imageFile!=null?print(imageFile.path.toString()):print("is null");
 
     // set up the buttons
     Widget cancelButton = FlatButton(
-      child: Text("Camera"),
+      child: Text(CAMERA_LABEL_TEXT),
       onPressed:  () {
         _pickImage(ImageSource.camera);
         Navigator.of(context).pop();
       },
     );
     Widget continueButton = FlatButton(
-      child: Text("Galary"),
+      child: Text(GALERY_LABEL_TEXT),
       onPressed:  () {
         var doc_id=document.documentID;
         var img_url = document['img_url'];
@@ -118,7 +116,7 @@ class _EditProfileState extends State<EditProfile> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Change restaurant image"),
+      title: Text(CHANGE_RESTAURANT_IMAGE_LABEL_TEXT),
       actions: [
         cancelButton,
         continueButton,
@@ -150,7 +148,7 @@ class _EditProfileState extends State<EditProfile> {
     FirebaseMessaging _fcm = FirebaseMessaging();
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(title: Text("Profile"), centerTitle: true,),
+      appBar: AppBar(title: Text(PROFILE_LABEL_TEXT), centerTitle: true,),
       body: !isLoading?Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: ListView(children: <Widget>[
@@ -184,7 +182,7 @@ class _EditProfileState extends State<EditProfile> {
                 controller: nameController,
                 decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: "Enter Fullname",
+                    hintText: RESTAURANT_NAME_LABEL_TEXT,
                     hintStyle: TextStyle(color: Colors.grey[400])
                 ),
               ),
@@ -202,7 +200,7 @@ class _EditProfileState extends State<EditProfile> {
                 controller: phonenumberController,
                 decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: "Enter phonenumber",
+                    hintText: RESTAURANT_PHONENUMBER_LABEL_TEXT,
                     hintStyle: TextStyle(color: Colors.grey[400])
                 ),
               ),
@@ -224,7 +222,7 @@ class _EditProfileState extends State<EditProfile> {
                 controller: locationController,
                 decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: "Enter Location",
+                    hintText: RESTAURANT_ADDRESS_LABEL_TEXT,
                     hintStyle: TextStyle(color: Colors.grey[400])
                 ),
               ),
@@ -257,7 +255,8 @@ class _EditProfileState extends State<EditProfile> {
           SizedBox(height: 20,),
           Row(children: <Widget>[
             SizedBox(width: 18,),
-            Icon(Icons.add_shopping_cart, size: 25, color: Colors.purple,),
+            //Icon(Icons.add_shopping_cart, size: 25, color: Colors.purple,),
+            Image.asset("assets/images/delivery_fee_icon.png", width: 35,),
             SizedBox(width: 18,),
             Expanded(
               child: TextFormField(
@@ -265,7 +264,7 @@ class _EditProfileState extends State<EditProfile> {
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: "Delivery Fee",
+                    hintText: DELIVERY_FEE_LABEL_TEXT,
                     hintStyle: TextStyle(color: Colors.grey[400])
                 ),
               ),
@@ -309,12 +308,6 @@ class _EditProfileState extends State<EditProfile> {
                       String img = bloc.restaurantDocument['image'];
                       Provider.of<CartBloc>(context).uploadImage(imageFile ).then(
                               (url){
-                                print("@@@@@@@@@@@@@@@@");
-                                print("@@@@@@@@@@@@@@@@");
-                                print("@@@@@@@@@@@@@@@@");
-                                print("@@@@@@@@@@@@@@@@");
-                                print("@@@@@@@@@@@@@@@@"+deliveryFeeController.text);
-                                print(url);
                             Firestore.instance.document('Restaurant/$doc_id')
                                 .updateData({
                               'name': nameController.text,

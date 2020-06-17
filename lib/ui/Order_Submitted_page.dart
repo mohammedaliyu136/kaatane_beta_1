@@ -1,5 +1,6 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
+import 'package:kaatane/admin/STRINGVALUE.dart';
 import 'package:provider/provider.dart';
 
 import '../bloc/cart_bloc.dart';
@@ -57,7 +58,7 @@ class Order_Submitted extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.all(12.0),
                               child: Text(
-                                "BACK TO HOME",
+                                BACK_TO_HOME_LABEL,
                               ),
                             ),
                           ),

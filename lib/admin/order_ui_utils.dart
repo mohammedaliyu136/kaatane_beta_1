@@ -8,6 +8,7 @@ import 'package:uuid/uuid.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 
+import 'STRINGVALUE.dart';
 import 'order_detail_page.dart';
 import 'SnackBars.dart';
 
@@ -86,8 +87,8 @@ order_header(DocumentSnapshot document){
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
-          Text("Order id: "+document['order_id'].split('-')[0],),//document['order_id']
-          Text("Total: ₦${NumberFormat.currency(symbol: "",decimalDigits: 0).format(document['total'])}"),
+          Text("${ORDER_ID_LABEL_TEXT}: "+document['order_id'].split('-')[0],),//document['order_id']
+          Text("${TOTAL_LABEL_TEXT}: ₦${NumberFormat.currency(symbol: "",decimalDigits: 0).format(document['total'])}"),
         ],
       ),
     ),
@@ -104,13 +105,13 @@ order_list(DocumentSnapshot document){
           new Row(children: <Widget>[///document['meals']
             Expanded(
                 flex: 3,
-                child: Text("Meals", style: TextStyle(fontWeight: FontWeight.bold),)
+                child: Text(MEALS_LABEL_TEXT, style: TextStyle(fontWeight: FontWeight.bold),)
             ),
             Expanded(
-                child: Text("Qty", style: TextStyle(fontWeight: FontWeight.bold))
+                child: Text(QTY_LABEL_TEXT, style: TextStyle(fontWeight: FontWeight.bold))
             ),
             Expanded(
-                child: Text("Price", textAlign: TextAlign.end, style: TextStyle(fontWeight: FontWeight.bold))
+                child: Text(PRICE_LABEL_TEXT, textAlign: TextAlign.end, style: TextStyle(fontWeight: FontWeight.bold))
             ),
           ],),
           SizedBox(height: 10,),
@@ -146,7 +147,7 @@ order_list(DocumentSnapshot document){
 order_message(DocumentSnapshot document){
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal:8.0),
-    child: Text(document['message'], textAlign: TextAlign.start,),
+    child: Text("${MESSAGE_LABEL_TEXT}: ${document['message']}", textAlign: TextAlign.start,),
   );
 }
 
@@ -169,7 +170,7 @@ buttons(context, DocumentSnapshot document, _scaffoldKey){
           MaterialPageRoute(builder: (context) => OrderDetailPage(1, document)),
           );
         },
-       child: Text("View Detail"),
+       child: Text(VIEW_DETAIL_LABEL_TEXT),
       ),
       Spacer(),
       SizedBox(width: 5,),
@@ -177,13 +178,13 @@ buttons(context, DocumentSnapshot document, _scaffoldKey){
         onPressed: (){
           showAlertDialog(context, document, true, 'false', _scaffoldKey);
         },
-        child: Text("Cancel"), color: Colors.redAccent,),
+        child: Text(CANCEL_LABEL_TEXT), color: Colors.redAccent,),
       SizedBox(width: 5,),
       RaisedButton(
         onPressed: (){
           showAlertDialog(context, document, true, 'true', _scaffoldKey);
         },
-        child: Text("Accept"), color: Colors.green,),
+        child: Text(ACCEPT_LABEL_TEXT), color: Colors.green,),
     ],),
   );
 }
@@ -192,24 +193,24 @@ buttons_ongoing(context, DocumentSnapshot document, _scaffoldKey){
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal:8.0),
     child: Row(children: <Widget>[
-      Text("Order Status: ", style: TextStyle(fontWeight: FontWeight.bold),),
+      Text("${ORDER_STATUS_LABEL_TEXT}: ", style: TextStyle(fontWeight: FontWeight.bold),),
       Padding(
         padding: const EdgeInsets.symmetric(horizontal:8.0),
         child: DropdownButton<String>(
           items: [
             DropdownMenuItem<String>(
-              child: Text('Finished'),
+              child: Text(FINISHED_LABEL_TEXT),
               value: 'true',
             ),
             DropdownMenuItem<String>(
-              child: Text('Cancel'),
+              child: Text(CANCEL_LABEL_TEXT),
               value: 'false',
             ),
           ],
           onChanged: (String value) {
             showAlertDialog(context, document, false, value, _scaffoldKey);
           },
-          hint: Text('In progress'),
+          hint: Text(IN_PROGRESS_LABEL_TEXT),
           //value: _value,
         ),
       ),
@@ -219,7 +220,7 @@ buttons_ongoing(context, DocumentSnapshot document, _scaffoldKey){
           context,
           MaterialPageRoute(builder: (context) => OrderDetailPage(2, document)),
         );
-      }, child: Text("View Detail"),),
+      }, child: Text(VIEW_DETAIL_LABEL_TEXT),),
     ],),
   );
 }
@@ -228,7 +229,7 @@ buttons_past(context, DocumentSnapshot document){
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal:8.0),
     child: Row(children: <Widget>[
-      Text(document['delivered']?"Order Status: Order Delivered":"Order Status: Order Canceled", style: TextStyle(fontWeight: FontWeight.bold, color: document['delivered']?Colors.green:Colors.red),),
+      Text(document['delivered']?"${ORDER_STATUS_LABEL_TEXT}: ${ORDER_DELIVERED_LABEL_TEXT}":"${ORDER_STATUS_LABEL_TEXT}: ${ORDER_CANCELED_LABEL_TEXT}", style: TextStyle(fontWeight: FontWeight.bold, color: document['delivered']?Colors.green:Colors.red),),
       Spacer(),
       RaisedButton(onPressed: (){
         Navigator.push(
@@ -236,7 +237,7 @@ buttons_past(context, DocumentSnapshot document){
           MaterialPageRoute(builder: (context) => OrderDetailPage(3, document)),
         );
         },
-        child: Text("View Detail"),),
+        child: Text(VIEW_DETAIL_LABEL_TEXT),),
     ],),
   );
 }
@@ -244,18 +245,18 @@ buttons_past(context, DocumentSnapshot document){
 showAlertDialog(BuildContext context, DocumentSnapshot document,bool new_order, String value, _scaffoldKey) {
 
   final  messageController = TextEditingController();
-  var acceptOrderMessage = document['delivery']?'Order delivery instruction':'Order pick up/ delivery instruction';
-  var acceptHintMessage = document['status']==1?'When order will be ready':acceptOrderMessage;
+  var acceptOrderMessage = document['delivery']?ORDER_DELIVERY_INSTRUCTION_LABEL_TEXT:ORDER_DELIVERY_OR_PICKUP_LABEL_TEXT;
+  var acceptHintMessage = document['status']==1?WHEN_ORDER_WILL_BE_READY_LABEL_TEXT:acceptOrderMessage;
 
   // set up the buttons
   Widget cancelButton = FlatButton(
-    child: Text("Cancel"),
+    child: Text(CANCEL_LABEL_TEXT),
     onPressed:  () {
       Navigator.of(context).pop();
     },
   );
   Widget continueButton = FlatButton(
-    child: Text("Continue"),
+    child: Text(CONTINUE_LABEL_TEXT),
     onPressed:  () {
       var status = 0;
       if(new_order){
@@ -263,7 +264,7 @@ showAlertDialog(BuildContext context, DocumentSnapshot document,bool new_order, 
       }else{
         status = 3;
       }
-      var message = value=='true'?'Order accepted by restaurant':'Order canceled by restaurant, No reason given.';
+      var message = value=='true'?ORDER_ACCEPTED_BY_RESTAURANT_LABEL_TEXT:ORDER_CANCELED_BY_RESTAURANT_LABEL_TEXT;
       var doc = document.documentID;
       var restaurant = Provider.of<CartBloc>(context).restaurant;
       Firestore.instance.document('order_$restaurant/$doc')
@@ -284,12 +285,12 @@ showAlertDialog(BuildContext context, DocumentSnapshot document,bool new_order, 
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("Message to customer"),
+    title: Text(MESSAGE_TO_CUSTOMER_LABEL_TEXT),
     content: TextFormField(
       controller: messageController,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-          hintText: value=='true'?acceptHintMessage:'Reason for cancelation',
+          hintText: value=='true'?acceptHintMessage:REASON_FOR_CANCELATION_LABEL_TEXT,
           hintStyle: TextStyle(color: Colors.grey[400])
       ),
     ),
@@ -312,22 +313,22 @@ showAlertDialogValidation(BuildContext context, String message, _scaffoldKey) {
 
   // set up the buttons
   Widget cancelButton = FlatButton(
-    child: Text("Cancel"),
+    child: Text(CANCEL_LABEL_TEXT),
     onPressed:  () {
       Navigator.of(context).pop();
     },
   );
   Widget continueButton = FlatButton(
-    child: Text("Continue"),
+    child: Text(CONTINUE_LABEL_TEXT),
     onPressed:  () {
       Navigator.of(context).pop();
-      orderAccepted(_scaffoldKey);
+      //orderAccepted(_scaffoldKey);
     },
   );
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("List of Errors", style: TextStyle(fontWeight: FontWeight.bold),),
+    title: Text(LIST_OF_ERROR_LABEL_TEXT, style: TextStyle(fontWeight: FontWeight.bold),),
     content: Text(message, style: TextStyle(color: Colors.red)),
     actions: [
       //cancelButton,

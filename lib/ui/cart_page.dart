@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:kaatane/admin/STRINGVALUE.dart';
 import 'package:provider/provider.dart';
 
 import '../bloc/cart_bloc.dart';
@@ -17,9 +19,9 @@ class CartPage extends StatelessWidget {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text("Your Order"),
+        title: Text(YOUR_ORDER_LABEL_TEXT),
       ),
-      body: Container(
+      body: Provider.of<CartBloc>(context).cart.length>0?Container(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
@@ -91,23 +93,23 @@ class CartPage extends StatelessWidget {
             ),
             Container(color: Colors.white, child: Column(children: <Widget>[
               SizedBox(height: 8.0,),
-              ListTile(leading: Text("Order Summary", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),)),
-              ListTile(leading: Text("Bill Total"), trailing: Text("₦${NumberFormat.currency(symbol: "", decimalDigits: 0).format(bloc.total-int.parse(bloc.delivery_fee))}"),),
+              ListTile(leading: Text(Order_SUMMARY_LABEL_TEXT, style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),)),
+              ListTile(leading: Text(BILL_TOTAL_LABEL_TEXT), trailing: Text("₦${NumberFormat.currency(symbol: "", decimalDigits: 0).format(bloc.total-int.parse(bloc.delivery_fee))}"),),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: SizedBox(height: 1, child: Container(color: Colors.grey[350],),),
               ),
 
               bloc.restaurantDocument['delivery']?ListTile(
-                leading: Text("How to get ur order:"),
+                leading: Text(HOW_TO_GET_YOUR_ORDER_LABEL_TEXT),
                 title: DropdownButton<bool>(
                   items: [
                     DropdownMenuItem<bool>(
-                      child: Text('Pickup'),
+                      child: Text(PICKUP_LABEL_TEXT),
                       value: false,
                     ),
                     DropdownMenuItem<bool>(
-                      child: Text('Delivery'),
+                      child: Text(DELIVERY_LABEL_TEXT),
                       value: true,
                     ),
                   ],
@@ -123,16 +125,16 @@ class CartPage extends StatelessWidget {
                     }
                   },
                   value: bloc.del_or_pick,
-                  hint: Text('Choose'),
+                  hint: Text(CHOOSE_LABEL_TEXT),
                   //value: _value,
                 ),//Text("How to get ur order: "),
                 trailing: bloc.del_or_pick?Text("₦"+bloc.delivery_fee):Text(""),
-              ):ListTile(leading: Text("No Delivery")),
+              ):ListTile(leading: Text(NO_DELIVERY_LABEL_TEXT)),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: SizedBox(height: 1, child: Container(color: Colors.grey[350],),),
               ),
-              ListTile(leading: Text("Grand Total"), trailing: Text("₦${NumberFormat.currency(symbol: "", decimalDigits: 0).format(bloc.total)}"),),
+              ListTile(leading: Text(GRAND_TOTAL_LABEL_TEXT), trailing: Text("₦${NumberFormat.currency(symbol: "", decimalDigits: 0).format(bloc.total)}"),),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Buttom_Cart(_scaffoldKey),
@@ -141,6 +143,16 @@ class CartPage extends StatelessWidget {
             ],),)
           ],
         ),
+      ):Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset("assets/images/empty_cart.png", height: 200,),
+          SizedBox(height: 10,),
+          Center(child: Text(YOUR_BASKET_IS_EMPTY_LABEL_TEXT, style: TextStyle(fontWeight: FontWeight.bold, color: Color.fromRGBO(128, 0, 128, 1), fontSize: 23),)),
+          SizedBox(height: 10,),
+          Center(child: Text(MAKE_YOUR_BASKET_HAPPY_LABEL_TEXT)),
+          SizedBox(height: 200,),
+        ],
       ),
       /**
       bottomNavigationBar: new Container(

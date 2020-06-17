@@ -3,6 +3,7 @@ import 'package:introduction_screen/introduction_screen.dart';
 
 import 'restaurant_page.dart';
 
+
 class OnBoardingPage extends StatefulWidget {
   @override
   _OnBoardingPageState createState() => _OnBoardingPageState();
