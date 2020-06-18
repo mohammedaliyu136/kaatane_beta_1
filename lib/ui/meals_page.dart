@@ -614,41 +614,41 @@ class _MealPageState extends State<MealPage> {
                   ),
                 ),
               ),
-              Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topRight,
-                      end: Alignment.bottomLeft,
-                      colors: [Colors.black, Color.fromRGBO(128, 0, 128, 1)]),
-                  //borderRadius: BorderRadius.all(Radius.circular(80.0)),
-                ),
-                //color: Color.fromRGBO(128, 0, 128, 1),
-                height: 50, child: Row(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(top:8.0, bottom:8.0, left: 16, right: 8.0),
-                    child: Text("${Provider.of<CartBloc>(context).count_total} ${Provider.of<CartBloc>(context).count_total>1?ITEMS_LABEL_TEXT:ITEM_LABEL_TEXT}", style: TextStyle(color: Colors.white),),
+              GestureDetector(
+                onTap: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CartPage(),
+                    ),
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topRight,
+                        end: Alignment.bottomLeft,
+                        colors: [Colors.black, Color.fromRGBO(128, 0, 128, 1)]),
+                    //borderRadius: BorderRadius.all(Radius.circular(80.0)),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical:16.0, horizontal: 8.0),
-                    child: SizedBox(width: 2, child:Container(color: Colors.white,),),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top:8.0, bottom:8.0, left: 8.0, right: 8.0),
-                    child: Text("₦${NumberFormat.currency(symbol: "", decimalDigits: 0).format(bloc.total)}", style: TextStyle(color: Colors.white),),
-                  ),
-                  Spacer(),
-                  SizedBox(width: 2, child:Container(color: Colors.white,),),
-                  GestureDetector(
-                    onTap: (){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CartPage(),
-                        ),
-                      );
-                    },
-                    child: Row(children: <Widget>[
+                  //color: Color.fromRGBO(128, 0, 128, 1),
+                  height: 50, child: Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(top:8.0, bottom:8.0, left: 16, right: 8.0),
+                      child: Text("${Provider.of<CartBloc>(context).count_total} ${Provider.of<CartBloc>(context).count_total>1?ITEMS_LABEL_TEXT:ITEM_LABEL_TEXT}", style: TextStyle(color: Colors.white),),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical:16.0, horizontal: 8.0),
+                      child: SizedBox(width: 2, child:Container(color: Colors.white,),),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top:8.0, bottom:8.0, left: 8.0, right: 8.0),
+                      child: Text("₦${NumberFormat.currency(symbol: "", decimalDigits: 0).format(bloc.total)}", style: TextStyle(color: Colors.white),),
+                    ),
+                    Spacer(),
+                    SizedBox(width: 2, child:Container(color: Colors.white,),),
+                    Row(children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Icon(Icons.shopping_cart, color: Colors.white,),
@@ -658,45 +658,45 @@ class _MealPageState extends State<MealPage> {
                         child: Text(VIEW_CART_LABEL_TEXT, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),),
                       )
                     ],),
-                  ),
-                  /*
-                  GestureDetector(
-                    onTap: (){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CartPage(),
+                    /*
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CartPage(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        color: Colors.teal,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(Icons.shopping_cart, color: Colors.white,),
                         ),
-                      );
-                    },
-                    child: Container(
-                      color: Colors.teal,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(Icons.shopping_cart, color: Colors.white,),
                       ),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: (){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CartPage(),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CartPage(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        color: Colors.teal,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text("VIEW CART", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),),
                         ),
-                      );
-                    },
-                    child: Container(
-                      color: Colors.teal,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text("VIEW CART", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),),
                       ),
-                    ),
-                  ),*/
-                  SizedBox(width: 10,)
-                ],
-              ),)
+                    ),*/
+                    SizedBox(width: 10,)
+                  ],
+                ),),
+              )
             ],
           ),
         ),

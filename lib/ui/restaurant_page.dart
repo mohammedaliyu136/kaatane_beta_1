@@ -189,7 +189,9 @@ class _RestaurantPageState extends State<RestaurantPage> {
               padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 10),
               child: new GestureDetector(
                 onTap: (){
-                  //isLoading=true;
+                  setState(() {
+                    isLoadingPage=true;
+                  });
                   Firestore.instance.collection('category').where('restaurant_id', isEqualTo: document.documentID).getDocuments().then(
                           (val){
                         List<DocumentSnapshot> ctegory_list = val.documents;
@@ -199,6 +201,9 @@ class _RestaurantPageState extends State<RestaurantPage> {
 
                         });
                         //isLoading=false;
+                        setState(() {
+                          isLoadingPage=false;
+                        });
                         bloc.clearAll();
                         bloc.not();
                         Navigator.push(
