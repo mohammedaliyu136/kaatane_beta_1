@@ -63,6 +63,7 @@ class Settings extends StatelessWidget {
           onTap: () async {
             _auth.signOut();
             bloc.isTerminated=false;
+            bloc.isLoggedIn=false;
             //_signInWithEmailAndPassword();
             Provider.of<CartBloc>(context).isLoading = false;
             _fcm.subscribeToTopic(bloc.restaurantDocument.documentID);
