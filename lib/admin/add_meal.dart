@@ -57,24 +57,24 @@ class _AddMealState extends State<AddMeal> {
       }
     });
     File cropped = await ImageCropper.cropImage(
-      sourcePath: imageFile.path,
+        sourcePath: imageFile.path,
         compressQuality: persent,
         aspectRatioPresets: [CropAspectRatioPreset.square,],
-      // ratioX: 1.0,
-      // ratioY: 1.0,
-      maxWidth: 512,
-      maxHeight: 512,
-      //toolbarColor: Colors.purple,
-      //toolbarWidgetColor: Colors.white,
-      //toolbarTitle: 'Crop It'
+        // ratioX: 1.0,
+        // ratioY: 1.0,
+        maxWidth: 512,
+        maxHeight: 512,
+        //toolbarColor: Colors.purple,
+        //toolbarWidgetColor: Colors.white,
+        //toolbarTitle: 'Crop It'
         androidUiSettings: AndroidUiSettings(
-        lockAspectRatio: true),
+            lockAspectRatio: true),
         iosUiSettings: IOSUiSettings(
-         //minimumAspectRatio: 1.0,
-          aspectRatioLockEnabled: true,
-          rectHeight: 200,
-          rectWidth: 300
-    )
+          //minimumAspectRatio: 1.0,
+            aspectRatioLockEnabled: true,
+            rectHeight: 200,
+            rectWidth: 300
+        )
     );
 
     imageFile = cropped ?? imageFile;
@@ -97,7 +97,7 @@ class _AddMealState extends State<AddMeal> {
       },
     );
     Widget continueButton = FlatButton(
-      child: Text("Galary"),
+      child: Text("Gallery"),
       onPressed:  () {
         _pickImage(ImageSource.gallery);
         Navigator.of(context).pop();
@@ -106,7 +106,7 @@ class _AddMealState extends State<AddMeal> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Set image for meal"),
+      title: Text("Select image of the meal"),
       actions: [
         cancelButton,
         continueButton,
@@ -135,8 +135,8 @@ class _AddMealState extends State<AddMeal> {
     String restaurant =Provider.of<CartBloc>(context).restaurant;
     Firestore.instance.collection('category').where('restaurant_id', isEqualTo: restaurant).getDocuments().then(
             (sn){setState(() {
-              ctegory_list = sn.documents;
-            });}
+          ctegory_list = sn.documents;
+        });}
     );
     return Scaffold(
       key: _scaffoldKey,
@@ -182,6 +182,7 @@ class _AddMealState extends State<AddMeal> {
                 ],
               ),
               SizedBox(height: 30,),
+              /*
               Container(
                 //color: Colors.grey[200],
                 decoration: BoxDecoration(
@@ -200,32 +201,53 @@ class _AddMealState extends State<AddMeal> {
                     ),
                   ),
                 ),
+              ),*/
+              TextField(
+                maxLength: 25,
+                controller: nameController,
+                decoration: InputDecoration(
+                  labelText: ENTER_ITEM_NAME_HINT_TEXT,
+                  errorText: _validate ? ERROR_LABEL_TEXT : null,
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color.fromRGBO(128, 0, 128, 1),
+                      width: 2.0,
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.black54,
+                      width: 2.0,
+                    ),
+                  ),
+                ),
               ),
               SizedBox(height: 10,),
               Container(
                 //color: Colors.grey[200],
                 decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    border: Border.all(color: Colors.grey[500])
+                  //color: Colors.grey[200],
+                    border: Border.all(color: Colors.black54)
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 20.0),
-                  child: ctegory_list!=null?DropdownButton<String>(
-                        items: ctegory_list.length!=0?new List.generate(ctegory_list.length, (index) => new DropdownMenuItem<String>(
-                          child: Text(ctegory_list[index]['title']),
-                          value: ctegory_list[index]['title']+","+ctegory_list[index].documentID,
-                        ),):new DropdownMenuItem<String>(),
-                        onChanged: (String value) {
-                          setState(() {
-                            categoryController = value;
-                          });
-                        },
-                        hint: Text(CHOOSE_ITEM_CATEGORY_HINT_TEXT),
-                        value: categoryController,
-                      ):Container()
+                    padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 20.0),
+                    child: ctegory_list!=null?DropdownButton<String>(
+                      items: ctegory_list.length!=0?new List.generate(ctegory_list.length, (index) => new DropdownMenuItem<String>(
+                        child: Text(ctegory_list[index]['title']),
+                        value: ctegory_list[index]['title']+","+ctegory_list[index].documentID,
+                      ),):new DropdownMenuItem<String>(),
+                      onChanged: (String value) {
+                        setState(() {
+                          categoryController = value;
+                        });
+                      },
+                      hint: Text(CHOOSE_ITEM_CATEGORY_HINT_TEXT),
+                      value: categoryController,
+                    ):Container()
                 ),
               ),
               SizedBox(height: 10,),
+              /*
               Container(
                 //color: Colors.grey[200],
                 decoration: BoxDecoration(
@@ -244,8 +266,29 @@ class _AddMealState extends State<AddMeal> {
                     ),
                   ),
                 ),
+              ),*/
+              TextField(
+                controller: normalPriceController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: ENTER_NORMAL_PRICE_HINT_TEXT,
+                  errorText: _validate ? ERROR_LABEL_TEXT : null,
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color.fromRGBO(128, 0, 128, 1),
+                      width: 2.0,
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.black54,
+                      width: 2.0,
+                    ),
+                  ),
+                ),
               ),
               SizedBox(height: 10,),
+              /*
               Container(
                 //color: Colors.grey[200],
                 decoration: BoxDecoration(
@@ -264,28 +307,48 @@ class _AddMealState extends State<AddMeal> {
                     ),
                   ),
                 ),
-              ),
-              /**
-              SizedBox(height: 10,),
-              Container(
-                //color: Colors.grey[200],
-                decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    border: Border.all(color: Colors.grey[500])
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 20.0),
-                  child: TextFormField(
-                    maxLength: 50,
-                    controller: briefDescriptionController,
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "Write a brief description...",
-                        hintStyle: TextStyle(color: Colors.grey[400])
+              ),*/
+              TextField(
+                controller: discountPriceController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: ENTER_DISCOUNT_PRICE_HINT_TEXT,
+                  errorText: _validate ? ERROR_LABEL_TEXT : null,
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color.fromRGBO(128, 0, 128, 1),
+                      width: 2.0,
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.black54,
+                      width: 2.0,
                     ),
                   ),
                 ),
-              ),**/
+              ),
+              /**
+                  SizedBox(height: 10,),
+                  Container(
+                  //color: Colors.grey[200],
+                  decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  border: Border.all(color: Colors.grey[500])
+                  ),
+                  child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 20.0),
+                  child: TextFormField(
+                  maxLength: 50,
+                  controller: briefDescriptionController,
+                  decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: "Write a brief description...",
+                  hintStyle: TextStyle(color: Colors.grey[400])
+                  ),
+                  ),
+                  ),
+                  ),**/
               SizedBox(height: 100,),
             ],)),
 
@@ -331,7 +394,7 @@ class _AddMealState extends State<AddMeal> {
                       Provider.of<CartBloc>(context).isLoading = true;
 
                       Provider.of<CartBloc>(context).uploadImage(imageFile ).then(
-                          (url){
+                              (url){
                             Firestore.instance.collection('meal').document()
                                 .setData({
                               'title': nameController.text,

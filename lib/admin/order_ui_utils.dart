@@ -77,10 +77,22 @@ past_order(context, DocumentSnapshot document){
 }
 
 order_header(DocumentSnapshot document){
+  bool isPaid = false;
+  try{
+    isPaid = document['isPaid'];
+    print(isPaid);
+    print(isPaid==null);
+    print("000");
+  }catch(e){
+    isPaid = false;
+    print("111");
+  }
+
   return Container(
     color: Colors.purple[50],
     child: ListTile(
-      leading: Icon(Icons.directions_bike, size: 40,),
+      //leading: Icon(Icons.attach_money, size: 40, color: document['isPaid']!=null&&document['isPaid']!=false?Colors.green:Colors.red,),
+      leading: Text("₦", style: TextStyle(fontSize: 35, fontWeight:FontWeight.w400, color: document['isPaid']!=null&&document['isPaid']!=false?Colors.green:Colors.red),),
       title: Text(document['name']),
       subtitle: Text(timeago.format(document['time_stamp'].toDate().add(new Duration(hours: 1)))),//
       trailing: Column(

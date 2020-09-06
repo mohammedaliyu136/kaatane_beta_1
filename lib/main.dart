@@ -11,6 +11,7 @@ import 'bloc/cart_bloc.dart';
 import 'testUI/adsqqq.dart';
 import 'testUI/collapsingToolbar.dart';
 import 'testUI/flare.dart';
+import 'testUI/meals_pageee23.dart';
 import 'ui/payment_method_page.dart';
 import 'ui/splashScreen_page.dart';
 import 'ui/button.dart';

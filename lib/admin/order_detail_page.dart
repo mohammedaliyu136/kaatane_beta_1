@@ -62,6 +62,15 @@ class OrderDetailPage extends StatelessWidget {
           SizedBox(width: 18,),
           Text(document['address'], style: TextStyle(fontSize: 16),),
         ],),
+        SizedBox(height: 10,),
+        SizedBox(height: 2, child: Container(color: Colors.grey[300],),),
+        SizedBox(height: 10),
+        Row(children: <Widget>[
+          SizedBox(width: 18,),
+          Text("₦", style: TextStyle(fontSize: 22, fontWeight:FontWeight.w400, color: Colors.purple),),
+          SizedBox(width: 18,),
+          Text(document['isPaid']!=null&&document['isPaid']!=false?'Paid with card':'Not paid. Payment on delivery', style: TextStyle(fontSize: 16),),
+        ],),
         SizedBox(height: 10),
         SizedBox(height: 2, child: Container(color: Colors.grey[300],),),
         Padding(

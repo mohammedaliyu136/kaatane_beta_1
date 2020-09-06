@@ -9,6 +9,7 @@ final String Column_order_id = "order_id";
 final String Column_order_time = "order_time";
 final String Column_order_total = "order_total";
 final String Column_order_meals = "order_meals";
+final String Column_order_rated = "order_rated";
 
 class OrderModel{
   //final String name;
@@ -18,9 +19,10 @@ class OrderModel{
   final String order_time;
   final String order_total;
   final String order_meals;
+  final String order_rated;
   int id;
 
-  OrderModel({this.id, this.restaurant_name, this.restaurant_id, this.order_id, this.order_time, this.order_total, this.order_meals});
+  OrderModel({this.id, this.restaurant_name, this.restaurant_id, this.order_id, this.order_time, this.order_total, this.order_meals, this.order_rated});
 
   Map<String, dynamic> toMap(){
     return {
@@ -30,7 +32,8 @@ class OrderModel{
       Column_restaurant_id: this.restaurant_id,
       Column_order_time: this.order_time,
       Column_order_total: this.order_total,
-      Column_order_meals: this.order_meals
+      Column_order_meals: this.order_meals,
+      Column_order_rated: this.order_rated
 
     };
   }
@@ -47,7 +50,7 @@ class OrderHelper{
     db = await openDatabase(
         join(await getDatabasesPath(), "databse.db"),
         onCreate: (db, version){
-          return db.execute("CREATE TABLE $tableName($Column_id INTEGER PRIMARY KEY AUTOINCREMENT, $Column_order_id TEXT, $Column_restaurant_name TEXT, $Column_restaurant_id TEXT, $Column_order_time TEXT, $Column_order_total TEXT, $Column_order_meals TEXT)");
+          return db.execute("CREATE TABLE $tableName($Column_id INTEGER PRIMARY KEY AUTOINCREMENT, $Column_order_id TEXT, $Column_restaurant_name TEXT, $Column_restaurant_id TEXT, $Column_order_time TEXT, $Column_order_total TEXT, $Column_order_meals TEXT, $Column_order_rated TEXT)");
         },
         version: 1
     );
@@ -72,7 +75,24 @@ class OrderHelper{
           order_id: tasks[i][Column_order_id],
           order_time: tasks[i][Column_order_time],
           order_total: tasks[i][Column_order_total],
-          order_meals: tasks[i][Column_order_meals]
+          order_meals: tasks[i][Column_order_meals],
+          order_rated: tasks[i][Column_order_rated]
+      );
+    });
+  }
+  Future<List<OrderModel>> getAllOrderNotRated () async{
+    final List<Map<String, dynamic>> tasks = await db.rawQuery("SELECT * FROM $tableName WHERE $Column_order_rated = 'no'");//.query(tableName);
+
+    return List.generate(tasks.length, (i){
+      return OrderModel(
+          restaurant_name: tasks[i][Column_restaurant_name],
+          id: tasks[i][Column_id],
+          restaurant_id: tasks[i][Column_restaurant_id],
+          order_id: tasks[i][Column_order_id],
+          order_time: tasks[i][Column_order_time],
+          order_total: tasks[i][Column_order_total],
+          order_meals: tasks[i][Column_order_meals],
+          order_rated: tasks[i][Column_order_rated]
       );
     });
   }

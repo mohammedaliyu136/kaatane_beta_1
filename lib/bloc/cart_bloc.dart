@@ -14,6 +14,7 @@ import 'package:kaatane/admin/login2/login_page3.dart';
 import 'package:kaatane/admin/orders.dart';
 import 'package:kaatane/admin/SnackBars.dart';
 import 'package:kaatane/model/my_order_model.dart';
+import 'package:kaatane/ui/meals_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/meal.dart';
@@ -135,6 +136,9 @@ class CartBloc with ChangeNotifier {
 
       _fcm.requestNotificationPermissions(IosNotificationSettings());
     }
+    if(method=="card"){
+
+    }
 
     /**
     var url = "https://kaatane.herokuapp.com/api/place/order/";
@@ -180,6 +184,7 @@ class CartBloc with ChangeNotifier {
       'delivered':false,
       'restaurant_id': restaurant,
       'restaurant_name': restaurantDocument['name'],
+      'isPaid': method=="card"?true:false,
         }).then((value)async{
       _fcm.subscribeToTopic(reference);
 
@@ -190,7 +195,9 @@ class CartBloc with ChangeNotifier {
           order_id:reference,
           order_time:Timestamp.now().toDate().toString(),
           order_total:total.toString(),
-          order_meals:meals);
+          order_meals:meals,
+          order_rated:'no'
+      );
       _orderHelper.insertOrder(currentOrder);
       List<OrderModel> list = await _orderHelper.getAllOrder();
 
@@ -244,8 +251,8 @@ class CartBloc with ChangeNotifier {
           print("000000000000000000000000000000");
           print("000000000000000000000000000000");
           print(currentUser.user.displayName);
-          setUsernamePassword(email, password);
           _userFirebase=currentUser.user;
+          setUsernamePassword(email, password, _userFirebase.uid);
           isLoading=false;
           isLoggedIn=true;
           Firestore.instance.collection('Restaurant').where('user_id', isEqualTo: _userFirebase.uid).getDocuments().then((value){
@@ -332,15 +339,46 @@ class CartBloc with ChangeNotifier {
       return null;
     }
   }
-  setUsernamePassword(_email, _password) async {
+  setUsernamePassword(_email, _password, _restaurantUID) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     pref.setString('username', _email);
     pref.setString('password', _password);
+    pref.setBool('isLoggedin', true);
   }
 
   getMyOrders()async{
     List<OrderModel> list = await _orderHelper.getAllOrder();
     return list;
+  }
+
+  Future<List<OrderModel>> getMyOrdersNotRated()async{
+    List<OrderModel> list = await _orderHelper.getAllOrderNotRated();
+    print(list.length);
+    return list;
+  }
+
+  getCategories(document, context){
+    isLoading=true;
+    not();
+    Firestore.instance.collection('category').where('restaurant_id', isEqualTo: document.documentID).getDocuments().then(
+            (val)async{
+          List<DocumentSnapshot> ctegory_list = val.documents;
+          List<Widget> tabBarList = [];
+          ctegory_list.forEach((element) {
+            tabBarList.add(Tab(text: element['title']));
+
+          });
+
+          clearAll();
+          await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MealPage(document, ctegory_list, tabBarList)),
+          );
+
+          isLoading=false;
+          not();
+            }
+    );
   }
 
   not(){

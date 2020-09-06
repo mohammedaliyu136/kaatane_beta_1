@@ -45,6 +45,7 @@ class _AddCategoryState extends State<AddCategory> {
                 SizedBox(height: 10,),
                 //Text("Upload Image", style: TextStyle(decoration: TextDecoration.underline, color: Colors.white),),
                 SizedBox(height: 30,),
+                /*
                 Container(
                   //color: Colors.grey[200],
                   decoration: BoxDecoration(
@@ -61,6 +62,26 @@ class _AddCategoryState extends State<AddCategory> {
                           border: InputBorder.none,
                           hintText: ENTER_CATEGORY_NAME_LABEL_TEXT,
                           hintStyle: TextStyle(color: Colors.grey[400]),
+                      ),
+                    ),
+                  ),
+                ),*/
+                TextField(
+                  maxLength: 20,
+                  controller: nameController,
+                  decoration: InputDecoration(
+                    labelText: ENTER_CATEGORY_NAME_LABEL_TEXT,
+                    errorText: _validate ? ERROR_LABEL_TEXT : null,
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color.fromRGBO(128, 0, 128, 1),
+                        width: 2.0,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.black54,
+                        width: 2.0,
                       ),
                     ),
                   ),
@@ -89,8 +110,8 @@ class _AddCategoryState extends State<AddCategory> {
 
                       }
                       //Navigator.push(
-                        //context,
-                        //MaterialPageRoute(builder: (context) => AddMeal()),
+                      //context,
+                      //MaterialPageRoute(builder: (context) => AddMeal()),
                       //);
                     },
                   )),

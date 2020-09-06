@@ -1,9 +1,12 @@
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:kaatane/admin/STRINGVALUE.dart';
 import 'package:kaatane/bloc/cart_bloc.dart';
+import 'package:kaatane/model/my_order_model.dart';
 import 'package:kaatane/ui/meals_page.dart';
 import 'package:kaatane/ui/widgets/contact.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +23,9 @@ class _RestaurantPageState extends State<RestaurantPage> {
   List<DocumentSnapshot> snapshots=[];
   List<DocumentSnapshot> featured_snapshots=[];
   bool isLoadingPage=true;
+  bool isLoading = false;
+
+  bool firstLoad = false;
 
   List<String> imgList = [
     'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
@@ -67,26 +73,54 @@ class _RestaurantPageState extends State<RestaurantPage> {
   @override
   Widget build(BuildContext context){
     var bloc = Provider.of<CartBloc>(context);
-    bool isLoading =Provider.of<CartBloc>(context).isLoading;
+    //bool isLoading =Provider.of<CartBloc>(context).isLoading;
     //final List<Widget> imageSliders = imgList.map((item) => Container(
+    /**
+    if(!firstLoad){
+      Future<List<OrderModel>> list = bloc.getMyOrdersNotRated();
+      print("++++++++++++++");
+      print("++++++++++++++");
+      print("++++++++++++++");
+      list.then(
+              (value){
+                for(var i=0; i<value.length; i++){
+                  print(value[i].order_time);
+                  print(DateTime.parse(value[i].order_time));
+                  print(DateTime.now());
+                  print(DateTime.now().difference(DateTime.parse(value[i].order_time)).inMinutes);
+
+                }
+              });
+      print(list);
+      setState(() {
+        firstLoad=true;
+      });
+    }**/
     final List<Widget> imageSliders = featured_snapshots.map((item) => GestureDetector(
       onTap: (){
-        isLoading=true;
+        setState(() {
+          isLoading=true;
+        });
         Firestore.instance.collection('category').where('restaurant_id', isEqualTo: item.documentID).getDocuments().then(
-                (val){
+                (val)async{
               List<DocumentSnapshot> ctegory_list = val.documents;
               List<Widget> tabBarList = [];
               ctegory_list.forEach((element) {
-                tabBarList.add(Tab(text: element['title']));
+                String s = element['title'].toLowerCase();
+                tabBarList.add(Tab(text: s[0].toUpperCase() + s.substring(1)));
 
               });
               isLoading=false;
               bloc.clearAll();
               bloc.not();
-              Navigator.push(
+              await Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => MealPage(item, ctegory_list, tabBarList)),
               );
+              setState(() {
+                isLoading=false;
+              });
+
             }
         );
       },
@@ -132,157 +166,202 @@ class _RestaurantPageState extends State<RestaurantPage> {
         title: Text("Kaatane"),
       ),
       drawer: drawer2(context),
-      body: !isLoadingPage?ListView(children: <Widget>[
-        SizedBox(height: 20,),
-        Padding(
-          padding: const EdgeInsets.only(left: 24,bottom: 12, top: 16),
-          child: Row(
-            children: [
-              Text("Featured", style: TextStyle(fontSize: 18, color: Colors.black),),
-            ],
+      body: !bloc.isLoading&&!isLoadingPage?Container(
+        //color: Color.fromRGBO(128, 0, 128, 0.15),
+        color: Color.fromRGBO(243,204,243, .7),
+        //color: Color.fromRGBO(236, 239, 241, 1),
+        child: ListView(children: <Widget>[
+          SizedBox(height: 20,),
+          Padding(
+            padding: const EdgeInsets.only(left: 24,bottom: 12, top: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Featured", style: TextStyle(fontSize: 18, color: Color.fromRGBO(123,123,123, 1), fontFamily: 'Consola'),),
+              ],
+            ),
           ),
-        ),
-        CarouselSlider(
-          options: CarouselOptions(
-            autoPlay: true,
-            aspectRatio: 2.9,
-            enlargeCenterPage: true,
-              onPageChanged: (index, reason) {
-                setState(() {
-                  _current = index;
-                });
-              }
-          ),
-          items: imageSliders,
-        ),
-
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: featured_snapshots.map((url) {
-            int index = featured_snapshots.indexOf(url);
-            return Container(
-              width: 8.0,
-              height: 8.0,
-              margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: _current == index
-                    ? Color.fromRGBO(128, 0, 128, 1)
-                    : Color.fromRGBO(128, 0, 128, 0.4),
-              ),
-            );
-          }).toList(),
-        ),
-        SizedBox(height: 5,),
-        Padding(
-          padding: const EdgeInsets.only(left: 24,bottom: 8, top: 16),
-          child: Row(
-            children: [
-              Text("Restaurants", style: TextStyle(fontSize: 18, color: Colors.black, ),),
-            ],
-          ),
-        ),
-        snapshots.length!=0?Column(
-          //shrinkWrap: true,
-          children: snapshots.map((DocumentSnapshot document) {
-            return Padding(
-              padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 10),
-              child: new GestureDetector(
-                onTap: (){
+          CarouselSlider(
+            options: CarouselOptions(
+              autoPlay: true,
+              aspectRatio: 2.9,
+              enlargeCenterPage: true,
+                onPageChanged: (index, reason) {
                   setState(() {
-                    isLoadingPage=true;
+                    _current = index;
                   });
-                  Firestore.instance.collection('category').where('restaurant_id', isEqualTo: document.documentID).getDocuments().then(
-                          (val){
-                        List<DocumentSnapshot> ctegory_list = val.documents;
-                        List<Widget> tabBarList = [];
-                        ctegory_list.forEach((element) {
-                          tabBarList.add(Tab(text: element['title']));
+                }
+            ),
+            items: imageSliders,
+          ),
 
-                        });
-                        //isLoading=false;
-                        setState(() {
-                          isLoadingPage=false;
-                        });
-                        bloc.clearAll();
-                        bloc.not();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => MealPage(document, ctegory_list, tabBarList)),
-                        );
-                      }
-                  );
-                },
-                child: Card(
-                  elevation: 3,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10))),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      //Text(snapshot.data[index].location.toString()),
-                      //Row(
-                      //  children: <Widget>[
-                      //    Icon(Icons.phone, size: 15,),
-                      //    Text(snapshot.data[index].phone_number.toString()),
-
-                      //  ],
-                      //),
-                      Container(
-                        height: 150,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
-                            image: DecorationImage(
-                                image: NetworkImage(document['image']),
-                                fit: BoxFit.cover
-                            )
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left:12.0, right: 12.0, top: 8.0, ),
-                        child: Text(document['name'],
-                            style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                            )),
-                      ),
-                      SizedBox(
-                        height: 4.0,
-                      ),
-                      /**
-                      Padding(
-                        padding: const EdgeInsets.only(left:12.0, right: 12.0, top: 4.0, ),
-                        child: Text("${document['location']}kknjnjnonioi jnjijoooj bojnol ${document['delivery']?'* Delivery Available':''}", style: TextStyle(
-                          color: Colors.grey[500],
-                        )),
-                      ),**/
-                      Padding(
-                        padding: const EdgeInsets.only(left:12.0, right: 12.0, top: 4.0, ),
-                        child: RichText(
-                          text: TextSpan(children: [
-                            TextSpan(text: document['location']),
-                            TextSpan(text: document['delivery']?' * Delivery Available':'', style: TextStyle(fontWeight: FontWeight.bold)),
-                          ], style: TextStyle(
-                            color: Colors.grey[500],
-                          )),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 12.0,
-                      ),
-                      /**
-                      Padding(
-                        padding: const EdgeInsets.only(left:12.0, right: 12.0, top: 4.0, bottom: 12 ),
-                        child: Contact(document),
-                      )**/
-                    ],
-                  ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: featured_snapshots.map((url) {
+              int index = featured_snapshots.indexOf(url);
+              return Container(
+                width: 8.0,
+                height: 8.0,
+                margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: _current == index
+                      ? Color.fromRGBO(128, 0, 128, 1)
+                      : Color.fromRGBO(128, 0, 128, 0.4),
                 ),
-              ),
-            );
-          }).toList(),
-        ):Container()
-      ],):Center(
+              );
+            }).toList(),
+          ),
+          SizedBox(height: 5,),
+          Card(
+            elevation: 10,
+            color: Color.fromRGBO(236, 239, 241, 1),
+            //color: Color.fromRGBO(244,244,244, 1),
+            shadowColor: Colors.black,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+            ),
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(top: 30, bottom: 10),
+                  child: Text("Restaurants",
+                    style: TextStyle(
+                      color: Color.fromRGBO(123,123,123, 1),
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Consola'
+                    ),),
+                ),
+                snapshots.length!=0?Column(
+                  //shrinkWrap: true,
+                  children: snapshots.map((DocumentSnapshot document) {
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 10),
+                      child: new GestureDetector(
+                        onTap: (){
+                          bloc.getCategories(document, context);
+                          /*
+                          setState(() {
+                            isLoadingPage=true;
+                          });
+                          Firestore.instance.collection('category').where('restaurant_id', isEqualTo: document.documentID).getDocuments().then(
+                                  (val){
+                                List<DocumentSnapshot> ctegory_list = val.documents;
+                                List<Widget> tabBarList = [];
+                                ctegory_list.forEach((element) {
+                                  tabBarList.add(Tab(text: element['title']));
+
+                                });
+                                //isLoading=false;
+                                bloc.clearAll();
+                                bloc.not();
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => MealPage(document, ctegory_list, tabBarList)),
+                                );
+                                setState(() {
+                                  isLoadingPage=false;
+                                });
+                              }
+                          );*/
+                        },
+                        child: Stack(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(left:30.0,),
+                              child: Card(
+                                elevation: 1,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left:33.0, top: 10, bottom: 10),
+                                  child: Column(
+                                    children: <Widget>[
+                                      Row(
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(left:12.0, right: 12.0, top: 0, ),
+                                              child: Text(document['name'],
+                                                  maxLines: 1,
+                                                  overflow: TextOverflow.fade,
+                                                  softWrap: false,
+                                                  style: TextStyle(
+                                                    color: Color.fromRGBO(102,102,102, 1),
+                                                    fontSize: 18.0,
+                                                    fontWeight: FontWeight.bold,
+                                                  )),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(left:12.0, right: 12.0, top: 4.0, ),
+                                              child: Text(document['location'],
+                                                  maxLines: 1,
+                                                  overflow: TextOverflow.ellipsis,
+                                                  softWrap: false,
+                                                  style: TextStyle(
+                                                    color: Color.fromRGBO(123,123,123, 1),
+                                                    fontSize: 14.0,
+                                                    fontWeight: FontWeight.w300,
+                                                  )),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(left:12.0, right: 12.0, top: 4.0, bottom: 8.0),
+                                              child: Text(document['delivery']?'Delivery Available':'',
+                                                  style: TextStyle(
+                                                    color: Color.fromRGBO(123,123,123, 1),
+                                                    fontSize: 14.0,
+                                                    fontWeight: FontWeight.w300,
+                                                  )),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top:12.0),
+                                child: Container(
+                                  height: 70,
+                                  width: 70,
+                                  child: Center(child: Text('')),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.vertical(top: Radius.circular(80), bottom: Radius.circular(80)),
+                                      image: DecorationImage(
+                                          image: NetworkImage(document['image']),
+                                          fit: BoxFit.cover
+                                      )
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ):Container()
+              ],
+            ),
+          ),
+
+        ],),
+      ):Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[

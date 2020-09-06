@@ -37,7 +37,12 @@ class _MealPageState extends State<MealPage> {
   BuildContext mContext;
   Color currentColor;
 
+  bool isOpened = true;
+
+  String openingAndClosing = "";
+
   bool isLoading = true;
+  bool isDiscount = false;
 
   int cat_len = 0;
 
@@ -254,8 +259,15 @@ class _MealPageState extends State<MealPage> {
         isLoading = false;
         print(meals.documents.length);
         meal_list=meals.documents;
-
       });
+      for (var i = 1; i <= meals.documents.length; i++) {
+        if(meals.documents[i]['discount']){
+          setState(() {
+            isDiscount = true;
+          });
+          //break;
+        }
+      }
     });
     super.initState();
   }
@@ -299,6 +311,28 @@ class _MealPageState extends State<MealPage> {
     }
     List<Widget> taViewList = [];
 
+    try{
+      String currentTime = TimeOfDay.now().hour.toString()+(TimeOfDay.now().minute<10?'0${TimeOfDay.now().minute}':TimeOfDay.now().minute.toString()).toString();
+      //String currentTime = Timestamp.now().toDate().toUtc()
+      String openingTime = restaurantDocument['openingTime'].split(" ")[0].split(":").join("");
+      String closingTime = restaurantDocument['closingTime'].split(" ")[0].split(":").join("");
+      setState(() {
+        openingAndClosing = "${restaurantDocument['openingTime']} -- ${restaurantDocument['closingTime']}";
+      });
+      if(int.parse(currentTime)>int.parse(openingTime) && int.parse(currentTime)<int.parse(closingTime) && restaurantDocument['days'].split('-')[DateTime.now().weekday-1].toString()=='1'){
+        print("open");
+      }else{
+        setState(() {
+          isOpened=false;
+        });
+      }
+    }catch(err){
+      setState(() {
+        isOpened=true;
+        openingAndClosing="";
+      });
+    }
+
     return new WillPopScope(
       onWillPop: (){
         if(bloc.isLoggedIn){
@@ -308,7 +342,11 @@ class _MealPageState extends State<MealPage> {
             Navigator.of(mContext).pop();
           }
         }else{
-          showAlertDialog(mContext);
+          if(totalCount!=0){
+            showAlertDialog(mContext);
+          }else{
+            Navigator.of(mContext).pop();
+          }
         }
       },
       child: MaterialApp(
@@ -339,7 +377,7 @@ class _MealPageState extends State<MealPage> {
                       borderRadius: BorderRadius.all(Radius.circular(80.0)),
                       ),
                               child: IconButton(
-                                  icon: BackButtonIcon(),
+                                  icon: Icon(Icons.arrow_back),//BackButtonIcon(),
                                   color: Colors.black,//isShrink ? Colors.white : currentColor,
                                   onPressed: () {
                                     //showAlertDialog(mContext);
@@ -350,7 +388,11 @@ class _MealPageState extends State<MealPage> {
                                         Navigator.of(mContext).pop();
                                       }
                                     }else{
-                                      showAlertDialog(mContext);
+                                      if(totalCount!=0){
+                                        showAlertDialog(mContext);
+                                      }else{
+                                        Navigator.of(mContext).pop();
+                                      }
                                     }
                                     //Navigator.pop(context);
                                   }),
@@ -367,7 +409,11 @@ class _MealPageState extends State<MealPage> {
                                     Navigator.of(mContext).pop();
                                   }
                                 }else{
-                                  showAlertDialog(mContext);
+                                  if(totalCount!=0){
+                                    showAlertDialog(mContext);
+                                  }else{
+                                    Navigator.of(mContext).pop();
+                                  }
                                 }
                                 //Navigator.pop(context);
                               }),
@@ -463,7 +509,8 @@ class _MealPageState extends State<MealPage> {
                                                   Expanded(
                                                     child: Text(restaurantDocument['location'],
                                                         style: TextStyle(
-                                                          fontSize: 10,
+                                                          fontSize: 11,
+                                                          fontWeight: FontWeight.w400,
                                                           color: Colors.grey,////Colors.white,//Color.fromRGBO(128, 0, 128, 1),
                                                         )),
                                                   ),
@@ -473,21 +520,50 @@ class _MealPageState extends State<MealPage> {
                                               Row(
                                                 //mainAxisAlignment: MainAxisAlignment.center,
                                                 children: <Widget>[
-                                                  Icon(Icons.phone, size: 12.0, color: Color.fromRGBO(128, 0, 128, 1)),
+                                                  Icon(Icons.timelapse, size: 12.0, color: Color.fromRGBO(128, 0, 128, 1)),
                                                   SizedBox(width: 3.0),
                                                   Text(restaurantDocument['phone_number'],
                                                       style: TextStyle(
                                                         fontSize: 11,
+                                                        fontWeight: FontWeight.w400,
                                                         color: Colors.grey,////Colors.white,//Color.fromRGBO(128, 0, 128, 1),
                                                       )),
                                                   Spacer(),
                                                   Text(restaurantDocument['delivery']?"Delivery Fee: ₦${restaurantDocument['delivery_fee']}":"No Delivery",
                                                       style: TextStyle(
                                                         fontSize: 10,
+                                                        fontWeight: FontWeight.w400,
                                                         color: Colors.grey,////Colors.white,//Color.fromRGBO(128, 0, 128, 1),
                                                       )),
                                                 ],
                                               ),
+                                              SizedBox(height: 3.0),
+                                              openingAndClosing!=""?Row(
+                                                //mainAxisAlignment: MainAxisAlignment.center,
+                                                children: <Widget>[
+                                                  Icon(Icons.access_time, size: 12.0, color: Color.fromRGBO(128, 0, 128, 1)),
+                                                  SizedBox(width: 3.0),
+                                                  Text("open: $openingAndClosing",
+                                                      style: TextStyle(
+                                                        fontSize: 11,
+                                                        fontWeight: FontWeight.w400,
+                                                        color: Colors.grey,////Colors.white,//Color.fromRGBO(128, 0, 128, 1),
+                                                      )),
+
+                                                  /*
+                                                  Spacer(),
+
+                                                  Icon(Icons.calendar_today, size: 12.0, color: Color.fromRGBO(128, 0, 128, 1)),
+                                                  SizedBox(width: 3.0),
+                                                  Text("open: except sun",
+                                                      style: TextStyle(
+                                                        fontSize: 11,
+                                                        fontWeight: FontWeight.w400,
+                                                        color: Colors.grey,////Colors.white,//Color.fromRGBO(128, 0, 128, 1),
+                                                      )),
+                                                  */
+                                                ],
+                                              ):Container(),
                                             ],
                                           ),
                                         ),
@@ -499,6 +575,78 @@ class _MealPageState extends State<MealPage> {
                               )),
 
                         ),
+
+                        !isOpened?SliverToBoxAdapter(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical:20.0),
+                            child: Center(child: Text("This Restaurant is closed", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black),)),
+                          ),
+                        ):SliverToBoxAdapter(),
+
+                        isDiscount?SliverToBoxAdapter(
+                          child: Column(
+                            children: <Widget>[
+                              Row(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.only(top:18.0, left: 18, ),
+                                    child: Text("Deals", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                                  ),
+                                ],
+                              ),
+                              meal_list!=null?Container(
+                                height: isOpened?130.0:80,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 18, ),
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: meal_list.length,
+                                    itemBuilder: (context, index) {
+
+                                      if(meal_list[index]['discount']&&meal_list[index]['listed']){
+                                        return Container(
+                                          width: 220.0,
+                                          child: Card(
+                                            elevation: 5,
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Column(
+                                                children: <Widget>[
+                                                  Row(
+                                                    children: <Widget>[
+                                                      Expanded(child: Text(meal_list[index]['title'], maxLines: 2, style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16),)),
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 5,),
+                                                  Row(
+                                                    children: <Widget>[
+                                                      Text(NumberFormat.currency(symbol: "₦", decimalDigits: 0).format(int.parse(meal_list[index]['normal_price'])), style: meal_list[index]['discount']?TextStyle(decoration: TextDecoration.lineThrough, fontWeight: FontWeight.bold, color: Color.fromRGBO(128, 0, 128, 1)):TextStyle()),
+                                                      meal_list[index]['discount']?Text(" ₦${NumberFormat.currency(symbol: "", decimalDigits: 0).format(int.parse(meal_list[index]['discount_price']))}", style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold)):Container(),
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 10,),
+                                                  isOpened?Row(
+                                                    children: <Widget>[
+                                                      Spacer(),
+                                                      isOpened?Button(meal_list[index]):Container(),
+                                                      //Container(height: 50, width: 50, color: Colors.greenAccent,),
+                                                    ],
+                                                  ):Container()
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }else{
+                                        return Container(height: 1.0,);
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ):Container(),
+                            ],
+                          ),
+                        ):SliverToBoxAdapter(),
 
                         SliverPersistentHeader(
                           delegate: _SliverAppBarDelegate(
@@ -578,7 +726,7 @@ class _MealPageState extends State<MealPage> {
                                                       ),
                                                       Row(children: <Widget>[
                                                         //Add_To_Cart_btn(meal_list[index], bloc),
-                                                        Button(meal_list[index])
+                                                        isOpened?Button(meal_list[index]):Container()
                                                       ],)
                                                     ],
                                                   ),

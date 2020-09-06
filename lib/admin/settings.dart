@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:kaatane/bloc/cart_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'delivery_area.dart';
 import 'drawer.dart';
@@ -59,12 +60,14 @@ class Settings extends StatelessWidget {
         ),
         SizedBox(height: 1, child: Container(color: Colors.grey[300],),),
         ListTile(
-          onTap: (){
+          onTap: () async {
             _auth.signOut();
             bloc.isTerminated=false;
             //_signInWithEmailAndPassword();
             Provider.of<CartBloc>(context).isLoading = false;
             _fcm.subscribeToTopic(bloc.restaurantDocument.documentID);
+            SharedPreferences pref = await SharedPreferences.getInstance();
+            pref.setBool('isLoggedin', false);
             Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
                 LoginPage4()), (Route<dynamic> route) => false);
           },

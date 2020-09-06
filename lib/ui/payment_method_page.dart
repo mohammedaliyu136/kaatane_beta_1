@@ -4,6 +4,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 //import 'package:js/js.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,13 @@ class Order_payment_methodState extends State<Order_payment_method> {
   var paystackPublicKey = 'pk_test_277c53a98499bf6879daea5e6442e3ffdf45c573';
   @override
   void initState() {
-    PaystackPlugin.initialize(publicKey: paystackPublicKey);
+    var payStackKey = "";
+    Firestore.instance.collection('server').where('key_id', isEqualTo: '1').getDocuments().then((value){
+      //print(value.documents[0]['key']);
+      //print(utf8.decode(base64.decode(value.documents[0]['key'])));
+      payStackKey = utf8.decode(base64.decode(value.documents[0]['key']));
+      PaystackPlugin.initialize(publicKey: paystackPublicKey);
+    });
     super.initState();
   }
 
