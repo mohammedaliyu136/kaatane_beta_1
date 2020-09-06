@@ -589,7 +589,8 @@ class _EditProfileState extends State<EditProfile> {
                 print("====================");
                 //selectedTime.then((value) => print("${value.hour}:${value.minute} ${value.period.index==0?'AM':'PM'}"));
                 selectedTime.then((value) => setState(() {
-                  daysAndTime.setOpeningTime("${value.hour}:${value.minute<10?'0'+value.minute.toString():value.minute} ${value.period.index==0?'AM':'PM'}");
+                  String st = "${value.hour<10?'0'+value.hour.toString():value.hour}:${value.minute<10?'0'+value.minute.toString():value.minute} ${value.period.index==0?'AM':'PM'}";
+                  daysAndTime.setOpeningTime(st);
                 }));
               },
               child: Container(decoration: BoxDecoration(
@@ -612,7 +613,8 @@ class _EditProfileState extends State<EditProfile> {
                 print("====================");
                 //selectedTime.then((value) => print("${value.hour}:${value.minute} ${value.period.index==0?'AM':'PM'}"));
                 selectedTime.then((value) => setState(() {
-                  daysAndTime.setClosingTime("${value.hour}:${value.minute<10?'0'+value.minute.toString():value.minute} ${value.period.index==0?'AM':'PM'}");
+                  String st = "${value.hour<10?'0'+value.hour.toString():value.hour}:${value.minute<10?'0'+value.minute.toString():value.minute} ${value.period.index==0?'AM':'PM'}";
+                  daysAndTime.setClosingTime(st);
                 }));
               },
               child: Container(decoration: BoxDecoration(

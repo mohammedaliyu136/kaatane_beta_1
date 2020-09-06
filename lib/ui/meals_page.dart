@@ -543,7 +543,7 @@ class _MealPageState extends State<MealPage> {
                                                 children: <Widget>[
                                                   Icon(Icons.access_time, size: 12.0, color: Color.fromRGBO(128, 0, 128, 1)),
                                                   SizedBox(width: 3.0),
-                                                  Text("open: $openingAndClosing",
+                                                  Text("$openingAndClosing",
                                                       style: TextStyle(
                                                         fontSize: 11,
                                                         fontWeight: FontWeight.w400,
