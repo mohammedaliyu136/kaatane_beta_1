@@ -16,9 +16,14 @@ Future<CheckoutResponse> pay(context) async {
   var _reference = _getReference();
   var uuid = Uuid().v1();
 
+  print("-------------------");
+  print("-------------------");
+  print("payment");
+  print(bloc.email);
+
   Charge charge = Charge()
     ..amount = total.toInt()*100 // In base currency
-    ..email = 'customer@email.com'
+    ..email =  bloc.email
     ..card = _getCardFromUI();
 
   //charge.reference = _reference;

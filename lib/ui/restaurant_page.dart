@@ -73,6 +73,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
   @override
   Widget build(BuildContext context){
     var bloc = Provider.of<CartBloc>(context);
+    bloc.getVersionFromFirebase();
     //bool isLoading =Provider.of<CartBloc>(context).isLoading;
     //final List<Widget> imageSliders = imgList.map((item) => Container(
     /**

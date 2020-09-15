@@ -168,7 +168,6 @@ class _MealPageState extends State<MealPage> {
       child: Text("Reset"),
       onPressed:  () {
         setState(() {
-          print(Colors.white.value==currentColor.value);
           currentColor = Colors.white;
         });
         Navigator.of(context).pop();
@@ -190,12 +189,6 @@ class _MealPageState extends State<MealPage> {
         pickerColor: Color.fromRGBO(128, 0, 128, 1),
         onColorChanged: (change){
           setState(() {
-
-            print(change);
-            print(change.value);
-            print(change.value.toString());
-            print(Color(change.value));
-            print(Color(int.parse(change.value.toString())));
             currentColor = change;
           });},
       ),
@@ -232,10 +225,8 @@ class _MealPageState extends State<MealPage> {
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
     int len = 0;
-    print("00000000000");
     ctegory_list.forEach((element) {
       len += element['title'].length;
-      print(element['title'].length);
     });
 
     setState(() {
@@ -254,10 +245,7 @@ class _MealPageState extends State<MealPage> {
         .where('listed', isEqualTo: true).getDocuments()
         .then((meals){
       setState(() {
-        print("***************");
-        print("***************");
         isLoading = false;
-        print(meals.documents.length);
         meal_list=meals.documents;
       });
       for (var i = 1; i <= meals.documents.length; i++) {
@@ -671,13 +659,11 @@ class _MealPageState extends State<MealPage> {
                           child: TabBarView(
                             children: ctegory_list.map((DocumentSnapshot cat_document){
                               if(meal_list!=null){
-                                print(cat_document.documentID);
                                 return ListView.builder(
                                     padding: EdgeInsets.zero,
                                   itemCount: meal_list.length,
                                   itemBuilder: (context, index){
                                     if(cat_document.documentID==meal_list[index]['category_id']){//meal_list[index]
-                                      print(NumberFormat.currency(symbol: "", decimalDigits: 0).format(2000));
                                       return Padding(
                                         padding: const EdgeInsets.all(2.0),
                                         child: Card(
@@ -763,7 +749,8 @@ class _MealPageState extends State<MealPage> {
                 ),
               ),
               GestureDetector(
-                onTap: (){
+                onTap: () async {
+                  await bloc.getVersion(context);
                   Navigator.push(
                     context,
                     MaterialPageRoute(

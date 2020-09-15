@@ -14,6 +14,15 @@ class Delivery_info extends StatefulWidget {
 
 class Delivery_infoState extends State<Delivery_info> {
   final _formKey = GlobalKey<FormState>();
+
+  bool validateEmail(String value) {
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    return (!regex.hasMatch(value)) ? false : true;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     var bloc = Provider.of<CartBloc>(context);
@@ -48,7 +57,13 @@ class Delivery_infoState extends State<Delivery_info> {
                 keyboardType: TextInputType.emailAddress,
                 decoration:
                 InputDecoration(labelText: EMAIL_ADDRESS_LABEL, focusColor: Color.fromRGBO(128, 0, 128, 1)),
-                onSaved: (input)=>bloc.email=input,
+                onSaved: (input)=>input.isNotEmpty?bloc.email=input:bloc.email="customer@email.com",
+                validator: (value) {
+                  if (!validateEmail(value) && value.isNotEmpty) {
+                    return "Email is invalid";
+                  }
+                  return null;
+                },
               ),
               TextFormField(
                 keyboardType: TextInputType.phone,

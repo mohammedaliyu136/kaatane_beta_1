@@ -35,25 +35,31 @@ class Order_payment_method extends StatefulWidget {
 }
 
 class Order_payment_methodState extends State<Order_payment_method> {
-  var paystackPublicKey = 'pk_test_277c53a98499bf6879daea5e6442e3ffdf45c573';
+  //var paystackPublicKey = 'pk_test_277c53a98499bf6879daea5e6442e3ffdf45c573';
   @override
   void initState() {
     var payStackKey = "";
+    //PaystackPlugin.initialize(publicKey: paystackPublicKey);
+    Firestore.instance.collection('server').where('key_id', isEqualTo: '1').getDocuments().then((value){
+      //print(value.documents[0]['key']);
+      //print(utf8.decode(base64.decode(value.documents[0]['key'])));
+      payStackKey = utf8.decode(base64.decode(value.documents[0]['key']));
+      PaystackPlugin.initialize(publicKey: payStackKey);
+    });
+    /*
     Firestore.instance.collection('server').where('key_id', isEqualTo: '1').getDocuments().then((value){
       //print(value.documents[0]['key']);
       //print(utf8.decode(base64.decode(value.documents[0]['key'])));
       payStackKey = utf8.decode(base64.decode(value.documents[0]['key']));
       PaystackPlugin.initialize(publicKey: paystackPublicKey);
     });
+     */
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     var bloc = Provider.of<CartBloc>(context);
-    print(bloc.fullName);
-    print(bloc.total.toString());
-    print(bloc.cart.toString());
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       backgroundColor: Colors.white,

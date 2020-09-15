@@ -15,6 +15,8 @@ import 'package:kaatane/admin/orders.dart';
 import 'package:kaatane/admin/SnackBars.dart';
 import 'package:kaatane/model/my_order_model.dart';
 import 'package:kaatane/ui/meals_page.dart';
+import 'package:kaatane/ui/store_redirect_page.dart';
+import 'package:kaatane/utils/keys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/meal.dart';
@@ -24,6 +26,8 @@ import '../utils/paystack.dart';
 //import 'package:js/js.dart';
 
 class CartBloc with ChangeNotifier {
+
+  AppVersion appVersion;
 
   FirebaseUser _userFirebase;
   FirebaseMessaging _fcm = FirebaseMessaging();
@@ -384,6 +388,44 @@ class CartBloc with ChangeNotifier {
   not(){
     notifyListeners();
   }
+
+  getVersionFromFirebase()async{
+    Firestore.instance.collection('server').where('app_version', isEqualTo: "app_version").getDocuments().then((value){
+      //"app_version"
+      //min_version
+      //update_now
+      appVersion = AppVersion(appVersion:value.documents[0]['app_version'], minVersion:value.documents[0]['min_version'], updateNOW:value.documents[0]['update_now']);
+      notifyListeners();
+    });
+  }
+
+  getVersion(context)async{
+    int current_major_release = int.parse(current_version.split(".")[0]);
+    double current_minor_release = double.parse("${current_version.split(".")[1]}.${current_version.split(".")[2]}");
+
+    String firebase_version = appVersion.minVersion;
+    bool firebase_update_now = appVersion.updateNOW;
+    int firebase_major_release = int.parse(firebase_version.split(".")[0]);
+    double firebase_minor_release = double.parse("${firebase_version.split(".")[1]}.${firebase_version.split(".")[2]}");
+
+    if(current_major_release<firebase_major_release){
+      await Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) => StoreRedirectPage()
+          ),
+          ModalRoute.withName("")
+      );
+    }else if(current_minor_release<firebase_minor_release && firebase_update_now){
+      await Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) => StoreRedirectPage()
+          ),
+          ModalRoute.withName("")
+      );
+    }
+  }
 }
 
 class CartBloc2 with ChangeNotifier {
@@ -408,4 +450,10 @@ class CartBloc2 with ChangeNotifier {
     }
   }
 
+}
+class AppVersion{
+  String appVersion;
+  String minVersion;
+  bool updateNOW;
+  AppVersion({this.appVersion, this.minVersion, this.updateNOW});
 }
