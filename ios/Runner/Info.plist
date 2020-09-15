@@ -58,5 +58,10 @@
      <key>NSPhotoLibraryUsageDescription</key>
      <string>Share images with other chat users</string>
 
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+            <string>itms</string>
+    </array>
+
 </dict>
 </plist>
