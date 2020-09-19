@@ -127,7 +127,7 @@ class Order_payment_methodState extends State<Order_payment_method> {
                           //});
 
                         } else {
-                          pay(context);
+                          pay(context, bloc);
                         }
 
                       },

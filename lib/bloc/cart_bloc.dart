@@ -251,10 +251,6 @@ class CartBloc with ChangeNotifier {
             email: email,
             password: password)
             .then((currentUser){
-          print("000000000000000000000000000000");
-          print("000000000000000000000000000000");
-          print("000000000000000000000000000000");
-          print(currentUser.user.displayName);
           _userFirebase=currentUser.user;
           setUsernamePassword(email, password, _userFirebase.uid);
           isLoading=false;
@@ -279,9 +275,6 @@ class CartBloc with ChangeNotifier {
           notifyListeners();
         });
       }catch(e){
-        print("000000000000000000000000000000");
-        print("000000000000000000000000000000");
-        print("000000000000000000000000000000");
         print(e.message);
         isTerminated=true;
         isLoading=false;

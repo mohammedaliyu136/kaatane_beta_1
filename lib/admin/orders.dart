@@ -77,10 +77,6 @@ class _OrdersState extends State<Orders> {
   @override
   Widget build(BuildContext context) {
     var bloc = Provider.of<CartBloc>(context);
-    print("########################");
-    print("########################");
-    print("########################");
-    print(bloc.restaurant);
     var restaurant = bloc.restaurant;
     mUser=bloc.userFirebase;
     return WillPopScope(

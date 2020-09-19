@@ -308,7 +308,7 @@ class _MealPageState extends State<MealPage> {
         openingAndClosing = "${restaurantDocument['openingTime']} -- ${restaurantDocument['closingTime']}";
       });
       if(int.parse(currentTime)>int.parse(openingTime) && int.parse(currentTime)<int.parse(closingTime) && restaurantDocument['days'].split('-')[DateTime.now().weekday-1].toString()=='1'){
-        print("open");
+        //print("open");
       }else{
         setState(() {
           isOpened=false;

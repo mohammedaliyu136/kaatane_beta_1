@@ -10,8 +10,8 @@ import 'package:uuid/uuid.dart';
 
 import '../bloc/cart_bloc.dart';
 
-Future<CheckoutResponse> pay(context) async {
-  var bloc = Provider.of<CartBloc>(context);
+Future<CheckoutResponse> pay(context, bloc) async {
+  //var bloc = Provider.of<CartBloc>(context);
   var total = bloc.total;
   var _reference = _getReference();
   var uuid = Uuid().v1();
@@ -24,24 +24,28 @@ Future<CheckoutResponse> pay(context) async {
   Charge charge = Charge()
     ..amount = total.toInt()*100 // In base currency
     ..email =  bloc.email
+    ..putCustomField('Restaurant', bloc.restaurantDocument["name"])
     ..card = _getCardFromUI();
 
   //charge.reference = _reference;
   charge.reference = uuid;
 
-  CheckoutResponse response = await PaystackPlugin.checkout(
+  //CheckoutResponse response =
+
+  await PaystackPlugin.checkout(
     context,
     method: CheckoutMethod.card, //_method,
     charge: charge,
     fullscreen: false,
     logo: MyLogo(),
-  );
-  print('Response = $response');
-  //return response;
-  if(response.message=="Success"){
-    //bloc.postOrder("card", context, _reference);
-    bloc.postOrder("card", context, uuid);
-  }
+  ).then((response){
+    //return response;
+    if(response.message=="Success"){
+      //bloc.postOrder("card", context, _reference);
+      bloc.postOrder("card", context, uuid);
+    }
+  });
+
 
   //response = {message: Success, card: PaymentCard{_cvc: 884, expiryMonth: 11, expiryYear: 21, _type: VERVE, _last4Digits: 7804 , _number: null}, account: null, reference: ChargedFromAndroid_1579028228949, status: true, method: CheckoutMethod.card, verify: true}
 }

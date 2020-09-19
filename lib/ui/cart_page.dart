@@ -36,7 +36,7 @@ class CartPage extends StatelessWidget {
                   itemBuilder: (context, index) {
                     //Meal meal = cart.keys.toList()[index];
                     Meal meal = cart[index];
-                    print(cart.values.toList()[index].name);
+                    //print(cart.values.toList()[index].name);
                     //int count = cart[giftIndex];
                     return ListTile(
                       title: Column(
