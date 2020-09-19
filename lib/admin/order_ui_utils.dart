@@ -47,7 +47,6 @@ ongoing_order(context,  DocumentSnapshot document, _scaffoldKey){
   print("&&&&&&&&&&&&&&&&&&&&&");
   print("&&&&&&&&&&&&&&&&&&&&&");
   print("&&&&&&&&&&&&&&&&&&&&&");
-  print("443c40b0-9abc-11ea-c2c6-9d414111eb86");
   print(uuid.v1());
   print(uuid.v1());
   print(uuid.v1().split('-')[0]);
@@ -78,6 +77,8 @@ past_order(context, DocumentSnapshot document){
 
 order_header(DocumentSnapshot document){
   bool isPaid = false;
+
+  /*
   try{
     isPaid = document['isPaid'];
     print(isPaid);
@@ -86,13 +87,13 @@ order_header(DocumentSnapshot document){
   }catch(e){
     isPaid = false;
     print("111");
-  }
+  }*/
 
   return Container(
     color: Colors.purple[50],
     child: ListTile(
       //leading: Icon(Icons.attach_money, size: 40, color: document['isPaid']!=null&&document['isPaid']!=false?Colors.green:Colors.red,),
-      leading: Text("₦", style: TextStyle(fontSize: 35, fontWeight:FontWeight.w400, color: document['isPaid']!=null&&document['isPaid']!=false?Colors.green:Colors.red),),
+      //leading: Text("₦", style: TextStyle(fontSize: 35, fontWeight:FontWeight.w400, color: document['isPaid']!=null&&document['isPaid']!=false?Colors.green:Colors.red),),
       title: Text(document['name']),
       subtitle: Text(timeago.format(document['time_stamp'].toDate().add(new Duration(hours: 1)))),//
       trailing: Column(

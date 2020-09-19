@@ -43,7 +43,7 @@ class Order_payment_methodState extends State<Order_payment_method> {
       //print(value.documents[0]['key']);
       //print(utf8.decode(base64.decode(value.documents[0]['key'])));
       payStackKey = utf8.decode(base64.decode(value.documents[0]['key']));
-      PaystackPlugin.initialize(publicKey: paystackPublicKey);
+      PaystackPlugin.initialize(publicKey: payStackKey);
     });
     super.initState();
   }
