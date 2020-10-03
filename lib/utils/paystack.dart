@@ -40,6 +40,9 @@ Future<CheckoutResponse> pay(context, bloc) async {
     logo: MyLogo(),
   ).then((response){
     //return response;
+    print("+++++++++++++++++++++");
+    print(response);
+    print(response.message);
     if(response.message=="Success"){
       //bloc.postOrder("card", context, _reference);
       bloc.postOrder("card", context, uuid);
