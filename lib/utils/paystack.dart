@@ -43,7 +43,8 @@ Future<CheckoutResponse> pay(context, bloc) async {
     print("+++++++++++++++++++++");
     print(response);
     print(response.message);
-    if(response.message=="Success"){
+    //response.message=="Success" || response.message=="Transaction already succeeded"
+    if(response.status){
       //bloc.postOrder("card", context, _reference);
       bloc.postOrder("card", context, uuid);
     }
