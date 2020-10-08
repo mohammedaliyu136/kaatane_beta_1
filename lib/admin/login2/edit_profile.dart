@@ -296,7 +296,7 @@ class _EditProfileState extends State<EditProfile> {
           ],),*/
           TextField(
             controller: nameController,
-            keyboardType: TextInputType.number,
+            keyboardType: TextInputType.text,
             maxLength: 25,
             decoration: InputDecoration(
               prefixIcon: Icon(Icons.person, color: Colors.purple,),
@@ -376,7 +376,7 @@ class _EditProfileState extends State<EditProfile> {
           ],),*/
           TextField(
             controller: locationController,
-            keyboardType: TextInputType.number,
+            keyboardType: TextInputType.text,
             decoration: InputDecoration(
               prefixIcon: Icon(Icons.location_on, color: Colors.purple,),
               labelText: RESTAURANT_ADDRESS_LABEL_TEXT,
@@ -642,6 +642,10 @@ class _EditProfileState extends State<EditProfile> {
               children: <Widget>[
                 Expanded(child: RaisedButton(
                   color: Color.fromRGBO(128, 0, 128, 1),
+                  shape: new RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(50.0),
+                      side: BorderSide(color: Color.fromRGBO(128, 0, 128, 1))
+                  ),
                   onPressed: () async {
                     //_signInWithEmailAndPassword();
                     var doc_id = restaurantDocument.documentID;
@@ -718,6 +722,10 @@ class _EditProfileState extends State<EditProfile> {
             child: Row(
               children: <Widget>[
                 Expanded(child: RaisedButton(
+                  shape: new RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(50.0),
+                      side: BorderSide(color: Color.fromRGBO(128, 0, 128, 1))
+                  ),
                   color: Color.fromRGBO(128, 0, 128, 1),
                   onPressed: () async {
                     //_signInWithEmailAndPassword();
@@ -744,6 +752,10 @@ class _EditProfileState extends State<EditProfile> {
               children: <Widget>[
                 Expanded(child: RaisedButton(
                   color: Colors.red,
+                  shape: new RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(50.0),
+                      side: BorderSide(color: Colors.red)
+                  ),
                   onPressed: () async {
                     _auth.signOut();
                     bloc.isTerminated=false;
