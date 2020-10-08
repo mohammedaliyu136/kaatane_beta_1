@@ -11,7 +11,7 @@ description: Kaatane application.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.9
+version: 1.0.10
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -28,14 +28,14 @@ dependencies:
   http: ^0.12.0+4
   #js: ^0.6.0
   #shared_preferences: ^0.5.6
-  shared_preferences: ^0.5.4
+  shared_preferences: ^0.5.12
   introduction_screen: ^1.0.7
-  flutter_paystack: ^1.0.2+1
+  flutter_paystack: ^1.0.4+1
   firebase_database: ^3.1.1
   url_launcher: ^5.4.1
   flare_flutter: ^2.0.3
   intl:
-  carousel_slider: 2.1.0
+  carousel_slider: 2.3.1
 
   custom_switch: ^0.0.1
   flutter_slidable: ^0.5.4
@@ -48,7 +48,7 @@ dependencies:
   firebase_storage: 3.0.4
   firebase_messaging: ^5.0.2
   sqflite: ^1.2.0
-  firebase_crashlytics: ^0.1.3+3
+  firebase_crashlytics: ^0.1.1+1
   #firebase_admob: ^0.9.0+1
   flutter_datetime_picker: ^1.3.8
   google_fonts: ^1.1.0

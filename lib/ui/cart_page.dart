@@ -12,6 +12,80 @@ import 'widgets/cart_quantity_btn.dart';
 class CartPage extends StatelessWidget {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int delivery_fee = 0;
+
+  showAlertLogouDialog(BuildContext context) {
+
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("No"),
+      onPressed:  () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Yes"),
+      onPressed:  () {
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(height: 15,),
+          TextField(
+            //controller: nameController,
+            keyboardType: TextInputType.text,
+            decoration: InputDecoration(
+              labelText: "Enter coupon Code",
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Color.fromRGBO(128, 0, 128, 1),
+                  width: 2.0,
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.black54,
+                  width: 2.0,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 15,),
+          Row(
+            children: [
+              Expanded(
+                child: RaisedButton(
+                  shape: new RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(50.0),
+                      //side: BorderSide(color: Colors.red)
+                  ),
+                  onPressed: () async {
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Text("APPLY CODE", style: TextStyle(color: Colors.white, fontSize: 16),),
+                  ),),
+              ),
+            ],
+          )
+        ],
+      ),
+      actions: [
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var bloc = Provider.of<CartBloc>(context);
@@ -92,8 +166,25 @@ class CartPage extends StatelessWidget {
               ),
             ),
             Container(color: Colors.white, child: Column(children: <Widget>[
-              SizedBox(height: 8.0,),
-              ListTile(leading: Text(Order_SUMMARY_LABEL_TEXT, style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),)),
+              SizedBox(height: 0.0,),
+              ListTile(
+                  leading: Text(Order_SUMMARY_LABEL_TEXT, style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),),
+                  /*
+                  trailing: ButtonTheme(
+                    minWidth: 5.0,
+                    buttonColor: Colors.white,
+                    child: RaisedButton(child: Text("Add Coupon", style:TextStyle(color:  Color.fromRGBO(128, 0, 128, 1), fontSize: 12)),onPressed: (){
+                      showAlertLogouDialog(context);
+                      print("---------------");
+                      print("---------------");
+                      print("---------------");
+                    },
+                      shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(50.0),
+                        //side: BorderSide(color: Colors.red)
+                    ),),
+                  ),*/
+              ),
               ListTile(leading: Text(BILL_TOTAL_LABEL_TEXT), trailing: Text("₦${NumberFormat.currency(symbol: "", decimalDigits: 0).format(bloc.total-int.parse(bloc.delivery_fee))}"),),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -131,15 +222,15 @@ class CartPage extends StatelessWidget {
                 trailing: bloc.del_or_pick?Text("₦"+bloc.delivery_fee):Text(""),
               ):ListTile(leading: Text(NO_DELIVERY_LABEL_TEXT)),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: SizedBox(height: 1, child: Container(color: Colors.grey[350],),),
               ),
               ListTile(leading: Text(GRAND_TOTAL_LABEL_TEXT), trailing: Text("₦${NumberFormat.currency(symbol: "", decimalDigits: 0).format(bloc.total)}"),),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Buttom_Cart(_scaffoldKey),
               ),
-              SizedBox(height: 8.0,),
+              SizedBox(height: 4.0,),
             ],),)
           ],
         ),

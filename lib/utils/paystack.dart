@@ -33,7 +33,8 @@ Future<CheckoutResponse> pay(context) async {
   );
   print('Response = $response');
   //return response;
-  if(response.message=="Success"){
+  //response.message=="Success"
+  if(response.status){
     //bloc.postOrder("card", context, _reference);
     bloc.postOrder("card", context, uuid);
   }
