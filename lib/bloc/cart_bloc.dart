@@ -41,6 +41,9 @@ class CartBloc with ChangeNotifier {
 
   String restaurant = '';
   DocumentSnapshot restaurantDocument;
+  DocumentSnapshot couponDocument;
+  bool coupon_error = false;
+  bool coupon_loading = false;
   String delivery_fee = '0';
   bool del_or_pick=false;
 
@@ -56,6 +59,8 @@ class CartBloc with ChangeNotifier {
   String _phone="";
   String _note="";
   String _address="";
+  bool applied_coupon = false;
+  double discount_amount = 0;
   String get fullName => _fullName;
   String get email => _email;
   String get phone => _phone;
@@ -88,6 +93,8 @@ class CartBloc with ChangeNotifier {
     _count_total=0;
     delivery_fee = '0';
     del_or_pick=false;
+    applied_coupon=false;
+    discount_amount=0;
     notifyListeners();
   }
 
@@ -122,6 +129,9 @@ class CartBloc with ChangeNotifier {
       }else{
         _total-=_cart[index].price;
         _count_total-=_cart[index].quantity;
+      }
+      if(_total>0 && applied_coupon){
+        setCoupon(couponDocument);
       }
   }
   postOrder(method, context, reference) async {
@@ -166,9 +176,11 @@ class CartBloc with ChangeNotifier {
       meals+="${value.name}#${value.quantity}*";
     });
 
+    final collRef = Firestore.instance.collection("order_$restaurant");
+    DocumentReference docReference = collRef.document();
 
-    Firestore.instance.collection("order_$restaurant").document()
-        .setData({
+    //Firestore.instance.collection("order_$restaurant").document()
+    docReference.setData({
       'name': _fullName,
       'meals':_0cart,
       'status':1,
@@ -188,6 +200,18 @@ class CartBloc with ChangeNotifier {
         }).then((value)async{
       _fcm.subscribeToTopic(reference);
 
+      print(docReference.documentID);
+
+      //--------------------------------
+      if(couponDocument!=null){
+        var doc_id = couponDocument.documentID;
+        await Firestore.instance.document('coupon/$doc_id')
+            .updateData({
+          'quantity':couponDocument["quantity"]>1?couponDocument["quantity"]-1:0,
+          'status': couponDocument["quantity"]>1?true:false
+        });
+      }
+
       //save order to local database
       currentOrder = OrderModel(
           restaurant_name:restaurantDocument['name'],
@@ -196,7 +220,8 @@ class CartBloc with ChangeNotifier {
           order_time:Timestamp.now().toDate().toString(),
           order_total:total.toString(),
           order_meals:meals,
-          order_rated:'no'
+          order_rated:'no',
+          document_id: docReference.documentID
       );
       _orderHelper.insertOrder(currentOrder);
       List<OrderModel> list = await _orderHelper.getAllOrder();
@@ -208,6 +233,8 @@ class CartBloc with ChangeNotifier {
       _cart = {};
 
       _total = 0;
+      applied_coupon=false;
+      discount_amount=0;
 
       notifyListeners();
 
@@ -293,6 +320,80 @@ class CartBloc with ChangeNotifier {
 
   }
 
+  couponSearch(context, couponCodeController){
+    coupon_loading = true;
+    bool done = false;
+    notifyListeners();
+    Firestore.instance.collection('coupon').where('code', isEqualTo: (couponCodeController.text).toLowerCase()).getDocuments().then((value) async {
+      for (var i = 0; i < value.documents.length; i++) {
+        print(i);
+        print(value.documents[i]['code']);
+        if(value.documents[i]['quantity']>0 && value.documents[i]['owner']=="admin" && value.documents[i]['status']){
+          //break;
+          setCoupon(value.documents[i]);
+          done=true;
+          //Navigator.of(context).pop();
+        }else if(value.documents[i]['quantity']>0 && value.documents[i]['owner']==restaurantDocument.documentID && value.documents[i]['status']){
+          setCoupon(value.documents[i]);
+          done=true;
+          //Navigator.of(context).pop();
+        }
+      }
+      coupon_loading = false;
+      notifyListeners();
+
+      if(!done){
+        coupon_error = true;
+        await Future.delayed(const Duration(milliseconds: 2000));
+        coupon_error = false;
+        notifyListeners();
+      }
+    });
+  }
+
+  setCoupon(_couponDocument){
+    int percentage = _couponDocument["percentage"];
+    //int quantity = _couponDocument["quantity"];
+    int cap = _couponDocument["cap"];
+    int ntotal;
+
+    if(total*(percentage/100)>cap){
+      ntotal = total-cap;
+    }else{
+      print("-------${_total}");
+      /*
+      var total_no_delivery_fee = total-int.parse(delivery_fee);
+       */
+      //ntotal = (total_no_delivery_fee-total_no_delivery_fee*(percentage/100)).ceil();
+      ntotal = _total - (_total*(percentage/100)).ceil();
+      print("-------${ntotal}");
+      print("-------${(percentage/100)}");
+    }
+    couponDocument=_couponDocument;
+    applied_coupon=true;
+    //discount_amount=(ntotal.toDouble()+int.parse(delivery_fee));
+    discount_amount=(ntotal.toDouble());
+    print("-------${discount_amount}");
+    print("-------${delivery_fee}");
+    print("-------ooo${ntotal}");
+    notifyListeners();
+  }
+
+  FocusNode _myNode;
+  get myNode => _myNode;
+  keyboardListenerCartPage(){
+    _myNode = new FocusNode()..addListener(this._listener());
+  }
+  _listener(){
+    if(_myNode.hasFocus){
+      // keyboard appeared
+      print("keyboard opened............");
+    }else{
+      // keyboard dismissed
+      print("keyboard closed............");
+    }
+  }
+
   final FirebaseStorage _storage = FirebaseStorage(storageBucket: 'gs://kaatane-5c28c.appspot.com');
   Future<String> uploadImage(var imageFile ) async {
     String filePath = 'images/${DateTime.now()}.png';
@@ -369,6 +470,7 @@ class CartBloc with ChangeNotifier {
 
           });
 
+          restaurantDocument=document;
           clearAll();
           await Navigator.push(
             context,

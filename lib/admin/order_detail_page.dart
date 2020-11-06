@@ -60,7 +60,7 @@ class OrderDetailPage extends StatelessWidget {
           SizedBox(width: 18,),
           Icon(Icons.location_on, size: 20, color: Colors.purple,),
           SizedBox(width: 18,),
-          Text(document['address'], style: TextStyle(fontSize: 16),),
+          Expanded(child: Text(document['address'], style: TextStyle(fontSize: 16),)),
         ],),
         SizedBox(height: 10,),
         SizedBox(height: 2, child: Container(color: Colors.grey[300],),),

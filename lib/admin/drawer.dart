@@ -6,6 +6,7 @@ import 'package:kaatane/ui/meals_page.dart';
 import 'package:provider/provider.dart';
 
 import 'category.dart';
+import 'coupon.dart';
 import 'discount.dart';
 import 'login2/edit_profile.dart';
 import 'meals.dart';
@@ -149,6 +150,25 @@ drawer(context, page, bloc){
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => Discount()),
+            );
+          },
+        ),
+        SizedBox(height: 3, child: Container(color: Colors.grey[300],),),
+        ListTile(
+          title: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 28.0),
+            child: Row(
+              children: <Widget>[
+                Icon(Icons.adjust, size: 28, color: "discount"==page?Colors.purple:Colors.black,),
+                SizedBox(width: 20),
+                Text('Coupon', style: TextStyle(fontSize: 18, color: "discount"==page?Colors.purple:Colors.black,),),
+              ],
+            ),
+          ),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Coupon()),
             );
           },
         ),

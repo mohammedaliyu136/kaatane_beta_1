@@ -10,6 +10,7 @@ final String Column_order_time = "order_time";
 final String Column_order_total = "order_total";
 final String Column_order_meals = "order_meals";
 final String Column_order_rated = "order_rated";
+final String Column_document_id = "document_id";
 
 class OrderModel{
   //final String name;
@@ -20,9 +21,10 @@ class OrderModel{
   final String order_total;
   final String order_meals;
   final String order_rated;
+  final String document_id;
   int id;
 
-  OrderModel({this.id, this.restaurant_name, this.restaurant_id, this.order_id, this.order_time, this.order_total, this.order_meals, this.order_rated});
+  OrderModel({this.id, this.restaurant_name, this.restaurant_id, this.order_id, this.order_time, this.order_total, this.order_meals, this.order_rated, this.document_id});
 
   Map<String, dynamic> toMap(){
     return {
@@ -33,7 +35,8 @@ class OrderModel{
       Column_order_time: this.order_time,
       Column_order_total: this.order_total,
       Column_order_meals: this.order_meals,
-      Column_order_rated: this.order_rated
+      Column_order_rated: this.order_rated,
+      Column_document_id: this.document_id
 
     };
   }
@@ -50,7 +53,7 @@ class OrderHelper{
     db = await openDatabase(
         join(await getDatabasesPath(), "databse.db"),
         onCreate: (db, version){
-          return db.execute("CREATE TABLE $tableName($Column_id INTEGER PRIMARY KEY AUTOINCREMENT, $Column_order_id TEXT, $Column_restaurant_name TEXT, $Column_restaurant_id TEXT, $Column_order_time TEXT, $Column_order_total TEXT, $Column_order_meals TEXT, $Column_order_rated TEXT)");
+          return db.execute("CREATE TABLE $tableName($Column_id INTEGER PRIMARY KEY AUTOINCREMENT, $Column_order_id TEXT, $Column_restaurant_name TEXT, $Column_restaurant_id TEXT, $Column_order_time TEXT, $Column_order_total TEXT, $Column_order_meals TEXT, $Column_order_rated TEXT, $Column_document_id TEXT)");
         },
         version: 1
     );
@@ -59,6 +62,13 @@ class OrderHelper{
   Future<void> insertOrder(OrderModel task) async{
     try{
       db.insert(tableName, task.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+    }catch(_){
+      print(_);
+    }
+  }
+  Future<void> updateOrder(OrderModel task) async{
+    try{
+      db.update(tableName, task.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
     }catch(_){
       print(_);
     }
@@ -76,7 +86,8 @@ class OrderHelper{
           order_time: tasks[i][Column_order_time],
           order_total: tasks[i][Column_order_total],
           order_meals: tasks[i][Column_order_meals],
-          order_rated: tasks[i][Column_order_rated]
+          order_rated: tasks[i][Column_order_rated],
+          document_id: tasks[i][Column_document_id],
       );
     });
   }
@@ -92,7 +103,8 @@ class OrderHelper{
           order_time: tasks[i][Column_order_time],
           order_total: tasks[i][Column_order_total],
           order_meals: tasks[i][Column_order_meals],
-          order_rated: tasks[i][Column_order_rated]
+          order_rated: tasks[i][Column_order_rated],
+          document_id: tasks[i][Column_document_id],
       );
     });
   }

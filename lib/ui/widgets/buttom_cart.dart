@@ -38,16 +38,20 @@ class Buttom_Cart extends StatelessWidget {
           gradient: LinearGradient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
-              colors: [Colors.black, Color.fromRGBO(128, 0, 128, 1)]),
+              colors: [Colors.white,Colors.white]),//[Colors.black, Color.fromRGBO(128, 0, 128, 1)]),
           borderRadius: BorderRadius.all(Radius.circular(80.0)),
         ),
-        child: Container(
-          //constraints: const BoxConstraints(minWidth: 88.0, minHeight: 36.0), // min sizes for Material buttons
-          alignment: Alignment.center,
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Text(
-              CHECKOUT_LABEL_TEXT,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Container(
+            //constraints: const BoxConstraints(minWidth: 88.0, minHeight: 36.0), // min sizes for Material buttons
+            alignment: Alignment.center,
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Text(
+                CHECKOUT_LABEL_TEXT,
+                style: TextStyle(color: Color.fromRGBO(128, 0, 128, 1), fontSize: 18, fontWeight: FontWeight.w700),
+              ),
             ),
           ),
         ),

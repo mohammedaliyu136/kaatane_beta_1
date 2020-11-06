@@ -168,19 +168,10 @@ class _RestaurantPageState extends State<RestaurantPage> {
       drawer: drawer2(context),
       body: !bloc.isLoading&&!isLoadingPage?Container(
         //color: Color.fromRGBO(128, 0, 128, 0.15),
-        color: Color.fromRGBO(243,204,243, .7),
+        //color: Color.fromRGBO(243,204,243, .7),
         //color: Color.fromRGBO(236, 239, 241, 1),
         child: ListView(children: <Widget>[
           SizedBox(height: 20,),
-          Padding(
-            padding: const EdgeInsets.only(left: 24,bottom: 12, top: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Featured", style: TextStyle(fontSize: 18, color: Color.fromRGBO(123,123,123, 1), fontFamily: 'Consola'),),
-              ],
-            ),
-          ),
           CarouselSlider(
             options: CarouselOptions(
               autoPlay: true,
@@ -194,7 +185,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
             ),
             items: imageSliders,
           ),
-
+          SizedBox(height: 10,),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: featured_snapshots.map((url) {
@@ -213,151 +204,162 @@ class _RestaurantPageState extends State<RestaurantPage> {
             }).toList(),
           ),
           SizedBox(height: 5,),
-          Card(
-            elevation: 10,
-            color: Color.fromRGBO(236, 239, 241, 1),
-            //color: Color.fromRGBO(244,244,244, 1),
-            shadowColor: Colors.black,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-            ),
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 30, bottom: 10),
-                  child: Text("Restaurants",
-                    style: TextStyle(
-                      color: Color.fromRGBO(123,123,123, 1),
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Consola'
-                    ),),
-                ),
-                snapshots.length!=0?Column(
-                  //shrinkWrap: true,
-                  children: snapshots.map((DocumentSnapshot document) {
-                    return Padding(
-                      padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 10),
-                      child: new GestureDetector(
-                        onTap: (){
-                          bloc.getCategories(document, context);
-                          /*
-                          setState(() {
-                            isLoadingPage=true;
-                          });
-                          Firestore.instance.collection('category').where('restaurant_id', isEqualTo: document.documentID).getDocuments().then(
-                                  (val){
-                                List<DocumentSnapshot> ctegory_list = val.documents;
-                                List<Widget> tabBarList = [];
-                                ctegory_list.forEach((element) {
-                                  tabBarList.add(Tab(text: element['title']));
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: SizedBox(height: 1, child: Container(color: Color.fromRGBO(223,223,223,1),),),
+          ),
+          SizedBox(height: 15,),
+          Column(
+            children: <Widget>[
+              snapshots.length!=0?Column(
+                //shrinkWrap: true,
+                children: snapshots.map((DocumentSnapshot document) {
+                  print(document);
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 10),
+                    child: new GestureDetector(
+                      onTap: (){
+                        bloc.getCategories(document, context);
+                        /*
+                        setState(() {
+                          isLoadingPage=true;
+                        });
+                        Firestore.instance.collection('category').where('restaurant_id', isEqualTo: document.documentID).getDocuments().then(
+                                (val){
+                              List<DocumentSnapshot> ctegory_list = val.documents;
+                              List<Widget> tabBarList = [];
+                              ctegory_list.forEach((element) {
+                                tabBarList.add(Tab(text: element['title']));
 
-                                });
-                                //isLoading=false;
-                                bloc.clearAll();
-                                bloc.not();
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => MealPage(document, ctegory_list, tabBarList)),
-                                );
-                                setState(() {
-                                  isLoadingPage=false;
-                                });
-                              }
-                          );*/
-                        },
-                        child: Stack(
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(left:30.0,),
-                              child: Card(
-                                elevation: 1,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left:33.0, top: 10, bottom: 10),
-                                  child: Column(
-                                    children: <Widget>[
-                                      Row(
-                                        children: <Widget>[
-                                          Expanded(
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(left:12.0, right: 12.0, top: 0, ),
-                                              child: Text(document['name'],
-                                                  maxLines: 1,
-                                                  overflow: TextOverflow.fade,
-                                                  softWrap: false,
-                                                  style: TextStyle(
-                                                    color: Color.fromRGBO(102,102,102, 1),
-                                                    fontSize: 18.0,
-                                                    fontWeight: FontWeight.bold,
-                                                  )),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: <Widget>[
-                                          Expanded(
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(left:12.0, right: 12.0, top: 4.0, ),
-                                              child: Text(document['location'],
-                                                  maxLines: 1,
-                                                  overflow: TextOverflow.ellipsis,
-                                                  softWrap: false,
-                                                  style: TextStyle(
-                                                    color: Color.fromRGBO(123,123,123, 1),
-                                                    fontSize: 14.0,
-                                                    fontWeight: FontWeight.w300,
-                                                  )),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: <Widget>[
-                                          Expanded(
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(left:12.0, right: 12.0, top: 4.0, bottom: 8.0),
-                                              child: Text(document['delivery']?'Delivery Available':'',
-                                                  style: TextStyle(
-                                                    color: Color.fromRGBO(123,123,123, 1),
-                                                    fontSize: 14.0,
-                                                    fontWeight: FontWeight.w300,
-                                                  )),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                              });
+                              //isLoading=false;
+                              bloc.clearAll();
+                              bloc.not();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => MealPage(document, ctegory_list, tabBarList)),
+                              );
+                              setState(() {
+                                isLoadingPage=false;
+                              });
+                            }
+                        );*/
+                      },
+                      child: Stack(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(left:34.0,),
+                            child: Container(
+                              /*
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  side: new BorderSide(color: Colors.grey, width: 1.0),
                               ),
-                            ),
-                            Align(
-                              alignment: Alignment.centerLeft,
+                              elevation: 2,*/
+                              decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(color:Color.fromRGBO(0, 0, 0, 0.25),spreadRadius:0.1, blurRadius: 2,),
+                                  ],
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(20.0) //         <--- border radius here
+                                  ),
+                                  //borderRadius: BorderRadius.vertical(top: Radius.circular(80), bottom: Radius.circular(80)),
+                                  color:Colors.white
+                              ),
                               child: Padding(
-                                padding: const EdgeInsets.only(top:12.0),
-                                child: Container(
-                                  height: 70,
-                                  width: 70,
-                                  child: Center(child: Text('')),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.vertical(top: Radius.circular(80), bottom: Radius.circular(80)),
-                                      image: DecorationImage(
-                                          image: NetworkImage(document['image']),
-                                          fit: BoxFit.cover
-                                      )
-                                  ),
+                                padding: const EdgeInsets.only(left:33.0, top: 10, bottom: 10),
+                                child: Column(
+                                  children: <Widget>[
+                                    Row(
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(left:12.0, right: 12.0, top: 0, ),
+                                            child: Text(document['name'],
+                                                maxLines: 1,
+                                                overflow: TextOverflow.fade,
+                                                softWrap: false,
+                                                style: TextStyle(
+                                                  color: Color.fromRGBO(90,90,90,1),
+                                                  fontSize: 18.0,
+                                                  fontWeight: FontWeight.bold,
+                                                )),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(left:12.0, right: 0.0, top: 4.0, ),
+                                            child: Text(document['location'],
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                softWrap: false,
+                                                style: TextStyle(
+                                                  color: Color.fromRGBO(137,137,137,1),
+                                                  fontSize: 14.0,
+                                                  fontWeight: FontWeight.w300,
+                                                )),
+                                          ),
+                                        ),
+                                        //Icon(Icons.home),
+                                        (document['is_home_based'] == null) ? Container() : (document['is_home_based'] != false)?Icon(Icons.home):Container(),
+                                        SizedBox(width: 5,)
+                                      ],
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(left:12.0, right: 12.0, top: 4.0, bottom: 8.0),
+                                            child: Text(document['delivery']?'Delivery Available':'No Delivery',
+                                                style: TextStyle(
+                                                  color: Color.fromRGBO(137,137,137,1),
+                                                  fontSize: 14.0,
+                                                  fontWeight: FontWeight.w300,
+                                                )),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: document['location'].length>32?EdgeInsets.only(top:14.0):EdgeInsets.only(top:10.0),//Police Roundabout, opp item 7
+                              child: Container(
+                                height: 70,
+                                width: 70,
+                                child: Center(child: Text('')),
+                                decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(color:Color.fromRGBO(0, 0, 0, 0.25),spreadRadius:0.1, blurRadius: 4,),
+                                    ],
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(100.0) //         <--- border radius here
+                                    ),
+                                    //borderRadius: BorderRadius.vertical(top: Radius.circular(80), bottom: Radius.circular(80)),
+                                    image: DecorationImage(
+                                        image: NetworkImage(document['image']),
+                                        fit: BoxFit.cover
+                                    )
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    );
-                  }).toList(),
-                ):Container()
-              ],
-            ),
+                    ),
+                  );
+                }).toList(),
+              ):Container()
+            ],
           ),
 
         ],),
@@ -374,6 +376,67 @@ class _RestaurantPageState extends State<RestaurantPage> {
     );
   }
 }
+/**
+class BottomWaveClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+
+    // Since the wave goes vertically lower than bottom left starting point,
+    // we'll have to make this point a little higher.
+    path.lineTo(0.0, size.height);
+
+    // TODO: The wavy clipping magic happens here, between the bottom left and bottom right points.
+    var firstControlPoint = Offset(size.height-20, size.width-10);
+    var firstEndPoint = Offset(size.height / 2.25, size.width - 30.0);
+    path.quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy,
+        firstEndPoint.dx, firstEndPoint.dy);
+
+    var secondControlPoint = Offset(size.width - (size.width / 3.25), 0.0);
+    var secondEndPoint = Offset(size.width, size.height - 40);
+    path.quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy,
+        secondEndPoint.dx, secondEndPoint.dy);
+
+
+    // The bottom right point also isn't at the same level as its left counterpart,
+    // so we'll adjust that one too. x,y
+    path.lineTo(size.height-20, size.width);
+    path.lineTo(size.width, 0.0);
+    path.close();
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+}
+class BottomWaveClipper2 extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+    path.lineTo(0.0, size.height - 20);
+
+    var firstControlPoint = Offset(size.width / 4, size.height);
+    var firstEndPoint = Offset(size.width / 2.25, size.height - 30.0);
+    path.quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy,
+        firstEndPoint.dx, firstEndPoint.dy);
+
+    var secondControlPoint =
+    Offset(size.width - (size.width / 3.25), size.height - 65);
+    var secondEndPoint = Offset(size.width, size.height - 40);
+    path.quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy,
+        secondEndPoint.dx, secondEndPoint.dy);
+
+    path.lineTo(size.width, size.height - 40);
+    path.lineTo(size.width, 0.0);
+    path.close();
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+}*/
 
 /**
 class MyAppADS extends StatefulWidget {

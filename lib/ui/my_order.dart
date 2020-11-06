@@ -245,6 +245,24 @@ class _MyOrderState extends State<MyOrder> {
                         children: <Widget>[
                           Expanded(
                             child: RaisedButton(
+                              onPressed: () async {
+                                setState(() {
+                                  isLoading=true;
+                                });
+                                //document.id
+
+                                await Firestore.instance.document('order_${document.restaurant_id}/${document.document_id}')
+                                    .updateData({
+                                  'status':3,
+                                  'status_text':"Cancelled by user",
+                                });
+                                showAlertDialog(context, document, _scaffoldKey);
+                              },
+                              child: Text("Cancel Order"),),
+                          ),
+                          SizedBox(width:10),
+                          Expanded(
+                            child: RaisedButton(
                               onPressed: (){
                                 setState(() {
                                   isLoading=true;

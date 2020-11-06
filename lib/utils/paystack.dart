@@ -12,7 +12,7 @@ import '../bloc/cart_bloc.dart';
 
 Future<CheckoutResponse> pay(context) async {
   var bloc = Provider.of<CartBloc>(context);
-  var total = bloc.total;
+  var total = bloc.applied_coupon?bloc.discount_amount:bloc.total;
   var _reference = _getReference();
   var uuid = Uuid().v1();
 

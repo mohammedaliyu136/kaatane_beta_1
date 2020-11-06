@@ -39,6 +39,17 @@ class MyApp extends StatelessWidget {
 
       _fcm.requestNotificationPermissions(IosNotificationSettings());
     }
+    _fcm.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print('on message $message');
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print('on resume $message');
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print('on launch $message');
+      },
+    );
     return ChangeNotifierProvider<CartBloc>(
       builder: (context) => CartBloc(),
       child: MaterialApp(

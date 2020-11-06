@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_phone_state/flutter_phone_state.dart';
 import 'package:kaatane/admin/STRINGVALUE.dart';
 import 'package:provider/provider.dart';
 import 'dart:io';
@@ -12,6 +13,7 @@ import '../utils/rest_api.dart';
 import 'package:intl/intl.dart';
 import 'button.dart';
 import 'cart_page.dart';
+import 'meal_item.dart';
 import 'widgets/add_to_cart_btn.dart';
 import 'widgets/contact.dart';
 import 'widgets/meal_list_item.dart';
@@ -38,6 +40,7 @@ class _MealPageState extends State<MealPage> {
   Color currentColor;
 
   bool isOpened = true;
+  bool isFirstOpened = false;
 
   String openingAndClosing = "";
 
@@ -213,6 +216,47 @@ class _MealPageState extends State<MealPage> {
       },
     );
   }
+  preOrderDialog(BuildContext context) {
+
+    //imageFile!=null?print(imageFile.path.toString()):print("is null");
+
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Ok"),
+      onPressed:  () {
+        setState(() {
+          print(Colors.white.value==currentColor.value);
+          currentColor = Colors.white;
+        });
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Done"),
+      onPressed:  () {
+        Navigator.of(context).pop();
+        //FirebaseStorage.instance.getReferenceFromUrl(document['img_url']).then((value) => value.delete().then((value){
+        //}));
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Pre-Orders Only"),
+      content: Text("The is a home based vendor. Orders made here might take up to 24 hours."),
+      actions: [
+        cancelButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 
   _scrollListener() {
     if (isShrink != lastStatus) {
@@ -224,7 +268,7 @@ class _MealPageState extends State<MealPage> {
 
   bool get isShrink {
     return _scrollController.hasClients &&
-        _scrollController.offset > (250 - kToolbarHeight);
+        _scrollController.offset > (150 - kToolbarHeight);
   }
 
   @override
@@ -366,16 +410,19 @@ class _MealPageState extends State<MealPage> {
                     headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
                       return <Widget>[
                         SliverAppBar(
-                          expandedHeight: 300.0,
+                          expandedHeight: 200.0,
                           floating: false,
                           pinned: true,
                           leading: !isShrink?Padding(
                             padding: const EdgeInsets.all(8),
                             child: Container(
-                              decoration: const BoxDecoration(
+                              decoration: BoxDecoration(
                                 color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(80.0)),
-                      ),
+                                borderRadius: BorderRadius.all(Radius.circular(80.0)),
+                                boxShadow: [
+                                  BoxShadow(color:Colors.grey.withOpacity(0.3),spreadRadius:2, blurRadius: 7, offset: Offset(0,3)),
+                                ]
+                              ),
                               child: IconButton(
                                   icon: Icon(Icons.arrow_back),//BackButtonIcon(),
                                   color: Colors.black,//isShrink ? Colors.white : currentColor,
@@ -417,56 +464,6 @@ class _MealPageState extends State<MealPage> {
                                 }
                                 //Navigator.pop(context);
                               }),
-                          actions: <Widget>[
-                            /**
-                            new Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: new Container(
-                                  height: 200.0,
-                                  width: 30.0,
-                                  child: new GestureDetector(
-                                    onTap: () {
-                                      //_bannerAd.dispose();
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => CartPage(),
-                                        ),
-                                      );
-                                    },
-                                    child: new Stack(
-                                      children: <Widget>[
-                                        new IconButton(
-                                          icon: new Icon(
-                                            Icons.shopping_cart,
-                                            color: currentColor != null?(isShrink ?  Colors.white : currentColor):Colors.white,
-                                          ),
-                                          onPressed: null,
-                                        ),
-                                        new Positioned(
-                                            child: new Stack(
-                                              children: <Widget>[
-                                                new Icon(Icons.brightness_1,
-                                                    size: 20.0, color: Colors.white),
-                                                new Positioned(
-                                                    top: totalCount>9 ? 6.0 : 3.0,
-                                                    right: totalCount>9 ? 10.0 : 6.0,
-                                                    child: new Center(
-                                                      child: new Text(
-                                                        '$totalCount',//(totalCount+8).toString()+'',
-                                                        style: new TextStyle(
-                                                            color:  Color.fromRGBO(128, 0, 128, 1),
-                                                            fontSize: totalCount>9 ? 10.0 : 12.0,//12.0,
-                                                            fontWeight: FontWeight.w500),
-                                                      ),
-                                                    )),
-                                              ],
-                                            )),
-                                      ],
-                                    ),
-                                  )),
-                            )**/
-                          ],
                           flexibleSpace: FlexibleSpaceBar(
                               centerTitle: true,
                               titlePadding: !isShrink?EdgeInsets.all(0):null,
@@ -480,91 +477,99 @@ class _MealPageState extends State<MealPage> {
                                     style: TextStyle(
                                       color: isShrink ? Colors.white : currentColor,
                                     )):SafeArea(
-                                      child: Container(
-                                  color: Colors.white,//Colors.black38,Color.fromRGBO(128, 0, 128, 99),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Row(
-                                                //mainAxisAlignment: MainAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Expanded(
-                                                    child: Text(restaurantDocument['name'],
-                                                      style: TextStyle(
-                                                        fontSize: 16,
-                                                        color: Colors.black,////Colors.white,//Color.fromRGBO(128, 0, 128, 1),
-                                                      )),
-                                                  ),
-                                                ],
-                                              ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(100),
+                                              color: Colors.white,
+                                              boxShadow: [
+                                                BoxShadow(color:Colors.grey.withOpacity(0.5),spreadRadius:2, blurRadius: 7, offset: Offset(0,3)),
+                                              ]
+                                          ), //Colors.black38,Color.fromRGBO(128, 0, 128, 99),
+                                          child: ListTile(
+                                            visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                                            contentPadding: EdgeInsets.only(left: 13.0, right: 2.0, top:0, bottom:0),
+                                            title: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(restaurantDocument['name'],
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: Colors.black,////Colors.white,//Color.fromRGBO(128, 0, 128, 1),
+                                                    )),
+                                                SizedBox(height: 3,),
+                                                openingAndClosing!=""&&(restaurantDocument['is_home_based'] == null)?Row(
 
-                                              SizedBox(height: 5,),
-                                              Row(
-                                                //mainAxisAlignment: MainAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Icon(Icons.location_on, size: 12.0, color: Color.fromRGBO(128, 0, 128, 1)),
-                                                  SizedBox(width: 3.0),
-                                                  Expanded(
-                                                    child: Text(restaurantDocument['location'],
+                                                  //mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: <Widget>[
+                                                    Icon(Icons.access_time, size: 10.0, color: Color.fromRGBO(128, 0, 128, 1)),
+                                                    SizedBox(width: 3.0),
+                                                    Text("$openingAndClosing",
                                                         style: TextStyle(
-                                                          fontSize: 11,
+                                                          fontSize: 9,
                                                           fontWeight: FontWeight.w400,
                                                           color: Colors.grey,////Colors.white,//Color.fromRGBO(128, 0, 128, 1),
                                                         )),
+
+                                                  ],
+                                                ):Container(),
+                                                (restaurantDocument['is_home_based'] != null)?(restaurantDocument['is_home_based'] != false)?Row(
+
+                                                  //mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: <Widget>[
+                                                    /*
+                                                    Text("${restaurantDocument["home_based_delivery_time"]}hrs - Pre-orders only",
+                                                        style: TextStyle(
+                                                          fontSize: 9,
+                                                          fontWeight: FontWeight.w400,
+                                                          color: Colors.grey,////Colors.white,//Color.fromRGBO(128, 0, 128, 1),
+                                                        )),*/
+                                                    Text("Pre-orders only",
+                                                        style: TextStyle(
+                                                          fontSize: 9,
+                                                          fontWeight: FontWeight.w400,
+                                                          color: Colors.grey,////Colors.white,//Color.fromRGBO(128, 0, 128, 1),
+                                                        )),
+
+                                                  ],
+                                                ):Row(
+
+                                                  //mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: <Widget>[
+                                                    Icon(Icons.access_time, size: 10.0, color: Color.fromRGBO(128, 0, 128, 1)),
+                                                    SizedBox(width: 3.0),
+                                                    Text("$openingAndClosing",
+                                                        style: TextStyle(
+                                                          fontSize: 9,
+                                                          fontWeight: FontWeight.w400,
+                                                          color: Colors.grey,////Colors.white,//Color.fromRGBO(128, 0, 128, 1),
+                                                        )),
+
+                                                  ],
+                                                ):Container()
+                                              ],
+                                            ),
+                                            trailing: GestureDetector(
+                                              onTap: () async {
+                                                await FlutterPhoneState.startPhoneCall(restaurantDocument["phone_number"]);
+                                                print(restaurantDocument["phone_number"]);
+                                              },
+                                              child: Container(
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(500),
+                                                    color: Colors.white,
+                                                    boxShadow: [
+                                                      BoxShadow(color:Colors.grey.withOpacity(0.3),spreadRadius:2, blurRadius: 7, offset: Offset(0,3)),
+                                                    ]
                                                   ),
-                                                ],
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: Icon(Icons.call, size: 20, color: Color.fromRGBO(128, 0, 128, 1)),
+                                                  )
                                               ),
-                                              SizedBox(height: 5.0),
-                                              Row(
-                                                //mainAxisAlignment: MainAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Icon(Icons.timelapse, size: 12.0, color: Color.fromRGBO(128, 0, 128, 1)),
-                                                  SizedBox(width: 3.0),
-                                                  Text(restaurantDocument['phone_number'],
-                                                      style: TextStyle(
-                                                        fontSize: 11,
-                                                        fontWeight: FontWeight.w400,
-                                                        color: Colors.grey,////Colors.white,//Color.fromRGBO(128, 0, 128, 1),
-                                                      )),
-                                                  Spacer(),
-                                                  Text(restaurantDocument['delivery']?"Delivery Fee: ₦${restaurantDocument['delivery_fee']}":"No Delivery",
-                                                      style: TextStyle(
-                                                        fontSize: 10,
-                                                        fontWeight: FontWeight.w400,
-                                                        color: Colors.grey,////Colors.white,//Color.fromRGBO(128, 0, 128, 1),
-                                                      )),
-                                                ],
-                                              ),
-                                              SizedBox(height: 3.0),
-                                              openingAndClosing!=""?Row(
-                                                //mainAxisAlignment: MainAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Icon(Icons.access_time, size: 12.0, color: Color.fromRGBO(128, 0, 128, 1)),
-                                                  SizedBox(width: 3.0),
-                                                  Text("$openingAndClosing",
-                                                      style: TextStyle(
-                                                        fontSize: 11,
-                                                        fontWeight: FontWeight.w400,
-                                                        color: Colors.grey,////Colors.white,//Color.fromRGBO(128, 0, 128, 1),
-                                                      )),
-
-                                                  /*
-                                                  Spacer(),
-
-                                                  Icon(Icons.calendar_today, size: 12.0, color: Color.fromRGBO(128, 0, 128, 1)),
-                                                  SizedBox(width: 3.0),
-                                                  Text("open: except sun",
-                                                      style: TextStyle(
-                                                        fontSize: 11,
-                                                        fontWeight: FontWeight.w400,
-                                                        color: Colors.grey,////Colors.white,//Color.fromRGBO(128, 0, 128, 1),
-                                                      )),
-                                                  */
-                                                ],
-                                              ):Container(),
-                                            ],
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -671,71 +676,14 @@ class _MealPageState extends State<MealPage> {
                           child: TabBarView(
                             children: ctegory_list.map((DocumentSnapshot cat_document){
                               if(meal_list!=null){
-                                print(cat_document.documentID);
+                                //print(cat_document.documentID);
                                 return ListView.builder(
                                     padding: EdgeInsets.zero,
                                   itemCount: meal_list.length,
                                   itemBuilder: (context, index){
                                     if(cat_document.documentID==meal_list[index]['category_id']){//meal_list[index]
                                       print(NumberFormat.currency(symbol: "", decimalDigits: 0).format(2000));
-                                      return Padding(
-                                        padding: const EdgeInsets.all(2.0),
-                                        child: Card(
-                                          child: Row(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              SizedBox(width: 5,),
-                                              Padding(
-                                                padding: const EdgeInsets.symmetric(vertical: 8,),
-                                                child: Container(
-                                                  height: 110,
-                                                  width: 110,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(10.0),
-                                                    image: DecorationImage(
-                                                      image: NetworkImage(meal_list[index]['img_url']),
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                //flex: 7,
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(16.0),
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: <Widget>[
-                                                      Text(meal_list[index]['title'],
-                                                          style: TextStyle(
-                                                            fontSize: 18.0,
-                                                            fontWeight: FontWeight.bold,
-                                                          )),
-                                                      SizedBox(
-                                                        height: 5.0,
-                                                      ),
-                                                      Row(
-                                                        children: <Widget>[
-                                                          Text("${PRICE_LABEL_TEXT}: ₦"),
-                                                          Text(NumberFormat.currency(symbol: "", decimalDigits: 0).format(int.parse(meal_list[index]['normal_price'])), style: meal_list[index]['discount']?TextStyle(decoration: TextDecoration.lineThrough, ):TextStyle()),
-                                                          meal_list[index]['discount']?Text(" ₦${NumberFormat.currency(symbol: "", decimalDigits: 0).format(int.parse(meal_list[index]['discount_price']))}", style: TextStyle(color: Colors.green)):Container(),
-                                                        ],
-                                                      ),
-                                                      SizedBox(
-                                                        height: 4.0,
-                                                      ),
-                                                      Row(children: <Widget>[
-                                                        //Add_To_Cart_btn(meal_list[index], bloc),
-                                                        isOpened?Button(meal_list[index]):Container()
-                                                      ],)
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      );
+                                      return Meal_Item(meal_list[index],isOpened);
                                     }else{
                                       return Container();
                                     }
@@ -773,12 +721,14 @@ class _MealPageState extends State<MealPage> {
                 },
                 child: Container(
                   decoration: BoxDecoration(
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
                     gradient: LinearGradient(
                         begin: Alignment.topRight,
                         end: Alignment.bottomLeft,
                         colors: [Colors.black, Color.fromRGBO(128, 0, 128, 1)]),
                     //borderRadius: BorderRadius.all(Radius.circular(80.0)),
                   ),
+
                   //color: Color.fromRGBO(128, 0, 128, 1),
                   height: 50, child: Row(
                   children: <Widget>[

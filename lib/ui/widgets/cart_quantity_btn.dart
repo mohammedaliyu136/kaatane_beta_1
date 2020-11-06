@@ -19,16 +19,16 @@ class Quantity_Cart_btn extends StatelessWidget {
           borderRadius: new BorderRadius.circular(28.0)),
       child: Padding(
 
-        padding: const EdgeInsets.symmetric(vertical:5.0, horizontal: 18.0),
+        padding: const EdgeInsets.symmetric(vertical:1.0, horizontal: 18.0),
         child: Wrap(
           children: <Widget>[
-          GestureDetector(child: Icon(Icons.remove), onTap: (){
+          GestureDetector(child: Icon(Icons.remove, size: 20,), onTap: (){
             bloc.subQuantity(meal.id);
           },),
           SizedBox(width: 10.0),
           Text(meal.quantity.toString(), style: TextStyle(fontSize: 18.0)),
             SizedBox(width: 10.0),
-          GestureDetector(onTap: (){bloc.addQuantity(meal.id);}, child: Icon(Icons.add))
+          GestureDetector(onTap: (){bloc.addQuantity(meal.id);}, child: Icon(Icons.add, size: 20,))
         ],),
       ),
     );
